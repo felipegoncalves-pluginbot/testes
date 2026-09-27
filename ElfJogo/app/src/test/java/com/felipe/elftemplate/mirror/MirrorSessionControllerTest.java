@@ -19,20 +19,27 @@ public class MirrorSessionControllerTest {
   private MirrorSessionController controller;
   private int lastLeftWing = -1;
   private int lastRightWing = -1;
-  private float lastRgbPan = Float.NaN;
+  private int overlayFrames;
+  private int lastHeadYaw = Integer.MIN_VALUE;
+  private int lastHeadPitch = Integer.MIN_VALUE;
 
   @Before
   public void setUp() {
     provider = new FakeTrackingProvider();
     controller = new MirrorSessionController(provider);
-    controller.setOverlayListener(
-        (result, silhouette, rgbPanNorm) -> lastRgbPan = rgbPanNorm);
+    controller.setOverlayListener((result, silhouette) -> overlayFrames++);
     controller.setRobotFeedback(
         new StubMirrorFeedback() {
           @Override
           public void setMirrorWingAngles(int leftAngle, int rightAngle) {
             lastLeftWing = leftAngle;
             lastRightWing = rightAngle;
+          }
+
+          @Override
+          public void setMirrorHead2D(int targetYawOffset, int targetPitchOffset) {
+            lastHeadYaw = targetYawOffset;
+            lastHeadPitch = targetPitchOffset;
           }
         });
     controller.start(null, CameraController.StreamProfile.PREVIEW_HD);
@@ -52,7 +59,7 @@ public class MirrorSessionControllerTest {
   }
 
   @Test
-  public void clearsMotorsAndPanWhenPlayerLost() {
+  public void clearsMotorsAndCentersHeadWhenPlayerLost() {
     TrackingResult present = new TrackingResult();
     present.isPlayerPresent = true;
     present.leftHandElevation = 0.6f;
@@ -65,7 +72,21 @@ public class MirrorSessionControllerTest {
 
     assertEquals(ArmElevationMapper.WING_ANGLE_MIN, lastLeftWing);
     assertEquals(ArmElevationMapper.WING_ANGLE_MIN, lastRightWing);
-    assertEquals(0f, lastRgbPan, 0.001f);
+    assertEquals("cabeça volta ao centro", 0, lastHeadYaw);
+    assertEquals("overlay recebe todo frame", 2, overlayFrames);
+  }
+
+  /** O Astra está na cabeça: inclinar a cabeça desloca o plano do chão e perde o jogador. */
+  @Test
+  public void neverTiltsTheHeadEvenWhenThePlayerHeadIsHighInFrame() {
+    TrackingResult result = new TrackingResult();
+    result.isPlayerPresent = true;
+    result.head.set(0.20f, 0.05f, 2000);
+
+    provider.deliver(result, null);
+
+    assertEquals("pitch nunca é comandado", 0, lastHeadPitch);
+    assertTrue("yaw ainda acompanha o jogador à esquerda da imagem", lastHeadYaw > 0);
   }
 
   @Test

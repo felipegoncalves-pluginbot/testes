@@ -48,8 +48,7 @@ public final class GroundPlaneEstimator {
   /**
    * Inclinação plausível, em graus.
    *
-   * <p>Pela ficha técnica o sensor 3D do Elf fica na cabeça, que inclina; por isso a faixa cobre
-   * quase toda a busca.
+   * <p>O Astra fica na cabeça do Elf, que inclina; por isso a faixa cobre quase toda a busca.
    */
   private static final float MIN_PLAUSIBLE_PITCH_DEG = -20f;
 

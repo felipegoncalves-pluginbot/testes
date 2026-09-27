@@ -10,17 +10,21 @@ alwaysApply: false
 Fonte da verdade: `docs/specs/COORDINATE_FRAMES.md` + `CoordinateContractTest`.
 - **Centro**: `Yaw = 90°`, `Pitch = 18°`.
 - **Limites de Segurança**: `Yaw ∈ [30°, 150°]`, `Pitch ∈ [10°, 28°]`.
-- **Orientação** ($X$ = eixo óptico da Astra, 0 = esquerda do sensor):
-  - $X < 0.5$ → `targetHeadYaw` **positivo** → `hardwareYaw > 90°`.
-  - $X > 0.5$ → `targetHeadYaw` **negativo** → `hardwareYaw < 90°`.
+- **Orientação** ($X$ = eixo óptico da Astra, 0 = esquerda do sensor), como direção do passo:
+  - $X < 0.5$ → passo de `targetHeadYaw` **positivo** → `hardwareYaw > 90°`.
+  - $X > 0.5$ → passo **negativo** → `hardwareYaw < 90°`.
 - Não inverter este sinal para “alinhar com a spec antiga”.
+- **A Astra está na cabeça** (junto com a HD): girar a cabeça move a câmera. Proibido mapear X da
+  imagem para yaw/pitch absoluto; use `HeadGazeServo` (passos com zona morta e espera). Pitch não é
+  comandado pela visão: desloca o plano do chão.
 
 ## 2. Fluidez e Prevenção de Trancos (Zero-Jerking Policy)
 - **Proibido `ACTION_BOTH_LOCK` em Rastreamento Contínuo**:
   - Sempre use `LocateAbsoluteAngleHeadMotion.ACTION_NO_LOCK` enquanto estiver rastreando o usuário em tempo real.
   - `ACTION_BOTH_LOCK` só deve ser usado em estados de repouso ou centralização (`resetCenter()`).
 - **Filtro de Média Móvel Exponencial (EMA)**:
-  - Todo ângulo derivado de visão computacional DEVE passar por filtro passa-baixa EMA ($0.25 \le \alpha \le 0.40$) antes de ser enviado aos controladores de hardware.
+  - Ângulos que **imitam** o usuário (asas, yaw sentado do espelho) passam por EMA ($0.25 \le \alpha \le 0.40$) antes do hardware.
+  - O yaw que **segue** o jogador é o `HeadGazeServo`: passos discretos e espaçados, sem EMA — EMA sobre malha fechada com a câmera na cabeça só atrasa e deixa o jogador fora do centro.
 - **Asas — dois relógios distintos**:
   - Ângulo proporcional (`updateMirrorAngles`): `MIRROR_UPDATE_MIN_MS = 150`.
   - Comando binário UP/DOWN (`updateWings`): debounce **350ms** por braço.

@@ -31,8 +31,6 @@ public class KinectDebugOverlayView extends View {
 
   private boolean isOverlayVisible = true;
   private boolean minimalFullscreen = false;
-  /** Pan RGB↔Astra (yaw da cabeça). Só no palco fullscreen; PiP fica em depth space. */
-  private float rgbPanNorm;
 
   public KinectDebugOverlayView(Context context) {
     super(context);
@@ -73,11 +71,6 @@ public class KinectDebugOverlayView extends View {
     minimalFullscreen = minimal;
     setBackgroundColor(Color.TRANSPARENT);
     invalidate();
-  }
-
-  /** Compensa o yaw da HD (peito≠cabeça). Kinect CoordinateMapper analog, só pan. */
-  public void setRgbPanNorm(float panNorm) {
-    rgbPanNorm = panNorm;
   }
 
   public void updateTracking(TrackingResult result, Bitmap silhouetteBitmap) {
@@ -366,10 +359,9 @@ public class KinectDebugOverlayView extends View {
   private void drawBone(
       Canvas canvas, Joint j1, Joint j2, int left, int top, int right, int bottom) {
     if (j1 == null || j2 == null) return;
-    float pan = minimalFullscreen ? rgbPanNorm : 0f;
-    float x1 = PreviewViewport.mapX(j1.x, left, right, pan);
+    float x1 = PreviewViewport.mapX(j1.x, left, right);
     float y1 = PreviewViewport.mapY(j1.y, top, bottom);
-    float x2 = PreviewViewport.mapX(j2.x, left, right, pan);
+    float x2 = PreviewViewport.mapX(j2.x, left, right);
     float y2 = PreviewViewport.mapY(j2.y, top, bottom);
     canvas.drawLine(x1, y1, x2, y2, bonePaint);
   }
@@ -377,8 +369,7 @@ public class KinectDebugOverlayView extends View {
   private void drawJoint(
       Canvas canvas, Joint j, int color, float radius, int left, int top, int right, int bottom) {
     if (j == null) return;
-    float pan = minimalFullscreen ? rgbPanNorm : 0f;
-    float cx = PreviewViewport.mapX(j.x, left, right, pan);
+    float cx = PreviewViewport.mapX(j.x, left, right);
     float cy = PreviewViewport.mapY(j.y, top, bottom);
     jointPaint.setColor(color);
     canvas.drawCircle(cx, cy, radius, jointPaint);

@@ -71,32 +71,30 @@ public class HeadKinematicsGuardTest {
         hardwareYaw < 90 && hardwareYaw >= 30);
   }
 
+  /**
+   * Salto de um quadro (ruído ou jogador pulando para o lado) vira no máximo um passo limitado, e o
+   * próximo só sai depois de a cabeça assentar: com o Astra na cabeça, seguir cada quadro faz a
+   * cabeça oscilar.
+   */
   @Test
-  public void testExponentialMovingAverageDampensAbruptCoordinateJumps() {
+  public void testAbruptJumpProducesOneBoundedStepThenWaits() {
     TrackingResult result = new TrackingResult();
     result.isPlayerPresent = true;
     result.head.x = 0.50f;
     result.head.y = 0.30f;
 
-    // Inicializa no centro
-    mirrorEngine.processTracking(result);
+    mirrorEngine.processTracking(result, 0L);
     assertEquals(0, mirrorEngine.getTargetHeadYaw());
 
-    // Salto abrupto de 1 quadro (ruído na câmera para x = 0.10)
     result.head.x = 0.10f;
-    mirrorEngine.processTracking(result);
+    mirrorEngine.processTracking(result, 33L);
+    int firstStep = mirrorEngine.getTargetHeadYaw();
+    assertTrue("passo positivo e limitado", firstStep > 0 && firstStep <= 20);
 
-    int firstFrameYaw = mirrorEngine.getTargetHeadYaw();
-    // Com filtro EMA, no primeiro frame o yaw converge suavemente (positivo para x < 0.5)
-    assertTrue(
-        "Filtro EMA deve suavizar a aceleração angular no primeiro frame",
-        firstFrameYaw > 0 && firstFrameYaw < 22);
-
-    // Quadros subsequentes convergem suavemente
-    for (int i = 0; i < 10; i++) {
-      mirrorEngine.processTracking(result);
-      int currentYaw = mirrorEngine.getTargetHeadYaw();
-      assertTrue("Yaw deve convergir de forma monótona e suave", currentYaw >= firstFrameYaw);
+    for (int i = 2; i < 12; i++) {
+      mirrorEngine.processTracking(result, 33L * i);
+      assertEquals(
+          "sem novo passo enquanto a cabeça assenta", firstStep, mirrorEngine.getTargetHeadYaw());
     }
   }
 

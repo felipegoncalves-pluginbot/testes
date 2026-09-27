@@ -68,16 +68,4 @@ public class PreviewViewportTest {
     assertEquals(9, box[3]);
     assertTrue("largura 4:3", box[2] - box[0] < 16);
   }
-
-  @Test
-  public void yawPanShiftsOverlayTowardRgbCenter() {
-    float pan = PreviewViewport.panNormFromHeadYaw(12);
-    assertTrue("yaw+ → pan+ (RGB recentra jogador à esquerda da Astra)", pan > 0f);
-    float[] nx = new float[] {0.20f, 0.22f, 0.30f};
-    for (int i = 0; i < nx.length; i++) {
-      float raw = PreviewViewport.mapX(nx[i], 0, 100);
-      float shifted = PreviewViewport.mapX(nx[i], 0, 100, pan);
-      assertTrue("junta vai para a direita no overlay", shifted > raw);
-    }
-  }
 }

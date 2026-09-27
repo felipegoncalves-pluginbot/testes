@@ -8,7 +8,6 @@ import com.felipe.elftemplate.movement.RobotGameFeedback;
 import com.felipe.elftemplate.tracking.ArmElevationMapper;
 import com.felipe.elftemplate.tracking.CameraController;
 import com.felipe.elftemplate.tracking.KinectTrackingEngine;
-import com.felipe.elftemplate.tracking.PreviewViewport;
 import com.felipe.elftemplate.tracking.RgbPreviewBridge;
 import com.felipe.elftemplate.tracking.TrackingProvider;
 import com.felipe.elftemplate.tracking.TrackingResult;
@@ -20,7 +19,7 @@ import com.felipe.elftemplate.tracking.TrackingResult;
 public class MirrorSessionController {
 
   public interface OverlayListener {
-    void onMirrorOverlayUpdate(TrackingResult result, Bitmap silhouette, float rgbPanNorm);
+    void onMirrorOverlayUpdate(TrackingResult result, Bitmap silhouette);
   }
 
   private final TrackingProvider trackingProvider;
@@ -70,33 +69,35 @@ public class MirrorSessionController {
     if (stopped) {
       return;
     }
-    float rgbPanNorm = applyMirrorMotors(result, debugSilhouette);
+    applyMirrorMotors(result, debugSilhouette);
     OverlayListener listener = overlayListener;
     if (listener != null) {
-      listener.onMirrorOverlayUpdate(result, debugSilhouette, rgbPanNorm);
+      listener.onMirrorOverlayUpdate(result, debugSilhouette);
     }
   }
 
-  private float applyMirrorMotors(TrackingResult result, Bitmap debugSilhouette) {
+  /**
+   * Asas e yaw da cabeça. O pitch vai sempre em 0 e o overlay não recebe pan: o Astra e a câmera HD
+   * estão os dois na cabeça, então giram juntos, e inclinar a cabeça tiraria o plano do chão do
+   * lugar.
+   */
+  private void applyMirrorMotors(TrackingResult result, Bitmap debugSilhouette) {
     mirrorEngine.processTracking(result);
-    float rgbPanNorm = PreviewViewport.panNormFromHeadYaw(mirrorEngine.getTargetHeadYaw());
     if (!result.isPlayerPresent) {
-      rgbPanNorm = 0f;
       SanbotDebugBridge.publish(result, debugSilhouette, 0, 0, 0, 0);
       if (robotFeedback != null) {
         robotFeedback.setMirrorWingAngles(
             ArmElevationMapper.WING_ANGLE_MIN, ArmElevationMapper.WING_ANGLE_MIN);
         robotFeedback.setMirrorHead2D(0, 0);
       }
-      return rgbPanNorm;
+      return;
     }
     int leftAngle = mirrorEngine.getTargetLeftWingAngle();
     int rightAngle = mirrorEngine.getTargetRightWingAngle();
     int headYaw = mirrorEngine.getTargetHeadYaw();
-    int headPitch = mirrorEngine.getTargetHeadPitch();
-    SanbotDebugBridge.publish(result, debugSilhouette, headYaw, headPitch, leftAngle, rightAngle);
+    SanbotDebugBridge.publish(result, debugSilhouette, headYaw, 0, leftAngle, rightAngle);
     if (robotFeedback == null) {
-      return rgbPanNorm;
+      return;
     }
     robotFeedback.setMirrorWingAngles(leftAngle, rightAngle);
     if (result.activeGesture == KinectTrackingEngine.GestureType.HEAD_NOD_YES) {
@@ -104,8 +105,7 @@ public class MirrorSessionController {
     } else if (result.activeGesture == KinectTrackingEngine.GestureType.HEAD_SHAKE_NO) {
       robotFeedback.performHeadShakeNo();
     } else {
-      robotFeedback.setMirrorHead2D(headYaw, headPitch);
+      robotFeedback.setMirrorHead2D(headYaw, 0);
     }
-    return rgbPanNorm;
   }
 }

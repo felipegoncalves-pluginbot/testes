@@ -1,5 +1,6 @@
 package com.felipe.elftemplate.movement;
 
+import com.felipe.elftemplate.logic.HeadGazeServo;
 import com.sanbot.opensdk.function.beans.LED;
 import com.sanbot.opensdk.function.beans.wheelmotion.RelativeAngleWheelMotion;
 import com.sanbot.opensdk.function.unit.HardWareManager;
@@ -27,6 +28,7 @@ public class RobotGameFeedback {
   private final RobotHeadController headController;
   private final RobotWingController wingController;
   private final ExecutorService commandExecutor = Executors.newSingleThreadExecutor();
+  private final HeadGazeServo gazeServo = new HeadGazeServo();
   private volatile boolean stopped;
 
   private long lastSpeechTime = 0;
@@ -81,9 +83,20 @@ public class RobotGameFeedback {
     enqueue(() -> headController.resetCenter());
   }
 
-  public void trackTargetX(float centroidX) {
-    int yawOffset = (int) ((0.5f - centroidX) * 60.0f);
-    setMirrorHead2D(yawOffset, 0);
+  /**
+   * Vira a cabeça para manter o jogador no quadro do Astra, que fica na própria cabeça.
+   *
+   * <p>Antes o X virava yaw absoluto a cada frame ({@code (0,5 − x)·60}): girar a cabeça movia o
+   * jogador na imagem e o comando voltava, e a cabeça ficava indo e vindo o jogo inteiro. Agora só
+   * sai comando quando o jogador deixa a zona central, em passos que esperam a cabeça assentar.
+   * Chamado da UI e da ponte JavaScript dos jogos web, por isso é sincronizado.
+   */
+  public synchronized void trackTargetX(float centroidX) {
+    int before = gazeServo.getYawOffset();
+    int yawOffset = gazeServo.update(centroidX, System.currentTimeMillis());
+    if (yawOffset != before) {
+      setMirrorHead2D(yawOffset, 0);
+    }
   }
 
   public void performHeadNodYes() {

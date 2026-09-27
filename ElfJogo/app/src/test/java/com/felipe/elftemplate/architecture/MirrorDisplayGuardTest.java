@@ -57,15 +57,22 @@ public class MirrorDisplayGuardTest {
     Assert.assertTrue(src.contains("PreviewViewport.mapX"));
     Assert.assertTrue(
         "fullscreen 4:3 deve letterbox, não esticar no 16:9", src.contains("letterboxDest"));
-    Assert.assertTrue(src.contains("setRgbPanNorm"));
   }
 
+  /** HD e Astra estão na cabeça e giram juntas: pan pelo yaw desalinha esqueleto e imagem. */
   @Test
-  public void overlayPanUsesHeadYawGain() throws IOException {
-    String act = read("app/src/main/java/com/felipe/elftemplate/mirror/MirrorSessionController.java");
-    Assert.assertTrue(act.contains("panNormFromHeadYaw"));
-    String vp = read("app/src/main/java/com/felipe/elftemplate/tracking/PreviewViewport.java");
-    Assert.assertTrue(vp.contains("YAW_TO_PAN_GAIN"));
+  public void overlayDoesNotPanWithHeadYaw() throws IOException {
+    String[] files = {
+      "app/src/main/java/com/felipe/elftemplate/mirror/MirrorSessionController.java",
+      "app/src/main/java/com/felipe/elftemplate/tracking/KinectDebugOverlayView.java",
+      "app/src/main/java/com/felipe/elftemplate/tracking/PreviewViewport.java",
+      "app/src/main/java/com/felipe/elftemplate/MirrorActivity.java"
+    };
+    for (String file : files) {
+      String src = read(file);
+      Assert.assertFalse(file + " não deve compensar yaw no overlay", src.contains("PanNorm"));
+      Assert.assertFalse(file + " não deve compensar yaw no overlay", src.contains("panNorm"));
+    }
   }
 
   private static String read(String relative) throws IOException {

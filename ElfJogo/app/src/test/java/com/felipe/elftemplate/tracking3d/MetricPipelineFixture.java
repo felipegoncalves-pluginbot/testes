@@ -31,11 +31,11 @@ final class MetricPipelineFixture {
   }
 
   /**
-   * Cenário padrão: Astra no tronco do Sanbot a 1,05 m, inclinado 5° para baixo, pessoa de frente.
+   * Cenário padrão legado: sensor a 1,05 m, inclinado 5° para baixo, pessoa de frente.
    *
    * <p>Com esse pitch e essa altura, um adulto cabe inteiro no quadro a partir de ~2,2 m e o piso
-   * aparece a partir de ~2,0 m. É a geometria real de operação, e é por isso que os testes usam 2,5 m
-   * como distância de referência em vez de um número arbitrário.
+   * aparece a partir de ~2,0 m. No robô o Astra fica na cabeça, a ~0,8 m: os casos dessa geometria
+   * estão em {@code RobotMountingTrackingTest}.
    */
   void standardScene(float statureM, float depthM, SyntheticHumanScene.Pose pose) {
     renderer.setCamera(1.05f, 5f);

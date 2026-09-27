@@ -4,16 +4,13 @@ package com.felipe.elftemplate.tracking;
  * Viewport do preview RGB (16:9, center-crop) e do overlay Astra (4:3).
  *
  * <p>Kinect SDK: juntas vivem no depth space. Overlay em color exige CoordinateMapper — FOV e
- * baseline RGB≠depth. No Sanbot a HD está na cabeça (yaw) e a Astra no peito: sem mapper
- * esticar 4:3 no 16:9 desloca o esqueleto (usuário em X, desenho em Y).
+ * baseline RGB≠depth. No Sanbot a HD e o Astra estão os dois na cabeça: giram juntos, então o yaw
+ * da cabeça não desloca um em relação ao outro e não há pan a compensar. Esticar 4:3 no 16:9
+ * desloca o esqueleto (usuário em X, desenho em Y).
  *
- * <p>Espelho: letterbox 4:3 + pan do yaw da cabeça (mesmo ganho de {@code MirrorGameEngine}).
- * Sem {@code 1.0f - x}.
+ * <p>Espelho: letterbox 4:3. Sem {@code 1.0f - x}.
  */
 public final class PreviewViewport {
-
-  /** {@code MirrorGameEngine}: yaw = (deltaX) * -GAIN. panNorm = yaw / GAIN. */
-  public static final float YAW_TO_PAN_GAIN = 60f;
 
   private PreviewViewport() {}
 
@@ -71,20 +68,8 @@ public final class PreviewViewport {
     }
   }
 
-  public static float panNormFromHeadYaw(int yawOffsetDeg) {
-    return yawOffsetDeg / YAW_TO_PAN_GAIN;
-  }
-
   public static float mapX(float nx, int left, int right) {
-    return mapX(nx, left, right, 0f);
-  }
-
-  /**
-   * {@code panNorm} &gt; 0: cabeça virou para a esquerda da Astra (yaw positivo) e o RGB
-   * recentra o jogador — junta desloca para a direita no overlay.
-   */
-  public static float mapX(float nx, int left, int right, float panNorm) {
-    return left + (nx + panNorm) * (right - left);
+    return left + nx * (right - left);
   }
 
   public static float mapY(float ny, int top, int bottom) {

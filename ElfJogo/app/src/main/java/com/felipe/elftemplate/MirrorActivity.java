@@ -38,7 +38,6 @@ public class MirrorActivity extends BindBaseActivity {
   private final AtomicBoolean overlayPosted = new AtomicBoolean(false);
   private volatile TrackingResult pendingResult;
   private volatile Bitmap pendingSilhouette;
-  private volatile float pendingRgbPan;
   private volatile boolean stopped;
 
   @Override
@@ -118,13 +117,12 @@ public class MirrorActivity extends BindBaseActivity {
     sessionController.start(this, CameraController.StreamProfile.POSE_EFFICIENT);
   }
 
-  private void enqueueOverlay(TrackingResult result, Bitmap silhouette, float rgbPanNorm) {
+  private void enqueueOverlay(TrackingResult result, Bitmap silhouette) {
     if (stopped) {
       return;
     }
     pendingResult = result;
     pendingSilhouette = silhouette;
-    pendingRgbPan = rgbPanNorm;
     if (overlayPosted.compareAndSet(false, true)) {
       runOnUiThread(this::drainOverlay);
     }
@@ -138,7 +136,6 @@ public class MirrorActivity extends BindBaseActivity {
     TrackingResult result = pendingResult;
     Bitmap silhouette = pendingSilhouette;
     if (kinectOverlay != null) {
-      kinectOverlay.setRgbPanNorm(pendingRgbPan);
       kinectOverlay.updateTracking(result, silhouette);
     }
     if (pendingResult != result && overlayPosted.compareAndSet(false, true)) {
