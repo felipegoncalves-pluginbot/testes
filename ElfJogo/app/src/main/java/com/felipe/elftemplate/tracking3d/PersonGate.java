@@ -25,6 +25,16 @@ public final class PersonGate {
   /** Largura máxima do "pescoço": a faixa mais estreita acima da cintura. */
   public static final float MAX_NECK_BAND_M = 0.45f;
 
+  /**
+   * Largura máxima da faixa mais estreita quando a cabeça está fora do quadro.
+   *
+   * <p>Sem a cabeça no quadro não existe pescoço para medir: a faixa mais estreita visível é peito
+   * ou cintura com os braços ao lado, 0,45 a 0,60 m num adulto. Exigir os 0,45 m do pescoço
+   * reprovava justamente o jogador na distância de jogo. Com o Astra a menos de 0,9 m do chão (o
+   * Sanbot Elf tem 0,90 m de altura), a cabeça de um adulto só entra no quadro a partir de ~2,3 m.
+   */
+  public static final float MAX_TORSO_BAND_HEAD_CUT_M = 0.70f;
+
   /** Piso absoluto de pontos, para o caso de grades muito decimadas. */
   private static final int ABSOLUTE_MIN_POINTS = 40;
 
@@ -83,7 +93,8 @@ public final class PersonGate {
     if (cluster.thicknessM > MAX_THICKNESS_M) {
       return REJECT_TOO_THICK;
     }
-    if (cluster.narrowestUpperBandM > MAX_NECK_BAND_M) {
+    float maxBand = cluster.headOutOfFrame ? MAX_TORSO_BAND_HEAD_CUT_M : MAX_NECK_BAND_M;
+    if (cluster.narrowestUpperBandM > maxBand) {
       return REJECT_NO_NECK;
     }
     return hasPlausibleStature(cluster, floorMeasured) ? ACCEPTED : REJECT_STATURE;

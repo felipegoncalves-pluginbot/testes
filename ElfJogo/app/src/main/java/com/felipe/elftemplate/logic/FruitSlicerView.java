@@ -9,6 +9,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /** Visualizador Canvas 2D de alta performance para o jogo Fruit Slicer. */
@@ -139,7 +140,14 @@ public class FruitSlicerView extends View {
 
   private void drawBladeTrail(Canvas canvas) {
     long now = System.currentTimeMillis();
-    trailPoints.removeIf(tp -> (now - tp.time) > 200);
+    // Iterator em vez de removeIf: Collection.removeIf só existe a partir da API 24 e o Elf roda
+    // Android 6 (API 23) sem core library desugaring — lá isso é NoSuchMethodError no onDraw.
+    Iterator<TrailPoint> expired = trailPoints.iterator();
+    while (expired.hasNext()) {
+      if ((now - expired.next().time) > 200) {
+        expired.remove();
+      }
+    }
     if (trailPoints.size() < 2) return;
 
     bladePath.reset();

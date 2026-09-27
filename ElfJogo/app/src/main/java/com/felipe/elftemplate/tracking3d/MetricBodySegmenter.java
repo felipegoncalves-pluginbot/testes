@@ -341,6 +341,15 @@ public final class MetricBodySegmenter {
       accepted++;
     }
     clusterCount = accepted;
+    // Slot 0 = corpo mais próximo ("Closest1Player" do Kinect), não o primeiro rótulo da varredura:
+    // um recorte da parede do fundo começa mais alto no quadro e roubava o lugar do jogador.
+    int closest = 0;
+    for (int slot = 1; slot < accepted; slot++) {
+      closest = pool[slot].centroidZ < pool[closest].centroidZ ? slot : closest;
+    }
+    if (closest != 0) {
+      swapSlots(closest, 0);
+    }
     return accepted;
   }
 
@@ -366,6 +375,7 @@ public final class MetricBodySegmenter {
     return lastRejectReason;
   }
 
+  /** Corpo aprovado no slot informado; o slot 0 é sempre o mais próximo (o jogador). */
   public BodyCluster getCluster(int index) {
     return pool[index];
   }

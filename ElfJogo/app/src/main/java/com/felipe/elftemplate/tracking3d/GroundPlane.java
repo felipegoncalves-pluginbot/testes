@@ -21,8 +21,14 @@ package com.felipe.elftemplate.tracking3d;
  */
 public final class GroundPlane {
 
-  /** Altura assumida do Astra no tronco do Sanbot Elf quando o piso não está visível. */
-  public static final float DEFAULT_CAMERA_HEIGHT_M = 1.05f;
+  /**
+   * Altura assumida do Astra quando o piso não está visível.
+   *
+   * <p>O Sanbot Elf mede 0,90 m e, pela ficha técnica, o sensor 3D fica na cabeça; 1,05 m, o valor
+   * antigo, ficava acima do próprio robô. Com o fallback errado em 0,3 m o piso passava no corte de
+   * 8 cm e se fundia aos pés do jogador.
+   */
+  public static final float DEFAULT_CAMERA_HEIGHT_M = 0.80f;
 
   /** Pitch assumido quando o piso não está visível (câmera praticamente nivelada). */
   public static final float DEFAULT_PITCH_RAD = 0.0f;

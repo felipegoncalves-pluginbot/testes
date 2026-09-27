@@ -6,8 +6,8 @@ import com.felipe.elftemplate.tracking.AstraDepthController;
 import com.felipe.elftemplate.tracking.TrackingResult;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Motor de rastreamento métrico 3D rodando sobre o stream real do Orbbec Astra.
@@ -16,8 +16,9 @@ import java.util.concurrent.atomic.AtomicReference;
  * certo: ele fala OpenNI2 de verdade, com o helper oficial de permissão USB. Todo o resto do caminho
  * — nuvem métrica, plano do chão, segmentação, esqueleto geodésico, filtro e gestos — é novo.
  *
- * <p>Contrapressão: buffer duplo com descarte do frame intermediário. Um frame atrasado não vale nada
- * em jogo, então processar sempre o mais recente é melhor que enfileirar.
+ * <p>Contrapressão: buffer triplo ({@link DepthFrameExchange}) com descarte do frame intermediário.
+ * Um frame atrasado não vale nada em jogo, então processar sempre o mais recente é melhor que
+ * enfileirar.
  *
  * <p>O plano do chão é reestimado periodicamente, não a cada frame: a montagem do sensor no robô não
  * muda em milissegundos, e a busca de pitch é a etapa mais caras do pipeline.
@@ -37,12 +38,6 @@ public final class Astra3dTrackingEngine {
     void onTrackingUpdate(TrackingResult result, Astra3dTelemetry telemetry);
   }
 
-  private static final class FrameSlot {
-    short[] data;
-    int width;
-    int height;
-  }
-
   private final DepthPointCloud cloud = new DepthPointCloud();
   private final GroundPlane plane = new GroundPlane();
   private final GroundPlaneEstimator groundEstimator = new GroundPlaneEstimator();
@@ -56,15 +51,13 @@ public final class Astra3dTrackingEngine {
   private final TrackingResult output = new TrackingResult();
   private final Astra3dTelemetry telemetry = new Astra3dTelemetry();
 
-  private final FrameSlot[] slots = {new FrameSlot(), new FrameSlot()};
-  private final AtomicReference<FrameSlot> pending = new AtomicReference<FrameSlot>();
+  private final DepthFrameExchange frames = new DepthFrameExchange();
   private final AtomicBoolean processing = new AtomicBoolean(false);
 
   private AstraDepthController astra;
-  private ExecutorService worker;
+  private volatile ExecutorService worker;
   private volatile Listener listener;
   private volatile boolean running;
-  private int slotIndex;
   private int frameCounter;
   private int lostFrames;
 
@@ -108,6 +101,14 @@ public final class Astra3dTrackingEngine {
     if (!running) {
       return;
     }
+    // O estado da sessão anterior é zerado aqui, no worker, e não no stop(): lá ele rodava na UI
+    // enquanto o worker antigo ainda terminava um frame com os mesmos filtros. Sem zerar a saída,
+    // os primeiros frames sem jogador republicavam o esqueleto da partida anterior.
+    jointFilter.reset();
+    continuity.reset();
+    gestures.reset();
+    skeleton.reset();
+    output.reset();
     learnedRefiner.load(context);
     try {
       AstraDepthController controller = new AstraDepthController(context, this::enqueue);
@@ -136,39 +137,50 @@ public final class Astra3dTrackingEngine {
   }
 
   private void enqueue(short[] depthData, int width, int height) {
-    if (!running || depthData == null || worker == null || worker.isShutdown()) {
+    if (!running || depthData == null) {
       return;
     }
-    FrameSlot slot = slots[slotIndex];
-    slotIndex = (slotIndex + 1) % slots.length;
-    if (slot.data == null || slot.data.length < depthData.length) {
-      slot.data = new short[depthData.length];
-    }
-    System.arraycopy(depthData, 0, slot.data, 0, depthData.length);
-    slot.width = width;
-    slot.height = height;
-    pending.set(slot);
+    frames.publish(depthData, width, height);
     if (processing.compareAndSet(false, true)) {
-      worker.execute(this::drain);
+      scheduleDrain();
+    }
+  }
+
+  /**
+   * Agenda o dreno no worker atual, tolerando um {@link #stop()} concorrente.
+   *
+   * <p>Roda também na thread nativa do OpenNI: uma {@code RejectedExecutionException} ou um NPE
+   * aqui voltaria para dentro do callback JNI.
+   */
+  private void scheduleDrain() {
+    ExecutorService current = worker;
+    if (!running || current == null || current.isShutdown()) {
+      processing.set(false);
+      return;
+    }
+    try {
+      current.execute(this::drain);
+    } catch (RejectedExecutionException e) {
+      processing.set(false);
     }
   }
 
   private void drain() {
     try {
       while (running) {
-        FrameSlot slot = pending.getAndSet(null);
-        if (slot == null) {
+        DepthFrameExchange.Frame frame = frames.take();
+        if (frame == null) {
           return;
         }
-        processFrame(slot.data, slot.width, slot.height);
+        processFrame(frame.data, frame.width, frame.height);
       }
     } catch (Throwable t) {
       Log.e(TAG, "[ASTRA-3D] Erro no processamento do frame: " + t.getMessage(), t);
       telemetry.lastError = String.valueOf(t.getMessage());
     } finally {
       processing.set(false);
-      if (running && pending.get() != null && processing.compareAndSet(false, true)) {
-        worker.execute(this::drain);
+      if (running && frames.hasUnread() && processing.compareAndSet(false, true)) {
+        scheduleDrain();
       }
     }
   }
@@ -242,10 +254,6 @@ public final class Astra3dTrackingEngine {
     final AstraDepthController oldAstra = astra;
     worker = null;
     astra = null;
-    pending.set(null);
-    jointFilter.reset();
-    continuity.reset();
-    gestures.reset();
     if (oldWorker != null) {
       oldWorker.shutdownNow();
     }

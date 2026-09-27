@@ -1,10 +1,13 @@
 package com.felipe.elftemplate.tracking3d;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import com.felipe.elftemplate.tracking.CameraController;
 import com.felipe.elftemplate.tracking.RgbPreviewBridge;
 import com.felipe.elftemplate.tracking.TrackingProvider;
 import com.sanbot.opensdk.function.unit.HDCameraManager;
+import java.util.concurrent.Executor;
 
 /**
  * Ponto único de entrada do rastreamento corporal para todas as telas.
@@ -28,6 +31,7 @@ public final class BodyTrackingSession {
 
   private final Astra3dTrackingProvider provider = new Astra3dTrackingProvider();
   private CameraController.StreamProfile profile = CameraController.StreamProfile.POSE_EFFICIENT;
+  private MainThreadFrameRelay mainThreadRelay;
 
   /** Sessão local baseada no Astra: profundidade decide a pose, câmera HD é só imagem de fundo. */
   public static BodyTrackingSession createLocal() {
@@ -64,13 +68,48 @@ public final class BodyTrackingSession {
     provider.setDepthOverlayTransparent(bodyOnly);
   }
 
-  /** Sobe sensor e preview. Retorna imediatamente; a abertura acontece fora da thread de UI. */
+  /**
+   * Sobe sensor e preview. Retorna imediatamente; a abertura acontece fora da thread de UI.
+   *
+   * <p>O callback roda na thread de processamento e recebe o objeto de resultado do motor, que é
+   * reescrito a cada frame: copie o que precisar antes de sair do callback.
+   */
   public void start(Context context, TrackingProvider.FrameCallback callback) {
     provider.start(context, callback, profile);
   }
 
+  /**
+   * Igual a {@link #start}, mas entrega na thread de UI um retrato do frame que é só do chamador.
+   *
+   * <p>É o que os jogos querem: mexem em View, guardam o resultado para o {@code onDraw} e não
+   * podem ver o esqueleto pela metade nem acumular frames atrasados na fila da UI.
+   */
+  public void startOnMainThread(Context context, TrackingProvider.FrameCallback callback) {
+    final Handler mainHandler = new Handler(Looper.getMainLooper());
+    MainThreadFrameRelay relay =
+        new MainThreadFrameRelay(
+            new Executor() {
+              @Override
+              public void execute(Runnable task) {
+                mainHandler.post(task);
+              }
+            },
+            callback);
+    closeMainThreadRelay();
+    mainThreadRelay = relay;
+    provider.start(context, relay, profile);
+  }
+
   public void stop() {
+    closeMainThreadRelay();
     provider.stop();
+  }
+
+  private void closeMainThreadRelay() {
+    if (mainThreadRelay != null) {
+      mainThreadRelay.close();
+      mainThreadRelay = null;
+    }
   }
 
   public boolean isRunning() {

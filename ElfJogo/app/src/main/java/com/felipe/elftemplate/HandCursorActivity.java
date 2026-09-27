@@ -53,6 +53,8 @@ public class HandCursorActivity extends BindBaseActivity {
 
   @Override
   public void onMainServiceConnected() {
+    // O SDK reconecta no onResume depois de um onStop; sem zerar a flag o cursor ficava morto.
+    stopped = false;
     SpeechManager speech = (SpeechManager) getUnitManager(FuncConstant.SPEECH_MANAGER);
     if (speech != null) {
       speech.startSpeak(

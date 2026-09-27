@@ -32,21 +32,28 @@ public final class GroundPlaneEstimator {
   private static final int SAMPLE_STRIDE = 3;
 
   /**
-   * Alturas de montagem plausíveis para o Astra no tronco do Sanbot Elf.
+   * Alturas de montagem fisicamente possíveis para o Astra no Sanbot Elf.
    *
-   * <p>Faixa deliberadamente estreita. No robô real, o estimador aceitou um ajuste de 0,68 m com 30,5°
-   * de inclinação: não era o piso, era o tampo de uma mesa. Um ajuste desses desloca o referencial
-   * inteiro e faz o gate antropométrico rejeitar todo mundo. É melhor recusar a medição e cair no
-   * fallback da montagem conhecida do que aceitar um plano que a mecânica do robô não permite.
+   * <p>O robô inteiro mede 0,90 m (ficha técnica: 902 mm), então o sensor não pode estar acima
+   * disso. A faixa antiga, de 0,75 a 1,45 m, era quase toda impossível e recusava as medições reais
+   * do piso: no robô o estimador chegou a medir 0,68 m, que foi descartado como "tampo de mesa".
+   * Tampo de mesa ou assento de cadeira ficam a menos de 0,45 m abaixo de um sensor dessa altura, e
+   * são eles que o piso mínimo recusa. O teto de 1,10 m só deixa folga para os cenários sintéticos
+   * dos testes.
    */
-  private static final float MIN_PLAUSIBLE_HEIGHT_M = 0.75f;
+  private static final float MIN_PLAUSIBLE_HEIGHT_M = 0.45f;
 
-  private static final float MAX_PLAUSIBLE_HEIGHT_M = 1.45f;
+  private static final float MAX_PLAUSIBLE_HEIGHT_M = 1.10f;
 
-  /** Inclinação plausível da montagem, em graus. */
-  private static final float MIN_PLAUSIBLE_PITCH_DEG = -12f;
+  /**
+   * Inclinação plausível, em graus.
+   *
+   * <p>Pela ficha técnica o sensor 3D do Elf fica na cabeça, que inclina; por isso a faixa cobre
+   * quase toda a busca.
+   */
+  private static final float MIN_PLAUSIBLE_PITCH_DEG = -20f;
 
-  private static final float MAX_PLAUSIBLE_PITCH_DEG = 25f;
+  private static final float MAX_PLAUSIBLE_PITCH_DEG = 35f;
 
   /** Suavização em direção à nova medida, para o referencial não pular entre frames. */
   private static final float BLEND_ALPHA = 0.25f;

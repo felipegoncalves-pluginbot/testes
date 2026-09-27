@@ -67,6 +67,8 @@ public class Tracking3dActivity extends BindBaseActivity {
 
   @Override
   public void onMainServiceConnected() {
+    // O SDK reconecta no onResume depois de um onStop; sem zerar a flag a tela ficava congelada.
+    stopped = false;
     speechManager = (SpeechManager) getUnitManager(FuncConstant.SPEECH_MANAGER);
     tracking.start(this, this::onTrackingFrame);
   }
