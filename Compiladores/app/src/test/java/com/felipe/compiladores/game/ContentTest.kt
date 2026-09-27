@@ -29,9 +29,19 @@ class ContentTest {
         val ids = Content.allLevels.map { it.id }
         assertEquals(ids.size, ids.toSet().size)
         for (level in Content.allLevels) {
+            val spec = level.spec
+            if (spec is LevelSpec.Design) {
+                assertTrue(level.id, level.grammar.isBlank())
+                val reference = Grammar.parse(spec.reference)
+                val report = DesignCheck.check(reference, spec)
+                assertTrue("${level.id}: ${report.tests.filter { !it.ok }} ${report.extra}", report.ok)
+                assertEquals(level.id, spec.par, reference.productions.size)
+                assertFalse(level.id, DesignCheck.check(null, spec).ok)
+                continue
+            }
             val g = Grammar.parse(level.grammar)
             val c = GrammarClasses(g)
-            when (val s = level.spec) {
+            when (val s = spec) {
                 is LevelSpec.Derive -> {
                     val target = tokenizeInput(s.target)
                     assertTrue(level.id, Earley(g).derives(listOf(g.start), target))
@@ -56,6 +66,24 @@ class ContentTest {
                 LevelSpec.SlrTable -> assertTrue(level.id, c.isSLR)
                 LevelSpec.SlrConflict -> assertTrue(level.id, c.slrTable.hasConflicts)
                 is LevelSpec.Surgery -> assertSurgerySolvable(level, g, s)
+                is LevelSpec.Robot -> {
+                    assertTrue(level.id, c.isLL1)
+                    val ideal = RobotInterpreter.idealProgram(c.ll1)
+                    for ((input, expected) in s.tests) {
+                        assertEquals("${level.id} '$input'", expected, RobotInterpreter.run(g, ideal, input).accepted)
+                    }
+                    // Programa vazio: nenhuma frase é aceita.
+                    assertTrue(level.id, s.tests.none { RobotInterpreter.run(g, emptyMap(), it.first).accepted })
+                }
+                is LevelSpec.Magnets -> {
+                    val puzzle = Magnets.build(g, tokenizeInput(s.target), s.mode, s.distractors, Random(level.id.hashCode()))
+                    assertEquals(level.id, s.distractors, puzzle.distractors.size)
+                    assertTrue(level.id, puzzle.distractors.none { it in puzzle.forms })
+                    assertEquals(level.id, null, Magnets.explain(g, puzzle, puzzle.forms.drop(1), s.mode))
+                    val withTrap = listOf(puzzle.distractors.first())
+                    assertNotNull(level.id, Magnets.explain(g, puzzle, withTrap, s.mode))
+                    assertEquals(1, Magnets.derivations(g, tokenizeInput(s.target), s.mode, 3).size)
+                }
                 else -> Unit
             }
         }

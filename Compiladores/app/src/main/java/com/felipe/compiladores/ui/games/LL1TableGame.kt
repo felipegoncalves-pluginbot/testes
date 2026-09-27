@@ -51,6 +51,7 @@ import com.felipe.compiladores.ui.components.Overlay
 import com.felipe.compiladores.ui.components.Panel
 import com.felipe.compiladores.ui.components.productionText
 import com.felipe.compiladores.ui.components.symbolsText
+import com.felipe.compiladores.ui.components.shake
 import com.felipe.compiladores.ui.level.LevelSession
 import com.felipe.compiladores.ui.theme.Danger
 import com.felipe.compiladores.ui.theme.NonterminalColor
@@ -144,7 +145,7 @@ fun LL1TableGame(level: Level, spec: LevelSpec.LL1Table, session: LevelSession, 
         ) {
             GrammarCard(grammar, numbered = true)
             Panel(title = "FIRST e FOLLOW", accent = Tertiary, collapsible = true) { FirstFollowView(an) }
-            Panel(title = "Tabela M[A, a]", accent = NonterminalColor) {
+            Panel(Modifier.shake(session.mistakes), title = "Tabela M[A, a]", accent = NonterminalColor) {
                 Text("Toque numa célula para escolher as produções (pelo número).", style = MaterialTheme.typography.bodySmall, color = TextDim)
                 Spacer(Modifier.height(8.dp))
                 Column(Modifier.horizontalScroll(rememberScrollState())) {

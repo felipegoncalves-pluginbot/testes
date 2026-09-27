@@ -51,9 +51,11 @@ import com.felipe.compiladores.ui.components.MonoText
 import com.felipe.compiladores.ui.components.Panel
 import com.felipe.compiladores.ui.components.ParseTreeView
 import com.felipe.compiladores.ui.components.Tag
+import com.felipe.compiladores.ui.components.appear
 import com.felipe.compiladores.ui.components.productionText
 import com.felipe.compiladores.ui.components.symbolColor
 import com.felipe.compiladores.ui.components.symbolsText
+import com.felipe.compiladores.ui.components.shake
 import com.felipe.compiladores.ui.level.LevelSession
 import com.felipe.compiladores.ui.theme.Danger
 import com.felipe.compiladores.ui.theme.Mono
@@ -168,7 +170,7 @@ fun DeriveGame(level: Level, spec: LevelSpec.Derive, session: LevelSession, onSo
         }
         GrammarCard(grammar)
 
-        Panel(title = "Forma sentencial", accent = Primary) {
+        Panel(Modifier.shake(session.mistakes), title = "Forma sentencial", accent = Primary) {
             FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 current.symbols.forEachIndexed { i, s ->
                     val isNt = grammar.isNonterminal(s)
@@ -176,7 +178,7 @@ fun DeriveGame(level: Level, spec: LevelSpec.Derive, session: LevelSession, onSo
                     val active = i == activePos
                     val color = symbolColor(grammar, s)
                     Box(
-                        Modifier.heightIn(min = 44.dp).widthIn(min = 40.dp)
+                        Modifier.appear(current.form[i]).heightIn(min = 44.dp).widthIn(min = 40.dp)
                             .background(if (active) color.copy(alpha = 0.25f) else SurfaceHigh, RoundedCornerShape(10.dp))
                             .border(if (active) 2.dp else 1.dp, if (can) color else Outline, RoundedCornerShape(10.dp))
                             .then(if (can && spec.mode == DerivationMode.FREE) Modifier.clickable { selectedPos = i } else Modifier)

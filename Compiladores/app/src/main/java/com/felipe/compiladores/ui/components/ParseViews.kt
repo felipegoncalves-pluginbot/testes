@@ -52,6 +52,7 @@ import com.felipe.compiladores.ui.theme.Danger
 import com.felipe.compiladores.ui.theme.DotColor
 import com.felipe.compiladores.ui.theme.Mono
 import com.felipe.compiladores.ui.theme.NonterminalColor
+import com.felipe.compiladores.ui.theme.OnAccent
 import com.felipe.compiladores.ui.theme.Outline
 import com.felipe.compiladores.ui.theme.Primary
 import com.felipe.compiladores.ui.theme.Secondary
@@ -93,7 +94,13 @@ fun SymbolBox(symbol: String, grammar: Grammar?, highlight: Boolean = false, dim
  * forma o resto da derivação); false no LR (pilha + entrada = forma sentencial).
  */
 @Composable
-fun StackView(symbols: List<String>, grammar: Grammar?, topAtLeft: Boolean, states: List<Int>? = null) {
+fun StackView(
+    symbols: List<String>,
+    grammar: Grammar?,
+    topAtLeft: Boolean,
+    states: List<Int>? = null,
+    keys: List<Any>? = null,
+) {
     Column {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text("PILHA", style = MaterialTheme.typography.labelSmall, color = TextDim)
@@ -105,10 +112,14 @@ fun StackView(symbols: List<String>, grammar: Grammar?, topAtLeft: Boolean, stat
             if (!topAtLeft) {
                 SymbolBox(END, grammar, sub = states?.getOrNull(0)?.toString())
                 symbols.forEachIndexed { i, s ->
-                    SymbolBox(s, grammar, highlight = i == symbols.lastIndex, sub = states?.getOrNull(i + 1)?.toString())
+                    Box(Modifier.appear(keys?.getOrNull(i) ?: "$i-$s")) {
+                        SymbolBox(s, grammar, highlight = i == symbols.lastIndex, sub = states?.getOrNull(i + 1)?.toString())
+                    }
                 }
             } else {
-                symbols.forEachIndexed { i, s -> SymbolBox(s, grammar, highlight = i == 0) }
+                symbols.forEachIndexed { i, s ->
+                    Box(Modifier.appear(keys?.getOrNull(i) ?: "$i-$s")) { SymbolBox(s, grammar, highlight = i == 0) }
+                }
             }
         }
     }
@@ -191,6 +202,7 @@ fun ParseTreeView(
                 Box(
                     Modifier
                         .offset(colW * px + (colW - nodeW) / 2, rowH * py)
+                        .appear(n.id)
                         .size(nodeW, nodeH)
                         .background(if (hl) color.copy(alpha = 0.3f) else SurfaceHigh, RoundedCornerShape(8.dp))
                         .border(if (hl) 2.dp else 1.dp, if (hl) color else color.copy(alpha = 0.5f), RoundedCornerShape(8.dp)),
@@ -393,7 +405,7 @@ fun KeyValueLine(label: String, value: AnnotatedString) {
 @Composable
 fun NumberBadge(n: Int, color: Color = Warning) {
     Box(Modifier.size(22.dp).background(color, RoundedCornerShape(50)), contentAlignment = Alignment.Center) {
-        Text("$n", color = Color(0xFF0B1020), fontSize = 11.sp, fontWeight = FontWeight.Black, textAlign = TextAlign.Center)
+        Text("$n", color = OnAccent, fontSize = 11.sp, fontWeight = FontWeight.Black, textAlign = TextAlign.Center)
     }
 }
 

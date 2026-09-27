@@ -32,30 +32,10 @@ object Grammars {
 }
 
 object Content {
-    private const val CYAN = 0xFF22D3EE
-    private const val VIOLET = 0xFFA78BFA
-    private const val PINK = 0xFFF472B6
-    private const val AMBER = 0xFFFBBF24
-    private const val GREEN = 0xFF34D399
-    private const val ORANGE = 0xFFFB923C
-    private const val BLUE = 0xFF60A5FA
-    private const val LIME = 0xFFA3E635
-    private const val GOLD = 0xFFFACC15
 
     val worlds: List<World> = listOf(
         World(
-            "w1", 1, "Oficina de Derivações", "Gramáticas, derivações e ambiguidade", "🔧", CYAN,
-            Lesson(
-                "Gramáticas em 1 minuto",
-                listOf(
-                    "Uma gramática livre de contexto é um conjunto de regras de reescrita. Não-terminais (em azul) ainda serão trocados; terminais (em amarelo) são os tokens finais.",
-                    "Derivar é trocar um não-terminal pelo lado direito de uma de suas produções. Cada passo gera uma forma sentencial.",
-                    "Derivação mais à esquerda: sempre troque o não-terminal mais à esquerda. É exatamente o que um parser top-down (LL) faz.",
-                    "Derivação mais à direita: sempre troque o mais à direita. Um parser bottom-up (LR) produz essa derivação ao contrário!",
-                    "Ambígua é a gramática em que uma mesma cadeia tem duas árvores de derivação diferentes.",
-                ),
-                "S → a S b | ε\nS ⇒ a S b ⇒ a a S b b ⇒ a a b b",
-            ),
+            "w1", "Oficina de Derivações", "Gramáticas, derivações e ambiguidade", "🔧", 0, Lessons.w1,
             listOf(
                 Level(
                     "w1l1", "Primeiro passo",
@@ -77,6 +57,13 @@ object Content {
                     "Leia sua derivação de trás para frente: é exatamente a sequência de reduções de um parser shift-reduce! LR = Left-to-right, Rightmost derivation (ao contrário).",
                     "Aqui o 'id' da direita aparece antes do da esquerda. Comece por E → E + T e resolva o T primeiro.",
                     Grammars.EXPR_LR, LevelSpec.Derive("id + id", RIGHTMOST),
+                ),
+                Level(
+                    "w1m1", "Ímãs da derivação",
+                    "As formas de uma derivação mais à esquerda caíram da geladeira! Coloque os ímãs na ordem. Cuidado: 2 são armadilhas.",
+                    "Cada forma sai da anterior trocando SÓ o não-terminal mais à esquerda. Por isso a parte da esquerda (os terminais já fixados) só cresce.",
+                    "Olhe o não-terminal mais à esquerda da forma atual: qual peça troca exatamente ele?",
+                    Grammars.EXPR_LR, LevelSpec.Magnets("id + id", LEFTMOST),
                 ),
                 Level(
                     "w1l4", "Ordem livre",
@@ -107,19 +94,101 @@ object Content {
             ),
         ),
         World(
-            "w2", 2, "Laboratório FIRST", "Com o que cada não-terminal pode começar?", "🧪", VIOLET,
-            Lesson(
-                "FIRST em 1 minuto",
-                listOf(
-                    "FIRST(α) é o conjunto de terminais que podem aparecer no INÍCIO de alguma cadeia derivada de α. Se α pode virar ε, então ε ∈ FIRST(α).",
-                    "Regra 1: se A → a…, então a ∈ FIRST(A).",
-                    "Regra 2: se A → B…, tudo de FIRST(B), menos ε, entra em FIRST(A).",
-                    "Regra 3 (o vazamento): se B pode virar ε, olhe também o símbolo seguinte. Em A → B C…, FIRST(C) também entra.",
-                    "Regra 4: se TODOS os símbolos de uma alternativa podem sumir, ε ∈ FIRST(A).",
-                    "Repita as regras até nada mudar: é um algoritmo de ponto fixo.",
+            "wf", "Fábrica de Gramáticas", "Construa gramáticas que passem nos testes", "🏭", 5, Lessons.wf,
+            listOf(
+                Level(
+                    "wf1", "Linha de a's",
+                    "Monte uma gramática que gere um ou mais 'a'. A esteira vai testar sua fábrica.",
+                    "Repetição = recursão. S → a S | a é a receita de \"um ou mais\". Com S → a S | ε seria \"zero ou mais\".",
+                    "Uma alternativa gera um 'a' e chama S de novo; outra para.",
+                    "", LevelSpec.Design(
+                        listOf("S"), listOf("a", "b"),
+                        accept = listOf("a", "a a", "a a a a"), reject = listOf("", "b", "a b"),
+                        reference = "S -> a S | a", par = 2,
+                    ),
                 ),
-                "A → B c | d     B → b | ε\nFIRST(B) = { b, ε }\nFIRST(A) = { b, c, d }  (o c vaza porque B some)",
+                Level(
+                    "wf2", "Primeiro a's, depois b's",
+                    "Zero ou mais 'a' seguidos de um ou mais 'b'. Você tem S e B.",
+                    "Divida para conquistar: S cuida dos a's e passa o trabalho para B, que cuida dos b's. Cada não-terminal é uma máquina da linha de produção.",
+                    "S → a S (mais um a) ou S → B (acabaram os a's). E B?",
+                    "", LevelSpec.Design(
+                        listOf("S", "B"), listOf("a", "b"),
+                        accept = listOf("b", "a b", "a a b b b"), reject = listOf("", "a", "b a", "a b a"),
+                        reference = "S -> a S | B\nB -> b B | b", par = 4,
+                    ),
+                ),
+                Level(
+                    "wf3", "aⁿbⁿ",
+                    "Mesma quantidade de 'a' e de 'b', com os a's antes. Isso NÃO dá para fazer com expressão regular!",
+                    "O truque de coisas casadas: coloque as duas pontas na mesma regra (S → a S b). É exatamente o poder que a gramática livre de contexto tem a mais que a expressão regular.",
+                    "Se toda vez que você põe um 'a' também puser um 'b'...",
+                    "", LevelSpec.Design(
+                        listOf("S"), listOf("a", "b"),
+                        accept = listOf("", "a b", "a a b b", "a a a b b b"), reject = listOf("a", "a b b", "b a", "a a b"),
+                        reference = Grammars.ANBN, par = 2,
+                    ),
+                ),
+                Level(
+                    "wf4", "Parênteses balanceados",
+                    "Todo '(' tem seu ')'. Inclua a cadeia vazia.",
+                    "S → ( S ) S: o primeiro S fica DENTRO do par, o segundo vem DEPOIS. Duas posições, duas funções.",
+                    "Um par ( ) pode ter coisas dentro e coisas depois.",
+                    "", LevelSpec.Design(
+                        listOf("S"), listOf("(", ")"),
+                        accept = listOf("", "( )", "( ( ) )", "( ) ( )"), reject = listOf("(", ") (", "( ( )", ")"),
+                        reference = Grammars.PARENS, par = 2,
+                    ),
+                ),
+                Level(
+                    "wf5", "Lista com vírgulas",
+                    "id, depois vírgula e id quantas vezes quiser. Sem vírgula sobrando!",
+                    "Esse é o padrão \"item (separador item)*\": parâmetros de função, argumentos, declarações... Você vai escrever isso em todo compilador.",
+                    "Uma lista é um id sozinho, ou um id, uma vírgula e... outra lista.",
+                    "", LevelSpec.Design(
+                        listOf("L"), listOf("id", ","),
+                        accept = listOf("id", "id , id", "id , id , id"), reject = listOf("", ",", "id ,", "id id", ", id"),
+                        reference = "L -> id | id , L", par = 2,
+                    ),
+                ),
+                Level(
+                    "wf6", "Palíndromos",
+                    "Cadeias de a's e b's que se leem igual de trás para frente.",
+                    "Cada regra S → a S a fecha as duas pontas iguais. O meio pode ser uma letra sozinha ou nada.",
+                    "Coloque a mesma letra nas duas pontas e chame S no meio. E o centro?",
+                    "", LevelSpec.Design(
+                        listOf("S"), listOf("a", "b"),
+                        accept = listOf("", "a", "a b a", "b a a b", "a a"), reject = listOf("a b", "a a b", "b a"),
+                        reference = "S -> a S a | b S b | a | b | ε", par = 5,
+                    ),
+                ),
+                Level(
+                    "wf7", "Lista LL(1)",
+                    "A mesma lista, mas agora a fábrica exige uma gramática LL(1). Você tem L e L'.",
+                    "L → id | id , L tem prefixo comum (id). Separar em L → id L' deixa o parser decidir olhando um token só.",
+                    "Tire o id comum para fora: L → id L'. O que L' precisa gerar?",
+                    "", LevelSpec.Design(
+                        listOf("L", "L'"), listOf("id", ","),
+                        accept = listOf("id", "id , id", "id , id , id"), reject = listOf("", ",", "id ,", "id id"),
+                        reference = "L -> id L'\nL' -> , id L' | ε", par = 3, requireLL1 = true,
+                    ),
+                ),
+                Level(
+                    "wf8", "Expressões sem ambiguidade",
+                    "Monte expressões com +, *, parênteses e id. Exigência: sem ambiguidade (LR(1)). Use E, T e F.",
+                    "Camadas = precedência: E soma T's, T multiplica F's, F é átomo ou ( E ). Quanto mais fundo na gramática, mais forte o operador.",
+                    "E → E + T | T; T cuida do *; F é id ou ( E ).",
+                    "", LevelSpec.Design(
+                        listOf("E", "T", "F"), listOf("id", "+", "*", "(", ")"),
+                        accept = listOf("id", "id + id", "id * id + id", "( id + id ) * id"),
+                        reject = listOf("id +", "+ id", "( id", "id id"),
+                        reference = Grammars.EXPR_LR, par = 6, maxLen = 5, requireLR1 = true,
+                    ),
+                ),
             ),
+        ),
+        World(
+            "w2", "Laboratório FIRST", "Com o que cada não-terminal pode começar?", "🧪", 2, Lessons.w2,
             listOf(
                 Level(
                     "w2l1", "Começos diretos",
@@ -164,18 +233,7 @@ object Content {
             ),
         ),
         World(
-            "w3", 3, "Laboratório FOLLOW", "O que pode vir depois de cada não-terminal?", "🧭", PINK,
-            Lesson(
-                "FOLLOW em 1 minuto",
-                listOf(
-                    "FOLLOW(A) é o conjunto de terminais que podem aparecer IMEDIATAMENTE depois de A em alguma forma sentencial. Nunca contém ε; pode conter $ (fim da entrada).",
-                    "Regra 1: $ ∈ FOLLOW(símbolo inicial).",
-                    "Regra 2: em X → α A β, tudo de FIRST(β), menos ε, entra em FOLLOW(A).",
-                    "Regra 3: em X → α A (A no fim), ou se β pode virar ε, tudo de FOLLOW(X) entra em FOLLOW(A).",
-                    "Dica de ouro: procure A nos LADOS DIREITOS, não nas produções de A!",
-                ),
-                "S → a A b | c A     A → d\nFOLLOW(A) = { b } ∪ FOLLOW(S) = { b, $ }",
-            ),
+            "w3", "Laboratório FOLLOW", "O que pode vir depois de cada não-terminal?", "🧭", 5, Lessons.w3,
             listOf(
                 Level(
                     "w3l1", "Quem vem depois?",
@@ -215,17 +273,7 @@ object Content {
             ),
         ),
         World(
-            "w4", 4, "Montador de Tabela LL(1)", "A tabela que guia o parser preditivo", "🧩", AMBER,
-            Lesson(
-                "Tabela LL(1) em 1 minuto",
-                listOf(
-                    "A tabela M[A, a] responde: com A no topo da pilha e 'a' como próximo token, qual produção usar?",
-                    "Para cada produção A → α: coloque-a em M[A, a] para todo a ∈ FIRST(α).",
-                    "Se α pode virar ε: coloque-a também em M[A, b] para todo b ∈ FOLLOW(A), inclusive $.",
-                    "Célula vazia = erro de sintaxe. Duas produções na mesma célula = conflito: a gramática NÃO é LL(1).",
-                ),
-                "S → a S b (1) | ε (2)\nM[S, a] = 1     M[S, b] = 2     M[S, $] = 2",
-            ),
+            "w4", "Montador de Tabela LL(1)", "A tabela que guia o parser preditivo", "🧩", 3, Lessons.w4,
             listOf(
                 Level(
                     "w4l1", "Primeira tabela",
@@ -270,18 +318,7 @@ object Content {
             ),
         ),
         World(
-            "w5", 5, "Você é o Parser: Top-Down", "Pilha, tabela e derivação mais à esquerda", "🤖", GREEN,
-            Lesson(
-                "Parser preditivo em 1 minuto",
-                listOf(
-                    "O parser preditivo usa uma pilha. Começa com S $ e lê a entrada da esquerda para a direita.",
-                    "Topo é não-terminal A e o próximo token é a: troque A pelo lado direito de M[A, a]. O primeiro símbolo fica no topo.",
-                    "Topo é terminal: se for igual ao token, casa (match) e avança; senão, erro.",
-                    "Topo $ e entrada $: aceita!",
-                    "Truque: entrada já lida + pilha = forma sentencial da derivação mais à esquerda.",
-                ),
-                "Pilha: S $     Entrada: a b $\nM[S, a] = S → a S b  ⇒  Pilha: a S b $",
-            ),
+            "w5", "Você é o Parser: Top-Down", "Pilha, tabela e derivação mais à esquerda", "🤖", 1, Lessons.w5,
             listOf(
                 Level(
                     "w5l1", "Aquecimento",
@@ -296,6 +333,13 @@ object Content {
                     "Quando E' ou T' somem, a justificativa é sempre FOLLOW: o próximo token pode vir depois deles.",
                     "Consulte M[topo, token]. Quando o topo é T' e o token é '+', qual produção está lá?",
                     Grammars.EXPR_LL, LevelSpec.LL1Parse("id + id", askWhy = true),
+                ),
+                Level(
+                    "w5m1", "Ímãs do top-down",
+                    "Ordene a derivação mais à esquerda de \"id * id\". É exatamente o caminho que o parser LL percorre.",
+                    "Compare com o parser: entrada já lida + pilha = cada um desses ímãs. O parser LL é uma máquina de fazer derivações à esquerda.",
+                    "Toda forma começa com os tokens já casados. Qual é o próximo não-terminal a ser trocado?",
+                    Grammars.EXPR_LL, LevelSpec.Magnets("id * id", LEFTMOST),
                 ),
                 Level(
                     "w5l3", "Expressões II",
@@ -326,17 +370,44 @@ object Content {
             ),
         ),
         World(
-            "w6", 6, "Cirurgia de Gramáticas", "Recursão à esquerda e fatoração", "✂️", ORANGE,
-            Lesson(
-                "Cirurgia em 1 minuto",
-                listOf(
-                    "Top-down não aguenta recursão à esquerda: com A → A α, o parser expande A para sempre sem consumir nada.",
-                    "Receita: A → A α | β  vira  A → β A'  e  A' → α A' | ε.",
-                    "Fatoração à esquerda: A → α β1 | α β2  vira  A → α A'  e  A' → β1 | β2.",
-                    "Edite as produções à vontade. O verificador testa: sem recursão à esquerda, MESMA linguagem (todas as cadeias até um tamanho) e, quando pedido, LL(1).",
+            "wr", "Robô Descendente", "Programe o parser recursivo", "🦾", 4, Lessons.wr,
+            listOf(
+                Level(
+                    "wr1", "Comandos",
+                    "Programe o robô: para cada função, escolha com quais tokens cada ramo é escolhido. Depois rode os testes.",
+                    "Cada não-terminal virou uma função e cada alternativa virou um if. As condições dos ifs são exatamente as linhas da tabela LL(1)!",
+                    "O ramo de C que começa com print só pode ser escolhido quando o token é print.",
+                    "C -> id = V ; | print V ;\nV -> id | num",
+                    LevelSpec.Robot(listOf("id = num ;" to true, "print id ;" to true, "print = id ;" to false, "id = ;" to false)),
                 ),
-                "E → E + T | T\n⇒ E → T E'     E' → + T E' | ε",
+                Level(
+                    "wr2", "aⁿbⁿ recursivo",
+                    "Agora com ε: qual token faz S() simplesmente retornar?",
+                    "O ramo ε vira um return, escolhido pelos tokens de FOLLOW(S) = { b, $ }. Se você usasse \"qualquer outro token\", o robô ainda funcionaria nas frases certas, mas descobriria os erros mais tarde.",
+                    "S → ε deve ser escolhido quando o que vem é algo que pode seguir S.",
+                    Grammars.ANBN,
+                    LevelSpec.Robot(listOf("" to true, "a b" to true, "a a b b" to true, "a" to false, "a b b" to false, "b" to false)),
+                ),
+                Level(
+                    "wr3", "Listas",
+                    "Programe o robô das listas separadas por vírgula.",
+                    "L'() é um laço disfarçado de recursão: enquanto vier vírgula, consome \", id\" e chama L'() de novo. Muitos compiladores escrevem isso como while.",
+                    "L' continua com ',' e para com o que vier depois da lista.",
+                    "L -> id L'\nL' -> , id L' | ε",
+                    LevelSpec.Robot(listOf("id" to true, "id , id , id" to true, "id ," to false, ", id" to false, "id id" to false)),
+                ),
+                Level(
+                    "wr4", "Expressões",
+                    "O chefe: o parser recursivo completo de expressões.",
+                    "Você escreveu um parser descendente recursivo de verdade. A pilha de chamadas do robô é a mesma pilha do parser LL(1) que você operou à mão.",
+                    "Os ramos ε de E' e T' usam FOLLOW. Os outros usam FIRST do lado direito.",
+                    Grammars.EXPR_LL,
+                    LevelSpec.Robot(listOf("id" to true, "id + id * id" to true, "( id + id ) * id" to true, "id +" to false, "( id" to false, "id * * id" to false)),
+                ),
             ),
+        ),
+        World(
+            "w6", "Cirurgia de Gramáticas", "Recursão à esquerda e fatoração", "✂️", 6, Lessons.w6,
             listOf(
                 Level(
                     "w6l1", "Primeira cirurgia",
@@ -382,19 +453,7 @@ object Content {
             ),
         ),
         World(
-            "w7", 7, "Shift-Reduce: Bottom-Up", "Empilhar, reduzir e caçar handles", "🏗️", BLUE,
-            Lesson(
-                "Bottom-up em 1 minuto",
-                listOf(
-                    "O parser bottom-up constrói a árvore das folhas para a raiz.",
-                    "SHIFT: empilha o próximo token.",
-                    "REDUCE A → β: quando o topo da pilha termina com β (o handle), troca β por A.",
-                    "ACCEPT: a pilha tem só o símbolo inicial e a entrada acabou.",
-                    "A arte é saber QUANDO reduzir. No SLR: reduza por A → β só se o próximo token ∈ FOLLOW(A).",
-                    "Pilha + entrada restante = forma sentencial da derivação mais à direita (ao contrário).",
-                ),
-                "Pilha: $ a c     Entrada: b $\nc é handle de S → c  ⇒  Pilha: $ a S",
-            ),
+            "w7", "Shift-Reduce: Bottom-Up", "Empilhar, reduzir e caçar handles", "🏗️", 4, Lessons.w7,
             listOf(
                 Level(
                     "w7l1", "Empilhar e reduzir",
@@ -402,6 +461,13 @@ object Content {
                     "Repare na árvore crescendo de baixo para cima: primeiro S → c, depois S → a S b. É a derivação mais à direita lida ao contrário.",
                     "Empilhe até ver no topo um lado direito completo.",
                     Grammars.ASB_C, LevelSpec.ShiftReduce("a c b"),
+                ),
+                Level(
+                    "w7m1", "Ímãs da redução",
+                    "Ordene a derivação MAIS À DIREITA de \"id * id\". Depois leia de baixo para cima!",
+                    "De baixo para cima, cada ímã é um reduce do parser shift-reduce: id * id ← F * id ← T * id ← T * F ← T ← E. O LR faz a derivação à direita ao contrário.",
+                    "Troque sempre o não-terminal mais à direita. O último id é resolvido primeiro.",
+                    Grammars.EXPR_LR, LevelSpec.Magnets("id * id", RIGHTMOST),
                 ),
                 Level(
                     "w7l2", "Soma",
@@ -439,18 +505,7 @@ object Content {
             ),
         ),
         World(
-            "w8", 8, "Fábrica de Itens LR", "Itens, fechamento, goto e tabela SLR", "🏭", LIME,
-            Lesson(
-                "Itens LR(0) em 1 minuto",
-                listOf(
-                    "Um item LR(0) é uma produção com um ponto: E → E • + T significa \"já vi E, espero + T\".",
-                    "Fechamento: se há • antes de um não-terminal B, adicione B → • γ para toda produção de B. Repita.",
-                    "goto(I, X): pegue os itens de I com • antes de X, avance o ponto e faça o fechamento.",
-                    "Os conjuntos de itens são os estados de um autômato que reconhece os prefixos viáveis — tudo o que pode estar na pilha.",
-                    "Tabela SLR: transição com terminal → shift; transição com não-terminal → goto; item completo A → α • → reduce nas colunas de FOLLOW(A); S' → S • → accept no $.",
-                ),
-                "closure({ S' → • S }) com S → ( L ) | x:\nS' → • S     S → • ( L )     S → • x",
-            ),
+            "w8", "Fábrica de Itens LR", "Itens, fechamento, goto e tabela SLR", "🏭", 0, Lessons.w8,
             listOf(
                 Level(
                     "w8l1", "Primeiros itens",
@@ -497,19 +552,7 @@ object Content {
             ),
         ),
         World(
-            "w9", 9, "O Classificador", "Chefão final: LL(1), LR(0), SLR, LALR ou LR(1)?", "👑", GOLD,
-            Lesson(
-                "A hierarquia em 1 minuto",
-                listOf(
-                    "LR(0) ⊂ SLR(1) ⊂ LALR(1) ⊂ LR(1). Toda gramática LL(1) também é LR(1).",
-                    "Recursão à esquerda ou prefixo comum ⇒ não é LL(1). Mas LR adora recursão à esquerda!",
-                    "Conflito no LR(0) que some no SLR ⇒ o FOLLOW resolveu.",
-                    "Conflito no SLR que some no LALR ⇒ o lookahead por item resolveu.",
-                    "Conflito só no LALR ⇒ a fusão de estados do LR(1) criou um reduce/reduce.",
-                    "Gramática ambígua não é LL(1) nem LR(k) para nenhum k.",
-                ),
-                null,
-            ),
+            "w9", "O Classificador", "Chefão final: LL(1), LR(0), SLR, LALR ou LR(1)?", "👑", 3, Lessons.w9,
             listOf(
                 Level(
                     "w9l1", "Expressões LR",
@@ -536,7 +579,7 @@ object Content {
                     "w9l4", "Ponteiros",
                     "Classifique a gramática L = R.",
                     "O exemplo clássico LALR mas não SLR: no estado com S → L • = R e R → L •, o lookahead exato de R → L • é só $, não todo o FOLLOW(R) = { =, $ }.",
-                    "Lembre do conflito do Mundo 8. O LALR resolve?",
+                    "Lembre do conflito da Fábrica de Itens LR. O LALR resolve?",
                     Grammars.POINTERS, LevelSpec.Classify,
                 ),
                 Level(
@@ -555,7 +598,7 @@ object Content {
                 ),
             ),
         ),
-    )
+    ).mapIndexed { i, w -> w.copy(number = i + 1) }
 
     val allLevels: List<Level> = worlds.flatMap { it.levels }
 

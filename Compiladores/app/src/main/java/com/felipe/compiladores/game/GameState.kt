@@ -79,7 +79,34 @@ class GameState(private val store: ProfileStore, private val today: () -> Long =
 
     fun markLessonSeen(worldId: String) = update { it.copy(seenLessons = it.seenLessons + worldId) }
 
-    fun resetProgress() = update { Profile(lastDay = it.lastDay, streak = it.streak) }
+    fun resetProgress() = update { Profile(lastDay = it.lastDay, streak = it.streak, settings = it.settings) }
+
+    fun updateSettings(f: (Settings) -> Settings) = update { it.copy(settings = f(it.settings)) }
+
+    // ------------------------------------------------------------ treino relâmpago
+
+    fun arcadeLevel(gameId: String): Int = profile.arcadeLevel[gameId] ?: 1
+
+    fun arcadeBest(gameId: String): Int = profile.arcade[gameId].orEmpty().maxOrNull() ?: 0
+
+    /**
+     * Registra uma partida. [performance] ≥ 1 significa que o jogador bateu a meta do nível:
+     * a dificuldade sobe; abaixo de 0,4 ela desce (dificuldade adaptativa, como no Peak).
+     */
+    fun recordArcade(gameId: String, score: Int, performance: Float) = update {
+        val history = (it.arcade[gameId].orEmpty() + score).takeLast(12)
+        val level = it.arcadeLevel[gameId] ?: 1
+        val next = when {
+            performance >= 1f -> (level + 1).coerceAtMost(10)
+            performance < 0.4f -> (level - 1).coerceAtLeast(1)
+            else -> level
+        }
+        it.copy(
+            arcade = it.arcade + (gameId to history),
+            arcadeLevel = it.arcadeLevel + (gameId to next),
+            xp = it.xp + score / 20,
+        )
+    }
 
     // ------------------------------------------------------------ revisão espaçada (Leitner)
 

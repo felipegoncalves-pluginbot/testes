@@ -58,6 +58,7 @@ import com.felipe.compiladores.ui.components.Panel
 import com.felipe.compiladores.ui.components.itemText
 import com.felipe.compiladores.ui.components.productionText
 import com.felipe.compiladores.ui.components.symbolsText
+import com.felipe.compiladores.ui.components.shake
 import com.felipe.compiladores.ui.level.LevelSession
 import com.felipe.compiladores.ui.theme.Danger
 import com.felipe.compiladores.ui.theme.NonterminalColor
@@ -143,7 +144,7 @@ fun SlrTableGame(level: Level, session: LevelSession, onSolved: () -> Unit) {
             Panel(title = "FOLLOW", accent = Tertiary, collapsible = true) {
                 FirstFollowView(Analysis(grammar), showFirst = false)
             }
-            Panel(title = "ACTION | GOTO", accent = NonterminalColor) {
+            Panel(Modifier.shake(session.mistakes), title = "ACTION | GOTO", accent = NonterminalColor) {
                 Text("sN = empilhar e ir para N · rN = reduzir pela produção N · acc = aceitar", style = MaterialTheme.typography.bodySmall, color = TextDim)
                 Spacer(Modifier.height(8.dp))
                 Column(Modifier.horizontalScroll(rememberScrollState())) {
@@ -273,7 +274,7 @@ fun SlrConflictGame(level: Level, session: LevelSession, onSolved: () -> Unit) {
         GrammarCard(automaton.grammar, title = "Gramática aumentada", numbered = true)
         Panel(title = "Autômato LR(0)", accent = Tertiary, collapsible = true) { AutomatonView(automaton) }
         Panel(title = "FOLLOW", accent = Tertiary, collapsible = true) { FirstFollowView(Analysis(grammar), showFirst = false) }
-        Panel(title = "Marque as células ACTION com conflito", accent = Warning) {
+        Panel(Modifier.shake(session.mistakes), title = "Marque as células ACTION com conflito", accent = Warning) {
             Column(Modifier.horizontalScroll(rememberScrollState())) {
                 Row {
                     HeaderCell(AnnotatedString("#"), width = 36.dp)
@@ -375,7 +376,7 @@ fun ClassifyGame(level: Level, session: LevelSession, onSolved: () -> Unit) {
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         GrammarCard(grammar, numbered = true, collapsible = false)
-        Panel(title = "A quais classes ela pertence?", accent = Tertiary) {
+        Panel(Modifier.shake(session.mistakes), title = "A quais classes ela pertence?", accent = Tertiary) {
             Text("Marque todas. Se nenhuma, deixe tudo desmarcado.", style = MaterialTheme.typography.bodySmall, color = TextDim)
             Spacer(Modifier.height(8.dp))
             ChipsRow {

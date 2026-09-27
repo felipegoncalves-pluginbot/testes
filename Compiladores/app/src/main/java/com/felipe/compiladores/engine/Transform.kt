@@ -89,23 +89,32 @@ object Transform {
      * Ponto fixo sobre conjuntos finitos, então sempre termina (mesmo com recursão à esquerda).
      */
     fun languageUpTo(g: Grammar, maxLen: Int, limit: Int = 20_000): Set<List<String>> {
-        val lang = g.nonterminals.associateWith { HashSet<List<String>>() }
+        // Conjuntos separados por tamanho: só combinamos pares cujo tamanho total cabe em maxLen.
+        val lang = g.nonterminals.associateWith { Array(maxLen + 1) { HashSet<List<String>>() } }
+        fun byLen(x: String): Array<out Set<List<String>>> =
+            lang[x] ?: Array(maxLen + 1) { if (it == 1) setOf(listOf(x)) else emptySet() }
         var changed = true
         while (changed) {
             changed = false
             for (p in g.productions) {
-                var acc: Set<List<String>> = setOf(emptyList())
+                var acc: Array<HashSet<List<String>>> = Array(maxLen + 1) { if (it == 0) hashSetOf(emptyList()) else HashSet() }
+                var total = 1
                 for (x in p.rhs) {
-                    val xs: Set<List<String>> = if (g.isNonterminal(x)) lang.getValue(x) else setOf(listOf(x))
-                    val next = HashSet<List<String>>()
-                    for (u in acc) for (v in xs) if (u.size + v.size <= maxLen) next += (u + v)
+                    val xs = byLen(x)
+                    val next = Array(maxLen + 1) { HashSet<List<String>>() }
+                    total = 0
+                    for (lu in 0..maxLen) for (u in acc[lu]) for (lv in 0..maxLen - lu) for (v in xs[lv]) {
+                        if (next[lu + lv].add(u + v)) total++
+                    }
                     acc = next
-                    if (acc.isEmpty() || acc.size > limit) break
+                    if (total == 0 || total > limit) break
                 }
-                if (lang.getValue(p.lhs).addAll(acc)) changed = true
+                if (total == 0) continue
+                val target = lang.getValue(p.lhs)
+                for (l in 0..maxLen) if (target[l].addAll(acc[l])) changed = true
             }
         }
-        return lang.getValue(g.start)
+        return lang.getValue(g.start).flatMap { it }.toSet()
     }
 
     /** Compara linguagens até [maxLen]: (cadeia só em g1, cadeia só em g2), menores primeiro. */

@@ -27,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.felipe.compiladores.game.ArcadeGame
 import com.felipe.compiladores.game.Confidence
 import com.felipe.compiladores.game.Content
 import com.felipe.compiladores.game.Feeling
@@ -36,6 +37,7 @@ import com.felipe.compiladores.ui.components.ButtonStyle
 import com.felipe.compiladores.ui.components.GameButton
 import com.felipe.compiladores.ui.components.Panel
 import com.felipe.compiladores.ui.components.ProgressBar
+import com.felipe.compiladores.ui.arcade.Sparkline
 import com.felipe.compiladores.ui.components.TopBar
 import com.felipe.compiladores.ui.theme.Danger
 import com.felipe.compiladores.ui.theme.Outline
@@ -45,6 +47,7 @@ import com.felipe.compiladores.ui.theme.Success
 import com.felipe.compiladores.ui.theme.Tertiary
 import com.felipe.compiladores.ui.theme.TextDim
 import com.felipe.compiladores.ui.theme.TextMain
+import com.felipe.compiladores.ui.theme.accentColor
 
 /** Interpretação da curva de calibração: é aqui que a metacognição fica visível. */
 fun calibrationAdvice(game: GameState): String {
@@ -131,6 +134,22 @@ fun DiaryScreen(game: GameState, onBack: () -> Unit, onLevel: (Level) -> Unit) {
                                     .background(if (st != null && i < st.box) Primary else Outline, CircleShape),
                             )
                         }
+                    }
+                }
+            }
+
+            Panel(title = "⚡ Mapa do cérebro (treino relâmpago)", accent = Secondary) {
+                ArcadeGame.entries.forEachIndexed { i, g ->
+                    val history = p.arcade[g.id].orEmpty()
+                    Row(Modifier.padding(vertical = 5.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Column(Modifier.weight(1f)) {
+                            Text("${g.emoji} ${g.skill}", color = TextMain, style = MaterialTheme.typography.titleSmall)
+                            Text(
+                                if (history.isEmpty()) "${g.title}: ainda não jogado" else "${g.title}: nível ${game.arcadeLevel(g.id)} · recorde ${game.arcadeBest(g.id)}",
+                                color = TextDim, style = MaterialTheme.typography.bodySmall,
+                            )
+                        }
+                        if (history.size >= 2) Sparkline(history, accentColor(i + 1))
                     }
                 }
             }

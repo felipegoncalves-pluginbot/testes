@@ -1,5 +1,19 @@
 package com.felipe.compiladores.ui.level
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
+import androidx.compose.runtime.LaunchedEffect
+import com.felipe.compiladores.game.Mood
+import com.felipe.compiladores.ui.components.Confetti
+import com.felipe.compiladores.ui.components.Mascot
+import com.felipe.compiladores.ui.components.MascotSays
+import com.felipe.compiladores.ui.components.Tag
+import com.felipe.compiladores.ui.components.appear
+import com.felipe.compiladores.ui.games.DesignGame
+import com.felipe.compiladores.ui.games.MagnetsGame
+import com.felipe.compiladores.ui.games.RobotGame
+import com.felipe.compiladores.ui.lesson.LessonPlayer
+import com.felipe.compiladores.ui.theme.Danger
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -169,11 +183,6 @@ fun LevelHost(
                     Spacer(Modifier.height(12.dp))
                     GameButton("Voltar ao desafio", { showHints = false }, Modifier.fillMaxWidth(), style = ButtonStyle.OUTLINED)
                 }
-                Overlay(showLesson && world != null, { showLesson = false }) {
-                    if (world != null) LessonContent(world)
-                    Spacer(Modifier.height(12.dp))
-                    GameButton("Entendi", { showLesson = false }, Modifier.fillMaxWidth())
-                }
                 val o = outcome
                 Overlay(phase == Phase.RESULT && o != null, null) {
                     if (o != null) ResultContent(
@@ -183,7 +192,11 @@ fun LevelHost(
                         onExit = onExit,
                     )
                 }
+                if (phase == Phase.RESULT && o != null && o.stars >= 2) Confetti(attempt)
             }
+        }
+        if (showLesson && world != null) {
+            LessonPlayer(world, onClose = { showLesson = false }, closeLabel = "Voltar à fase ▶")
         }
     }
 }
@@ -210,6 +223,9 @@ private fun GameFor(level: Level, session: LevelSession, onSolved: () -> Unit) {
         LevelSpec.SlrTable -> SlrTableGame(level, session, onSolved)
         LevelSpec.SlrConflict -> SlrConflictGame(level, session, onSolved)
         LevelSpec.Classify -> ClassifyGame(level, session, onSolved)
+        is LevelSpec.Design -> DesignGame(level, s, session, onSolved)
+        is LevelSpec.Robot -> RobotGame(level, s, session, onSolved)
+        is LevelSpec.Magnets -> MagnetsGame(level, s, session, onSolved)
     }
 }
 
@@ -224,17 +240,17 @@ private fun Intro(
     onLesson: () -> Unit,
     onStart: () -> Unit,
 ) {
-    val grammar = remember(level.grammar) { Grammar.parse(level.grammar) }
+    val grammar = remember(level.grammar) { level.grammar.takeIf { it.isNotBlank() }?.let { Grammar.parse(it) } }
     Column(
         Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(14.dp),
     ) {
-        Panel(title = "Missão", accent = Primary) {
-            Text(level.briefing, style = MaterialTheme.typography.bodyLarge, color = TextMain)
-        }
-        GrammarCard(grammar, collapsible = false)
+        MascotSays(level.briefing, Mood.HAPPY)
+        if (grammar != null) GrammarCard(grammar, collapsible = false)
+        val spec = level.spec
+        if (spec is LevelSpec.Design) SpecCard(spec)
         if (world != null) {
-            GameButton("📖 Rever o conceito: ${world.lesson.title}", onLesson, Modifier.fillMaxWidth(), style = ButtonStyle.OUTLINED, color = Tertiary)
+            GameButton("📖 Aula ilustrada: ${world.lesson.title}", onLesson, Modifier.fillMaxWidth(), style = ButtonStyle.OUTLINED, color = Tertiary)
         }
         val p = level.prediction
         if (p != null) {
@@ -258,23 +274,21 @@ private fun Intro(
     }
 }
 
+/** Especificação da Fábrica: exemplos que devem ser aceitos e rejeitados. */
 @Composable
-fun LessonContent(world: World) {
-    Text("${world.emoji} ${world.lesson.title}", style = MaterialTheme.typography.titleLarge, color = TextMain)
-    Spacer(Modifier.height(10.dp))
-    world.lesson.points.forEach {
-        Row(Modifier.padding(vertical = 4.dp)) {
-            Text("▸ ", color = Primary)
-            Text(it, style = MaterialTheme.typography.bodyMedium, color = TextMain)
-        }
-    }
-    val ex = world.lesson.example
-    if (ex != null) {
-        Spacer(Modifier.height(10.dp))
-        Text("Exemplo", style = MaterialTheme.typography.labelMedium, color = TextDim)
-        Box(Modifier.fillMaxWidth().background(SurfaceHigh, RoundedCornerShape(12.dp)).padding(12.dp)) {
-            MonoText(ex, size = 13)
-        }
+fun SpecCard(spec: LevelSpec.Design) {
+    Panel(title = "Especificação da fábrica", accent = Tertiary) {
+        Text("Deve ACEITAR", style = MaterialTheme.typography.labelMedium, color = Success)
+        ChipsRow { spec.accept.forEach { Tag(if (it.isBlank()) "ε (vazia)" else it, Success) } }
+        Spacer(Modifier.height(8.dp))
+        Text("Deve REJEITAR", style = MaterialTheme.typography.labelMedium, color = Danger)
+        ChipsRow { spec.reject.forEach { Tag(if (it.isBlank()) "ε (vazia)" else it, Danger) } }
+        Spacer(Modifier.height(8.dp))
+        Text(
+            "Não-terminais: ${spec.nonterminals.joinToString(" ")} · Terminais: ${spec.terminals.joinToString(" ")}" +
+                (if (spec.requireLL1) " · exige LL(1)" else "") + (if (spec.requireLR1) " · exige LR(1)" else ""),
+            style = MaterialTheme.typography.bodySmall, color = TextDim,
+        )
     }
 }
 
@@ -329,14 +343,34 @@ private fun ResultContent(
     onNext: (() -> Unit)?,
     onExit: () -> Unit,
 ) {
+    val mood = when (outcome.stars) { 3 -> Mood.CELEBRATE; 2 -> Mood.HAPPY; else -> Mood.THINK }
+    val xpShown = remember { Animatable(0f) }
+    LaunchedEffect(xp) { xpShown.animateTo(xp.toFloat(), tween(900, delayMillis = 500)) }
     Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+        Mascot(mood, size = 84.dp)
         Text("Fase concluída!", style = MaterialTheme.typography.headlineSmall, color = Success)
         Spacer(Modifier.height(6.dp))
-        Stars(outcome.stars, size = 34)
+        Row {
+            repeat(3) { i ->
+                Text(
+                    if (i < outcome.stars) "★" else "☆", fontSize = 40.sp,
+                    color = if (i < outcome.stars) Tertiary else Outline,
+                    modifier = Modifier.appear("star$i", delayMs = 250 + i * 250),
+                )
+            }
+        }
         Spacer(Modifier.height(4.dp))
         Text(
-            "${outcome.mistakes} erro(s) · ${outcome.hints} dica(s)" + if (!sandbox) " · +$xp XP" else "",
+            "${outcome.mistakes} erro(s) · ${outcome.hints} dica(s)" + if (!sandbox) " · +${xpShown.value.toInt()} XP" else "",
             style = MaterialTheme.typography.labelLarge, color = TextDim,
+        )
+        Text(
+            when (outcome.stars) {
+                3 -> "Perfeito! Sem erros e sem dicas."
+                2 -> "Muito bom! Quer tentar as 3 estrelas?"
+                else -> "Concluído! Errar faz parte — refaça quando quiser."
+            },
+            style = MaterialTheme.typography.bodySmall, color = TextDim,
         )
     }
     Spacer(Modifier.height(14.dp))
@@ -350,16 +384,9 @@ private fun ResultContent(
         )
         Spacer(Modifier.height(10.dp))
     }
-    Column(
-        Modifier.fillMaxWidth()
-            .background(Primary.copy(alpha = 0.10f), RoundedCornerShape(14.dp))
-            .border(1.dp, Primary.copy(alpha = 0.5f), RoundedCornerShape(14.dp))
-            .padding(12.dp),
-    ) {
-        Text("💡 Ideia-chave", style = MaterialTheme.typography.titleSmall, color = Primary)
-        Spacer(Modifier.height(4.dp))
-        Text(level.insight, style = MaterialTheme.typography.bodyMedium, color = TextMain)
-    }
+    Text("💡 Ideia-chave", style = MaterialTheme.typography.titleSmall, color = Primary)
+    Spacer(Modifier.height(4.dp))
+    MascotSays(level.insight, Mood.HAPPY, mascotSize = 44.dp)
     if (!sandbox) {
         Spacer(Modifier.height(14.dp))
         Text("Como você se sente sobre essa ideia?", style = MaterialTheme.typography.labelMedium, color = TextDim)
@@ -381,28 +408,5 @@ private fun ResultContent(
     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         GameButton("↻ Jogar de novo", onRetry, Modifier.weight(1f), style = ButtonStyle.OUTLINED)
         GameButton(if (sandbox) "Voltar" else "Mapa", onExit, Modifier.weight(1f), style = ButtonStyle.OUTLINED)
-    }
-}
-
-@Composable
-fun SectionTitle(text: String) {
-    Text(text, style = MaterialTheme.typography.labelMedium, color = TextDim, fontWeight = FontWeight.SemiBold)
-}
-
-@Composable
-fun BigCenterText(text: String) {
-    Text(text, style = MaterialTheme.typography.bodyLarge, color = TextMain, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
-}
-
-@Composable
-fun StepCounter(label: String, value: String) {
-    Row(
-        Modifier.background(SurfaceHigh, RoundedCornerShape(50)).border(1.dp, Outline, RoundedCornerShape(50))
-            .padding(horizontal = 10.dp, vertical = 4.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Text(label, fontSize = 11.sp, color = TextDim)
-        Spacer(Modifier.width(4.dp))
-        Text(value, fontSize = 12.sp, color = TextMain, fontWeight = FontWeight.Bold)
     }
 }

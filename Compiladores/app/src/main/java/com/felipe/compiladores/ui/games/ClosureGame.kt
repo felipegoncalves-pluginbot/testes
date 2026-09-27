@@ -37,6 +37,7 @@ import com.felipe.compiladores.ui.components.MonoText
 import com.felipe.compiladores.ui.components.Panel
 import com.felipe.compiladores.ui.components.ProgressBar
 import com.felipe.compiladores.ui.components.itemText
+import com.felipe.compiladores.ui.components.shake
 import com.felipe.compiladores.ui.level.LevelSession
 import com.felipe.compiladores.ui.theme.DotColor
 import com.felipe.compiladores.ui.theme.Primary
@@ -132,7 +133,9 @@ fun ClosureGame(level: Level, spec: LevelSpec.Closure, session: LevelSession, on
         Text("Pergunta ${qIndex + 1} de ${spec.questions.size}", style = MaterialTheme.typography.labelLarge, color = Primary)
         ProgressBar((qIndex + if (answered) 1 else 0).toFloat() / spec.questions.size)
         GrammarCard(automaton.grammar, title = "Gramática aumentada", numbered = true)
-        ItemsTaskView(task, selected, { item -> selected = if (item in selected) selected - item else selected + item; message = null }, enabled = !answered)
+        Column(Modifier.shake(session.mistakes), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            ItemsTaskView(task, selected, { item -> selected = if (item in selected) selected - item else selected + item; message = null }, enabled = !answered)
+        }
         message?.let { (k, t) -> Feedback(k, t) }
         if (!answered) {
             CheckBar(confidence, { confidence = it }, ::check)

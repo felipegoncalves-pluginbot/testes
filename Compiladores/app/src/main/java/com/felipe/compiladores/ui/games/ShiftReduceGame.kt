@@ -47,6 +47,7 @@ import com.felipe.compiladores.ui.components.ParseTreeView
 import com.felipe.compiladores.ui.components.SententialForm
 import com.felipe.compiladores.ui.components.StackView
 import com.felipe.compiladores.ui.components.productionText
+import com.felipe.compiladores.ui.components.shake
 import com.felipe.compiladores.ui.level.LevelSession
 import com.felipe.compiladores.ui.theme.Danger
 import com.felipe.compiladores.ui.theme.Primary
@@ -126,7 +127,7 @@ fun ShiftReduceGame(level: Level, spec: LevelSpec.ShiftReduce, session: LevelSes
                 }
             }
             Panel(title = "Parser", accent = Primary) {
-                StackView(state.stackSymbols, grammar, topAtLeft = false, states = if (spec.showStates) state.states else null)
+                StackView(state.stackSymbols, grammar, topAtLeft = false, states = if (spec.showStates) state.states else null, keys = state.nodes)
                 Spacer(Modifier.height(10.dp))
                 InputTape(state.tokens, state.pos, grammar)
                 Spacer(Modifier.height(8.dp))
@@ -134,7 +135,7 @@ fun ShiftReduceGame(level: Level, spec: LevelSpec.ShiftReduce, session: LevelSes
             }
             message?.let { (k, t) -> Feedback(k, t) }
             if (!done) {
-                Panel(title = "Seu movimento", accent = Tertiary) {
+                Panel(Modifier.shake(session.mistakes), title = "Seu movimento", accent = Tertiary) {
                     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             GameButton("Empilhar ⤵", { play(LRMove.Shift) }, Modifier.weight(1f), color = Primary)

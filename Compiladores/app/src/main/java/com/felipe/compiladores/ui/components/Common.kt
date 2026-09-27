@@ -1,5 +1,6 @@
 package com.felipe.compiladores.ui.components
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -58,12 +59,15 @@ import com.felipe.compiladores.engine.EPS
 import com.felipe.compiladores.engine.Grammar
 import com.felipe.compiladores.engine.Production
 import com.felipe.compiladores.game.Confidence
+import com.felipe.compiladores.game.Mood
 import com.felipe.compiladores.ui.theme.Danger
 import com.felipe.compiladores.ui.theme.DotColor
 import com.felipe.compiladores.ui.theme.Mono
 import com.felipe.compiladores.ui.theme.NonterminalColor
+import com.felipe.compiladores.ui.theme.OnAccent
 import com.felipe.compiladores.ui.theme.Outline
 import com.felipe.compiladores.ui.theme.Primary
+import com.felipe.compiladores.ui.theme.Scrim
 import com.felipe.compiladores.ui.theme.SpecialColor
 import com.felipe.compiladores.ui.theme.Success
 import com.felipe.compiladores.ui.theme.SurfaceHigh
@@ -243,7 +247,7 @@ fun GameButton(
         ButtonStyle.OUTLINED -> color.copy(alpha = 0.10f)
         ButtonStyle.GHOST -> Color.Transparent
     }
-    val fg = if (style == ButtonStyle.FILLED) Color(0xFF0B1020) else color
+    val fg = if (style == ButtonStyle.FILLED) OnAccent else color
     Box(
         modifier
             .alpha(if (enabled) 1f else 0.38f)
@@ -320,11 +324,13 @@ fun GridCell(
         CellStatus.HINT -> Tertiary
         CellStatus.NEUTRAL -> if (selected) Primary else Outline
     }
-    val bg = when {
-        status == CellStatus.CONFLICT -> Warning.copy(alpha = 0.18f)
-        selected -> Primary.copy(alpha = 0.22f)
-        else -> SurfaceHigh
-    }
+    val bg by animateColorAsState(
+        when {
+            status == CellStatus.CONFLICT -> Warning.copy(alpha = 0.18f)
+            selected -> Primary.copy(alpha = 0.22f)
+            else -> SurfaceHigh
+        },
+    )
     Box(
         modifier
             .then(if (tag != null) Modifier.testTag(tag) else Modifier)
@@ -383,21 +389,36 @@ fun CheckBar(
 
 // ------------------------------------------------------------------ feedback
 
-enum class FeedbackKind(val color: Color, val icon: String) {
-    GOOD(Success, "✓"), BAD(Danger, "✗"), INFO(Primary, "ℹ"), WARN(Tertiary, "!")
+enum class FeedbackKind(val icon: String) {
+    GOOD("✓"), BAD("✗"), INFO("ℹ"), WARN("!");
+
+    val color: Color
+        get() = when (this) {
+            GOOD -> Success
+            BAD -> Danger
+            INFO -> Primary
+            WARN -> Tertiary
+        }
 }
 
 @Composable
 fun Feedback(kind: FeedbackKind, text: String, modifier: Modifier = Modifier, title: String? = null) {
     Row(
         modifier.fillMaxWidth()
+            .appear(text)
             .background(kind.color.copy(alpha = 0.12f), RoundedCornerShape(14.dp))
             .border(1.dp, kind.color.copy(alpha = 0.6f), RoundedCornerShape(14.dp))
             .padding(12.dp),
     ) {
-        Box(Modifier.size(24.dp).background(kind.color, CircleShape), contentAlignment = Alignment.Center) {
-            Text(kind.icon, color = Color(0xFF0B1020), fontWeight = FontWeight.Black, fontSize = 13.sp)
-        }
+        Mascot(
+            when (kind) {
+                FeedbackKind.GOOD -> Mood.HAPPY
+                FeedbackKind.BAD -> Mood.SAD
+                FeedbackKind.INFO -> Mood.THINK
+                FeedbackKind.WARN -> Mood.SURPRISED
+            },
+            size = 38.dp,
+        )
         Spacer(Modifier.width(10.dp))
         Column(Modifier.weight(1f)) {
             if (title != null) Text(title, color = kind.color, style = MaterialTheme.typography.titleSmall)
@@ -446,7 +467,7 @@ fun BoxScope.Overlay(visible: Boolean, onDismiss: (() -> Unit)?, content: @Compo
     if (onDismiss != null) SystemBack(enabled = true) { onDismiss() }
     Box(
         Modifier.fillMaxSize()
-            .background(Color(0xCC05070F))
+            .background(Scrim)
             .clickable(interactionSource = remember { MutableInteractionSource() }, indication = null) { onDismiss?.invoke() },
         contentAlignment = Alignment.Center,
     ) {

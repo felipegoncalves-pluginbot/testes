@@ -49,6 +49,7 @@ import com.felipe.compiladores.ui.components.GridCell
 import com.felipe.compiladores.ui.components.HeaderCell
 import com.felipe.compiladores.ui.components.Panel
 import com.felipe.compiladores.ui.components.symbolsText
+import com.felipe.compiladores.ui.components.shake
 import com.felipe.compiladores.ui.level.LevelSession
 import com.felipe.compiladores.ui.theme.Danger
 import com.felipe.compiladores.ui.theme.Mono
@@ -182,7 +183,7 @@ fun SetsGame(level: Level, follow: Boolean, showFirst: Boolean, session: LevelSe
                 FirstFollowView(an, showFirst = true, showFollow = false)
             }
         }
-        Panel(title = "Monte os conjuntos $name", accent = NonterminalColor) {
+        Panel(Modifier.shake(session.mistakes), title = "Monte os conjuntos $name", accent = NonterminalColor) {
             Text(
                 if (follow) "Toque nas células para marcar. $ = fim da entrada." else "Toque nas células para marcar. ε = pode sumir.",
                 style = MaterialTheme.typography.bodySmall, color = TextDim,

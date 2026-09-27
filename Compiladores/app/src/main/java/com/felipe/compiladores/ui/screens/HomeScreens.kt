@@ -21,16 +21,12 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -38,15 +34,19 @@ import com.felipe.compiladores.game.Content
 import com.felipe.compiladores.game.GameState
 import com.felipe.compiladores.game.Level
 import com.felipe.compiladores.game.LevelSpec
+import com.felipe.compiladores.game.Mood
 import com.felipe.compiladores.game.World
 import com.felipe.compiladores.ui.components.ButtonStyle
 import com.felipe.compiladores.ui.components.GameButton
-import com.felipe.compiladores.ui.components.Panel
+import com.felipe.compiladores.ui.components.Mascot
+import com.felipe.compiladores.ui.components.MascotSays
 import com.felipe.compiladores.ui.components.ProgressBar
 import com.felipe.compiladores.ui.components.Stars
 import com.felipe.compiladores.ui.components.Tag
 import com.felipe.compiladores.ui.components.TopBar
-import com.felipe.compiladores.ui.level.LessonContent
+import com.felipe.compiladores.ui.components.appear
+import com.felipe.compiladores.ui.components.pulse
+import com.felipe.compiladores.ui.theme.OnAccent
 import com.felipe.compiladores.ui.theme.Outline
 import com.felipe.compiladores.ui.theme.Primary
 import com.felipe.compiladores.ui.theme.Secondary
@@ -56,19 +56,28 @@ import com.felipe.compiladores.ui.theme.SurfaceHigh
 import com.felipe.compiladores.ui.theme.Tertiary
 import com.felipe.compiladores.ui.theme.TextDim
 import com.felipe.compiladores.ui.theme.TextMain
+import com.felipe.compiladores.ui.theme.accentColor
+
+/** Próxima fase recomendada: a primeira liberada e ainda não concluída. */
+fun nextRecommended(game: GameState): Level? =
+    Content.allLevels.firstOrNull { !game.profile.isDone(it.id) && Content.isUnlocked(game.profile, it.id) }
 
 @Composable
 fun HomeScreen(
     game: GameState,
     onWorld: (World) -> Unit,
+    onLevel: (Level) -> Unit,
     onReview: () -> Unit,
+    onArcade: () -> Unit,
     onDiary: () -> Unit,
     onSandbox: () -> Unit,
+    onSettings: () -> Unit,
 ) {
     val p = game.profile
     val maxStars = Content.allLevels.size * 3
     val due = game.dueSkills()
     val unlocked = game.unlockedSkills()
+    val next = nextRecommended(game)
     Column(
         Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)
             .verticalScroll(rememberScrollState()).padding(16.dp),
@@ -76,55 +85,78 @@ fun HomeScreen(
     ) {
         Column(
             Modifier.fillMaxWidth()
-                .background(Brush.linearGradient(listOf(Primary.copy(alpha = 0.25f), Secondary.copy(alpha = 0.18f))), RoundedCornerShape(22.dp))
+                .background(Brush.linearGradient(listOf(Primary.copy(alpha = 0.22f), Secondary.copy(alpha = 0.14f))), RoundedCornerShape(22.dp))
                 .border(1.dp, Outline, RoundedCornerShape(22.dp))
                 .padding(18.dp),
         ) {
-            Text("PARSER QUEST", style = MaterialTheme.typography.headlineMedium, color = TextMain, letterSpacing = 2.sp)
-            Text("Análise sintática na prática: você é o compilador.", style = MaterialTheme.typography.bodyMedium, color = TextDim)
-            Spacer(Modifier.height(14.dp))
-            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Column(Modifier.weight(1f)) {
+                    Text("PARSER QUEST", style = MaterialTheme.typography.headlineMedium, color = TextMain, letterSpacing = 2.sp)
+                    Text("Você é o compilador.", style = MaterialTheme.typography.bodyMedium, color = TextDim)
+                }
+                Mascot(if (p.streak >= 3) Mood.CELEBRATE else Mood.HAPPY, size = 72.dp)
+            }
+            Spacer(Modifier.height(12.dp))
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 StatPill("★", "${p.totalStars}/$maxStars", Tertiary)
                 StatPill("XP", "${p.xp}", Primary)
-                StatPill("🔥", "${p.streak} dia(s)", Secondary)
+                StatPill("🔥", "${p.streak}", Secondary)
             }
         }
 
-        Panel(title = "🧠 Treino espaçado", accent = Tertiary) {
-            Text(
-                when {
-                    unlocked.isEmpty() -> "Complete fases para liberar revisões. Relembrar depois de um tempo é o que fixa o conteúdo."
-                    due.isEmpty() -> "Nada pendente hoje. Volte amanhã — ou treine mesmo assim."
-                    else -> "${due.size} tema(s) para revisar hoje: ${due.joinToString { it.title }}."
-                },
-                style = MaterialTheme.typography.bodyMedium, color = TextMain,
-            )
-            if (unlocked.isNotEmpty()) {
-                Spacer(Modifier.height(10.dp))
-                GameButton(if (due.isEmpty()) "Treinar mesmo assim" else "Revisar agora (6 desafios)", onReview, Modifier.fillMaxWidth(), color = Tertiary)
-            }
+        MascotSays(
+            when {
+                p.stars.isEmpty() -> "Oi! Eu sou o *Parsy*. Que tal começar pela *Oficina de Derivações*? Cada mundo abre com uma aula ilustrada curtinha."
+                due.isNotEmpty() -> "Você tem *${due.size} tema(s)* para revisar hoje. Relembrar na hora certa é o que fixa!"
+                next != null -> "Bora continuar? Próxima parada: *${next.title}*."
+                else -> "Você completou tudo! Agora é buscar 3 estrelas e bater recordes no treino relâmpago."
+            },
+            Mood.HAPPY,
+        )
+        if (next != null) {
+            GameButton("▶ Continuar: ${next.title}", { onLevel(next) }, Modifier.fillMaxWidth().pulse().testTag("continue"))
+        }
+
+        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            QuickCard("🧠", "Treino espaçado", if (unlocked.isEmpty()) "libera ao jogar" else if (due.isEmpty()) "em dia ✓" else "${due.size} para hoje", Tertiary, Modifier.weight(1f).testTag("review"), onReview)
+            QuickCard("⚡", "Treino relâmpago", "4 minijogos", Secondary, Modifier.weight(1f).testTag("arcade"), onArcade)
         }
 
         Text("MAPA", style = MaterialTheme.typography.labelLarge, color = TextDim, letterSpacing = 2.sp)
         Content.worlds.forEachIndexed { i, w ->
-            WorldCard(w, game, onClick = { onWorld(w) })
+            WorldCard(w, game, i, onClick = { onWorld(w) })
             if (i < Content.worlds.lastIndex) {
                 Box(Modifier.padding(start = 34.dp).width(3.dp).height(12.dp).background(Outline))
             }
         }
 
-        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-            GameButton("🧪 Laboratório", onSandbox, Modifier.weight(1f), style = ButtonStyle.OUTLINED, color = Primary)
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            GameButton("🧪 Lab", onSandbox, Modifier.weight(1f), style = ButtonStyle.OUTLINED, color = Primary)
             GameButton("📓 Diário", onDiary, Modifier.weight(1f), style = ButtonStyle.OUTLINED, color = Secondary)
+            GameButton("🎨 Tema", onSettings, Modifier.weight(1f).testTag("settings"), style = ButtonStyle.OUTLINED, color = Tertiary)
         }
         Spacer(Modifier.height(16.dp))
     }
 }
 
 @Composable
+private fun QuickCard(icon: String, title: String, subtitle: String, color: Color, modifier: Modifier, onClick: () -> Unit) {
+    Column(
+        modifier.background(color.copy(alpha = 0.12f), RoundedCornerShape(18.dp))
+            .border(1.dp, color.copy(alpha = 0.6f), RoundedCornerShape(18.dp))
+            .clickable(onClick = onClick)
+            .padding(14.dp),
+    ) {
+        Text(icon, fontSize = 24.sp)
+        Text(title, style = MaterialTheme.typography.titleSmall, color = TextMain)
+        Text(subtitle, style = MaterialTheme.typography.labelMedium, color = color)
+    }
+}
+
+@Composable
 private fun StatPill(icon: String, value: String, color: Color) {
     Row(
-        Modifier.background(color.copy(alpha = 0.14f), RoundedCornerShape(50)).padding(horizontal = 12.dp, vertical = 6.dp),
+        Modifier.background(color.copy(alpha = 0.16f), RoundedCornerShape(50)).padding(horizontal = 12.dp, vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(icon, color = color, fontWeight = FontWeight.Bold)
@@ -134,15 +166,17 @@ private fun StatPill(icon: String, value: String, color: Color) {
 }
 
 @Composable
-private fun WorldCard(w: World, game: GameState, onClick: () -> Unit) {
-    val color = Color(w.color)
+private fun WorldCard(w: World, game: GameState, index: Int, onClick: () -> Unit) {
+    val color = accentColor(w.accent)
     val stars = w.levels.sumOf { game.profile.starsOf(it.id) }
     val done = w.levels.count { game.profile.isDone(it.id) }
     Row(
         Modifier.fillMaxWidth()
+            .appear(w.id, delayMs = (index * 40).coerceAtMost(400))
             .background(Surface, RoundedCornerShape(18.dp))
             .border(1.dp, if (done == w.levels.size) color else Outline, RoundedCornerShape(18.dp))
             .clickable(onClick = onClick)
+            .testTag("world:${w.id}")
             .padding(14.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -174,34 +208,44 @@ fun specLabel(spec: LevelSpec): String = when (spec) {
     LevelSpec.SlrTable -> "tabela SLR"
     LevelSpec.SlrConflict -> "conflito SLR"
     LevelSpec.Classify -> "classificar"
+    is LevelSpec.Design -> "fábrica"
+    is LevelSpec.Robot -> "robô"
+    is LevelSpec.Magnets -> "ímãs"
 }
 
 @Composable
-fun WorldScreen(world: World, game: GameState, onBack: () -> Unit, onLevel: (Level) -> Unit) {
-    val color = Color(world.color)
-    var lessonOpen by remember(world.id) { mutableStateOf(world.id !in game.profile.seenLessons) }
-    LaunchedEffect(world.id) { game.markLessonSeen(world.id) }
+fun WorldScreen(world: World, game: GameState, onBack: () -> Unit, onLesson: () -> Unit, onLevel: (Level) -> Unit) {
+    val color = accentColor(world.accent)
     Column(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
         TopBar("${world.emoji} ${world.title}", "Mundo ${world.number}", onBack)
         Column(
             Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            Column(
+            val seen = world.id in game.profile.seenLessons
+            Row(
                 Modifier.fillMaxWidth()
-                    .background(color.copy(alpha = 0.08f), RoundedCornerShape(18.dp))
-                    .border(1.dp, color.copy(alpha = 0.5f), RoundedCornerShape(18.dp))
-                    .clickable { lessonOpen = !lessonOpen }
+                    .background(color.copy(alpha = 0.10f), RoundedCornerShape(18.dp))
+                    .border(1.dp, color.copy(alpha = 0.6f), RoundedCornerShape(18.dp))
+                    .clickable { game.markLessonSeen(world.id); onLesson() }
+                    .testTag("lesson")
                     .padding(14.dp),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-                if (lessonOpen) LessonContent(world)
-                else Text("📖 ${world.lesson.title} (toque para abrir)", style = MaterialTheme.typography.titleSmall, color = color)
+                Mascot(if (seen) Mood.HAPPY else Mood.SURPRISED, size = 56.dp)
+                Spacer(Modifier.width(12.dp))
+                Column(Modifier.weight(1f)) {
+                    Text(if (seen) "Rever a aula ilustrada" else "Comece pela aula ilustrada!", style = MaterialTheme.typography.titleSmall, color = color)
+                    Text("${world.lesson.title} · ${world.lesson.scenes.size} cenas curtas", style = MaterialTheme.typography.bodySmall, color = TextDim)
+                }
+                Text("▶", color = color, fontSize = 20.sp, modifier = Modifier.pulse(!seen))
             }
             world.levels.forEachIndexed { i, level ->
                 val unlocked = Content.isUnlocked(game.profile, level.id)
                 val stars = game.profile.starsOf(level.id)
                 Row(
                     Modifier.fillMaxWidth()
+                        .appear(level.id, delayMs = i * 50)
                         .alpha(if (unlocked) 1f else 0.45f)
                         .background(Surface, RoundedCornerShape(16.dp))
                         .border(1.dp, if (game.profile.isDone(level.id)) color.copy(alpha = 0.7f) else Outline, RoundedCornerShape(16.dp))
@@ -213,7 +257,7 @@ fun WorldScreen(world: World, game: GameState, onBack: () -> Unit, onLevel: (Lev
                         Modifier.size(38.dp).background(if (unlocked) color else SurfaceHigh, CircleShape),
                         contentAlignment = Alignment.Center,
                     ) {
-                        Text(if (unlocked) "${i + 1}" else "🔒", color = Color(0xFF0B1020), fontWeight = FontWeight.Black)
+                        Text(if (unlocked) "${i + 1}" else "🔒", color = OnAccent, fontWeight = FontWeight.Black)
                     }
                     Spacer(Modifier.width(12.dp))
                     Column(Modifier.weight(1f)) {

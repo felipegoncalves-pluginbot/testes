@@ -51,6 +51,7 @@ import com.felipe.compiladores.ui.components.SententialForm
 import com.felipe.compiladores.ui.components.StackView
 import com.felipe.compiladores.ui.components.productionText
 import com.felipe.compiladores.ui.components.symbolsText
+import com.felipe.compiladores.ui.components.shake
 import com.felipe.compiladores.ui.level.LevelSession
 import com.felipe.compiladores.ui.theme.Danger
 import com.felipe.compiladores.ui.theme.Primary
@@ -150,14 +151,14 @@ fun LL1ParseGame(level: Level, spec: LevelSpec.LL1Parse, session: LevelSession, 
                 Panel(title = "FIRST e FOLLOW (sem tabela!)", accent = Tertiary, collapsible = true) { FirstFollowView(an) }
             }
             Panel(title = "Parser", accent = Primary) {
-                StackView(state.stackTopFirst, grammar, topAtLeft = true)
+                StackView(state.stackTopFirst, grammar, topAtLeft = true, keys = state.stack.asReversed())
                 Spacer(Modifier.height(10.dp))
                 InputTape(state.tokens, state.pos, grammar)
                 Spacer(Modifier.height(8.dp))
                 SententialForm("Derivação à esquerda:", state.sententialForm, grammar)
             }
             message?.let { (k, t) -> Feedback(k, t) }
-            if (!done) ActionPanel(state.top, grammar, ::play)
+            if (!done) Box(Modifier.shake(session.mistakes)) { ActionPanel(state.top, grammar, ::play) }
             if (done) GameButton("Concluir fase ✓", onSolved, Modifier.fillMaxWidth(), color = Success)
             Panel(title = "Árvore (cresce de cima para baixo)", accent = Primary, collapsible = true) {
                 ParseTreeView(state.tree, listOf(state.rootId), grammar)

@@ -6,17 +6,83 @@ import com.felipe.compiladores.engine.DerivationMode
 
 data class World(
     val id: String,
-    val number: Int,
     val title: String,
     val subtitle: String,
     val emoji: String,
-    val color: Long,
+    /** Índice da cor de destaque na paleta do tema (as cores mudam com o tema). */
+    val accent: Int,
     val lesson: Lesson,
     val levels: List<Level>,
+    val number: Int = 0,
 )
 
-/** "Conceito em 1 minuto": uma mini-aula curta, com exemplo resolvido. */
-data class Lesson(val title: String, val points: List<String>, val example: String? = null)
+// ------------------------------------------------------------------ aulas ilustradas (estilo Head First)
+
+enum class Mood { HAPPY, THINK, SURPRISED, SAD, CELEBRATE }
+
+/**
+ * Uma aula é uma sequência curta de cenas: o mascote conversa com você, mostra uma animação,
+ * faz você parar para pensar e termina com os pontos-chave. Texto curto, imagem perto da palavra.
+ * Nos textos, *assim* destaca e `assim` vira símbolo de gramática.
+ */
+data class Lesson(val title: String, val scenes: List<Scene>)
+
+sealed interface Scene {
+    /** O mascote fala (tom de conversa), opcionalmente com uma animação. */
+    data class Talk(val text: String, val mood: Mood = Mood.HAPPY, val visual: Visual? = null) : Scene
+
+    /** "Poder do cérebro": pare, pense, e só então revele. */
+    data class BrainPower(val question: String, val answer: String, val visual: Visual? = null) : Scene
+
+    /** "Cuidado!": a armadilha em que quase todo mundo cai. */
+    data class WatchIt(val text: String, val visual: Visual? = null) : Scene
+
+    /** "Não existem perguntas idiotas". */
+    data class NoDumbQuestions(val qa: List<Pair<String, String>>) : Scene
+
+    /** "Papo de bastidor": dois conceitos conversando. `true` = fala do personagem da esquerda. */
+    data class Fireside(val left: String, val right: String, val lines: List<Pair<Boolean, String>>) : Scene
+
+    /** "Pontos-chave" para fechar. */
+    data class KeyPoints(val points: List<String>) : Scene
+}
+
+/** Ilustrações animadas usadas nas aulas. */
+sealed interface Visual {
+    /** Formas sentenciais (separadas por espaço) aparecendo passo a passo. */
+    data class Derivation(val grammar: String, val forms: List<String>) : Visual
+
+    /** Fila de símbolos: os anuláveis somem e o primeiro que sobra vai para o FIRST. */
+    data class FirstQueue(val lhs: String, val rhs: List<String>, val vanish: Set<Int>) : Visual
+
+    /** Holofote num não-terminal dentro de um lado direito: quem vem depois dele? */
+    data class FollowSpot(val lhs: String, val rhs: List<String>, val index: Int) : Visual
+
+    /** Operações de pilha: "+X" empilha, "-" desempilha. */
+    data class StackOps(val ops: List<String>) : Visual
+
+    data class LLRun(val grammar: String, val input: String) : Visual
+
+    data class SRRun(val grammar: String, val input: String) : Visual
+
+    data class TableLookup(val grammar: String) : Visual
+
+    data object LeftRecursion : Visual
+
+    data class DotWalk(val lhs: String, val rhs: List<String>) : Visual
+
+    data class Closure(val grammar: String) : Visual
+
+    data object Hierarchy : Visual
+
+    data class TwoTrees(val grammar: String, val input: String) : Visual
+
+    data class Code(val lines: List<String>) : Visual
+
+    data object Conveyor : Visual
+
+    data object Legend : Visual
+}
 
 /**
  * Previsão antes de jogar (Prever → Observar → Explicar).
@@ -68,6 +134,29 @@ sealed interface LevelSpec {
     data object SlrConflict : LevelSpec
 
     data object Classify : LevelSpec
+
+    /**
+     * Fábrica de Gramáticas: construa uma gramática do zero que aceite [accept] e rejeite [reject].
+     * Testes ocultos comparam com [reference] para todas as cadeias de até [maxLen] tokens.
+     */
+    data class Design(
+        val nonterminals: List<String>,
+        val terminals: List<String>,
+        val accept: List<String>,
+        val reject: List<String>,
+        val reference: String,
+        val par: Int,
+        val maxLen: Int = 6,
+        val requireLL1: Boolean = false,
+        /** Exige LR(1): garante que a gramática não é ambígua. */
+        val requireLR1: Boolean = false,
+    ) : LevelSpec
+
+    /** Robô Descendente: programe as funções do parser recursivo escolhendo os tokens de cada ramo. */
+    data class Robot(val tests: List<Pair<String, Boolean>>) : LevelSpec
+
+    /** Ímãs de derivação: ordene as formas sentenciais embaralhadas (e deixe as armadilhas de fora). */
+    data class Magnets(val target: String, val mode: DerivationMode, val distractors: Int = 2) : LevelSpec
 }
 
 sealed interface ClosureQuestion {
@@ -143,6 +232,9 @@ enum class MistakeType(val title: String, val tip: String) {
     SURGERY_NOT_LL1("A gramática ainda não é LL(1)", "Fatore prefixos comuns e elimine recursão à esquerda."),
     SURGERY_PREFIX("Ainda há prefixo comum", "A → α β1 | α β2 vira A → α A' e A' → β1 | β2."),
     CLASSIFY_WRONG("Classificação errada", "LR(0) ⊂ SLR ⊂ LALR ⊂ LR(1); LL(1) ⊂ LR(1)."),
+    DESIGN_TEST("Fábrica reprovada nos testes", "Pense na linguagem inteira: repetição = recursão; pares casados nascem na mesma regra."),
+    ROBOT_BRANCH("Condição de ramo errada no robô", "Cada if usa o FIRST do lado direito; o ramo ε usa o FOLLOW."),
+    MAGNET_ORDER("Ordem da derivação trocada", "Em cada passo, troque só o não-terminal mais à esquerda (ou mais à direita)."),
 }
 
 // ------------------------------------------------------------------ perfil do jogador
@@ -153,6 +245,13 @@ data class Tally(val right: Int = 0, val total: Int = 0) {
     fun add(ok: Boolean) = Tally(right + if (ok) 1 else 0, total + 1)
     val rate: Float get() = if (total == 0) 0f else right.toFloat() / total
 }
+
+/** Preferências visuais (tema anti-cansaço, tamanho do texto, animações). */
+data class Settings(
+    val themeId: String = "everforest",
+    val textScale: Float = 1f,
+    val reduceMotion: Boolean = false,
+)
 
 data class Profile(
     val stars: Map<String, Int> = emptyMap(),
@@ -166,6 +265,11 @@ data class Profile(
     val lastDay: Long = -1,
     val streak: Int = 0,
     val seenLessons: Set<String> = emptySet(),
+    val settings: Settings = Settings(),
+    /** Últimas pontuações de cada jogo do Treino Relâmpago (mais antiga primeiro). */
+    val arcade: Map<String, List<Int>> = emptyMap(),
+    /** Nível de dificuldade adaptativa de cada jogo relâmpago. */
+    val arcadeLevel: Map<String, Int> = emptyMap(),
 ) {
     val totalStars: Int get() = stars.values.sum()
     fun starsOf(levelId: String) = stars[levelId] ?: 0
@@ -186,6 +290,11 @@ object ProfileCodec {
         p.skills.forEach { (k, v) -> appendLine("skill.${k.name}=${v.box},${v.dueDay},${v.seen},${v.right}") }
         p.feelings.forEach { (k, v) -> appendLine("feel.$k=${v.name}") }
         p.seenLessons.forEach { appendLine("lesson.$it=1") }
+        appendLine("set.theme=${p.settings.themeId}")
+        appendLine("set.text=${p.settings.textScale}")
+        appendLine("set.motion=${p.settings.reduceMotion}")
+        p.arcade.forEach { (k, v) -> appendLine("arc.$k=${v.joinToString(",")}") }
+        p.arcadeLevel.forEach { (k, v) -> appendLine("arclvl.$k=$v") }
     }
 
     fun decode(text: String?): Profile {
@@ -213,6 +322,11 @@ object ProfileCodec {
                     }
                     key.startsWith("feel.") -> p = p.copy(feelings = p.feelings + (key.removePrefix("feel.") to Feeling.valueOf(value)))
                     key.startsWith("lesson.") -> p = p.copy(seenLessons = p.seenLessons + key.removePrefix("lesson."))
+                    key == "set.theme" -> p = p.copy(settings = p.settings.copy(themeId = value))
+                    key == "set.text" -> p = p.copy(settings = p.settings.copy(textScale = value.toFloat()))
+                    key == "set.motion" -> p = p.copy(settings = p.settings.copy(reduceMotion = value.toBoolean()))
+                    key.startsWith("arc.") -> p = p.copy(arcade = p.arcade + (key.removePrefix("arc.") to value.split(",").filter { it.isNotBlank() }.map { it.toInt() }))
+                    key.startsWith("arclvl.") -> p = p.copy(arcadeLevel = p.arcadeLevel + (key.removePrefix("arclvl.") to value.toInt()))
                 }
             }
         }

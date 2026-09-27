@@ -59,11 +59,9 @@ data class ItemsQuestion(
 
 class ReviewGenerator(private val random: Random = Random.Default) {
 
-    private val pool: List<GrammarClasses> = Content.allLevels.map { it.grammar }.distinct()
-        .map { GrammarClasses(Grammar.parse(it)) }
-
-    private val llPool = pool.filter { it.isLL1 }
-    private val slrPool = pool.filter { it.isSLR }
+    private val pool: List<GrammarClasses> get() = ArcadePool.all
+    private val llPool get() = ArcadePool.ll
+    private val slrPool get() = ArcadePool.slr
 
     fun session(skills: List<Skill>, size: Int = 6): List<ReviewQuestion> {
         if (skills.isEmpty()) return emptyList()
@@ -129,7 +127,7 @@ class ReviewGenerator(private val random: Random = Random.Default) {
         val c = llPool.random(random)
         val g = c.grammar
         val parser = LLParser(c.ll1)
-        val tokens = maybeCorrupt(g, sampleString(g))
+        val tokens = maybeCorrupt(g, sampleString(g, random))
         val run = parser.run(tokens)
         val s = run.filter { it.status == ParseStatus.RUNNING }.random(random)
         val correct = parser.validMoves(s).first()
@@ -153,7 +151,7 @@ class ReviewGenerator(private val random: Random = Random.Default) {
         val c = slrPool.random(random)
         val g = c.grammar
         val parser = LRParser(c.slrTable)
-        val tokens = maybeCorrupt(g, sampleString(g))
+        val tokens = maybeCorrupt(g, sampleString(g, random))
         val run = parser.run(tokens)
         val s = run.filter { it.status == ParseStatus.RUNNING }.random(random)
         val correct = parser.validMoves(s).first()
@@ -236,27 +234,27 @@ class ReviewGenerator(private val random: Random = Random.Default) {
         if (random.nextBoolean() && t.size > 1) t.removeAt(i) else t[i] = g.terminals.random(random)
         return t
     }
+}
 
-    /** Gera uma cadeia da linguagem com derivação aleatória (curta). */
-    fun sampleString(g: Grammar, maxLen: Int = 8): List<String> {
-        val minLen = Derivation.minimalLengths(g)
-        fun cost(rhs: List<String>) = rhs.sumOf { if (g.isNonterminal(it)) minLen.getValue(it) else 1 }
-        var best: List<String>? = null
-        repeat(40) {
-            val out = mutableListOf<String>()
-            var ok = true
-            fun expand(sym: String, depth: Int) {
-                if (!ok) return
-                if (depth > 40) { ok = false; return }
-                if (!g.isNonterminal(sym)) { out += sym; return }
-                val prods = g.productionsOf(sym).filter { cost(it.rhs) < Int.MAX_VALUE / 4 }
-                val p = if (depth > 3) prods.minBy { cost(it.rhs) } else prods.random(random)
-                p.rhs.forEach { expand(it, depth + 1) }
-            }
-            expand(g.start, 0)
-            if (ok && out.size in 1..maxLen) return out
-            if (ok && (best == null || out.size < best!!.size)) best = out
+/** Gera uma cadeia da linguagem com derivação aleatória (curta). */
+fun sampleString(g: Grammar, random: Random, maxLen: Int = 8): List<String> {
+    val minLen = Derivation.minimalLengths(g)
+    fun cost(rhs: List<String>) = rhs.sumOf { if (g.isNonterminal(it)) minLen.getValue(it) else 1 }
+    var best: List<String>? = null
+    repeat(40) {
+        val out = mutableListOf<String>()
+        var ok = true
+        fun expand(sym: String, depth: Int) {
+            if (!ok) return
+            if (depth > 40) { ok = false; return }
+            if (!g.isNonterminal(sym)) { out += sym; return }
+            val prods = g.productionsOf(sym).filter { cost(it.rhs) < Int.MAX_VALUE / 4 }
+            val p = if (depth > 3) prods.minBy { cost(it.rhs) } else prods.random(random)
+            p.rhs.forEach { expand(it, depth + 1) }
         }
-        return best ?: emptyList()
+        expand(g.start, 0)
+        if (ok && out.size in 1..maxLen) return out
+        if (ok && (best == null || out.size < best!!.size)) best = out
     }
+    return best ?: emptyList()
 }
