@@ -1,0 +1,18 @@
+---
+description: Protocolo anti-loop de vibe coding em visão e hardware Sanbot
+alwaysApply: true
+---
+
+# Harness de vibe coding (visão + robô)
+
+Antes de editar `tracking/` ou `movement/`:
+
+1. Ler `docs/specs/COORDINATE_FRAMES.md`. Esse arquivo ganha de qualquer spec antiga.
+2. Uma hipótese, uma evidência (NDJSON/`logcat_cv_profiler.py`/PNG overlay), um patch.
+3. Proibido no mesmo turno: tunar Holt/EMA/Schmitt, `1.0f - x`, segundo smoother, novo detector, OpenCV “porque sim”.
+4. Zero `new Joint` / `new PoseLandmarkData` / `new TrackingResult` no loop. Use `.set()`.
+5. TFLite: 1 thread. Heap Java do Sanbot ~192 MB.
+6. Terminar com `./tools/verify_all.sh` (não só `testDebugUnitTest`).
+7. Se o teste unitário passa e o robô falha, o teste é que está errado — grave um golden real, não afrouxar constante.
+
+Flash/Composer: Activity, HUD, Gradle. Eixos/cinemática: Plan mode + evidência visual. Nunca accept-all em `tracking/`.

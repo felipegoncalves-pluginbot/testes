@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>3D Pong Kinect</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; -webkit-user-select: none; }
+        body, html { width: 100%; height: 100%; overflow: hidden; background: #0a0e17; font-family: 'Segoe UI', Roboto, sans-serif; }
+        #canvas { display: block; width: 100vw; height: 100vh; }
+        #scoreboard {
+            position: absolute; top: 20px; left: 50%;
+            -webkit-transform: translateX(-50%); transform: translateX(-50%);
+            display: -webkit-flex; display: flex;
+            background: rgba(0,0,0,0.6); padding: 12px 28px; border-radius: 20px;
+            color: #fff; font-size: 36px; font-weight: bold; border: 2px solid #00e5ff;
+            pointer-events: none;
+        }
+        .score-team { margin: 0 15px; }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <div id="scoreboard">
+        <div class="score-team" style="color: #ff5252;">ROBÔ: <span id="score-robot">0</span></div>
+        <div class="score-team">|</div>
+        <div class="score-team" style="color: #00e5ff;">VOCÊ: <span id="score-player">0</span></div>
+    </div>
+
+    <script>
+        'use strict';
+
+        var canvas = document.getElementById('canvas');
+        var ctx = canvas.getContext('2d');
+
+        function resize() {
+            canvas.width = window.innerWidth || 800;
+            canvas.height = window.innerHeight || 480;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        var playerPaddleX = canvas.width * 0.5;
+        var robotPaddleX = canvas.width * 0.5;
+        var paddleWidth = 140;
+        var paddleHeight = 18;
+
+        var ballX = canvas.width * 0.5;
+        var ballY = canvas.height * 0.5;
+        var ballVx = 5;
+        var ballVy = 6;
+        var ballRadius = 12;
+
+        var robotScore = 0;
+        var playerScore = 0;
+
+        // Entrada via Kinect
+        window.onKinectFrame = function(data) {
+            if (!data || !data.isPlayerPresent) return;
+            var targetX = (data.isRightHandRaised ? data.rightHandX : data.playerCentroidX) * canvas.width;
+            playerPaddleX = targetX;
+        };
+
+        // Entrada via Toque
+        window.addEventListener('touchmove', function(e) {
+            playerPaddleX = e.touches[0].clientX;
+        });
+        window.addEventListener('mousemove', function(e) {
+            playerPaddleX = e.clientX;
+        });
+
+        function resetBall() {
+            ballX = canvas.width * 0.5;
+            ballY = canvas.height * 0.5;
+            ballVx = (Math.random() - 0.5) * 8;
+            ballVy = (Math.random() > 0.5 ? 6 : -6);
+        }
+
+        function render() {
+            // Fundo da Quadra
+            ctx.fillStyle = '#0a0e17';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Linha central
+            ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+            ctx.lineWidth = 4;
+            ctx.setLineDash([12, 12]);
+            ctx.beginPath();
+            ctx.moveTo(0, canvas.height * 0.5);
+            ctx.lineTo(canvas.width, canvas.height * 0.5);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Atualiza IA do Robô (Segue a bola suavemente)
+            var robotTarget = ballX;
+            robotPaddleX += (robotTarget - robotPaddleX) * 0.08;
+
+            // Atualiza Bola
+            ballX += ballVx;
+            ballY += ballVy;
+
+            // Paredes Laterais
+            if (ballX - ballRadius < 0 || ballX + ballRadius > canvas.width) {
+                ballVx = -ballVx;
+            }
+
+            // Colisão com Raquete do Robô (Topo)
+            if (ballY - ballRadius <= 40 + paddleHeight && ballY + ballRadius >= 40) {
+                if (ballX >= robotPaddleX - paddleWidth * 0.5 && ballX <= robotPaddleX + paddleWidth * 0.5) {
+                    ballVy = Math.abs(ballVy) * 1.05;
+                    ballVx += (ballX - robotPaddleX) * 0.1;
+                }
+            }
+
+            // Colisão com Raquete do Jogador (Base)
+            var playerY = canvas.height - 40 - paddleHeight;
+            if (ballY + ballRadius >= playerY && ballY - ballRadius <= playerY + paddleHeight) {
+                if (ballX >= playerPaddleX - paddleWidth * 0.5 && ballX <= playerPaddleX + paddleWidth * 0.5) {
+                    ballVy = -Math.abs(ballVy) * 1.05;
+                    ballVx += (ballX - playerPaddleX) * 0.1;
+                    if (window.KinectBridge && window.KinectBridge.onScore) {
+                        window.KinectBridge.onScore(5, 1);
+                    }
+                }
+            }
+
+            // Ponto do Jogador
+            if (ballY < 0) {
+                playerScore++;
+                document.getElementById('score-player').innerText = playerScore;
+                if (window.KinectBridge && window.KinectBridge.onScore) {
+                    window.KinectBridge.onScore(20, 2);
+                }
+                resetBall();
+            }
+
+            // Ponto do Robô
+            if (ballY > canvas.height) {
+                robotScore++;
+                document.getElementById('score-robot').innerText = robotScore;
+                if (window.KinectBridge && window.KinectBridge.onBombHit) {
+                    window.KinectBridge.onBombHit();
+                }
+                resetBall();
+            }
+
+            // Desenha Raquete do Robô
+            ctx.fillStyle = '#ff5252';
+            ctx.fillRect(robotPaddleX - paddleWidth * 0.5, 40, paddleWidth, paddleHeight);
+
+            // Desenha Raquete do Jogador
+            ctx.fillStyle = '#00e5ff';
+            ctx.fillRect(playerPaddleX - paddleWidth * 0.5, canvas.height - 40 - paddleHeight, paddleWidth, paddleHeight);
+
+            // Desenha Bola Neon
+            ctx.fillStyle = '#ffeb3b';
+            ctx.beginPath();
+            ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2);
+            ctx.fill();
+
+            requestAnimationFrame(render);
+        }
+
+        render();
+    </script>
+</body>
+</html>

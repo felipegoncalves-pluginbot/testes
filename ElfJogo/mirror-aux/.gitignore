@@ -1,0 +1,9 @@
+# Build
+/build
+/.gradle
+
+# IDE — abra a pasta ElfJogo (raiz) no Android Studio, não só mirror-aux
+/.idea
+
+# Local
+local.properties

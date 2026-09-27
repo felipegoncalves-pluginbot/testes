@@ -1,0 +1,42 @@
+---
+description: MEM-GUARD — backpressure e sem clone() em pipelines YUV/depth (anti-OOM Sanbot 192MB)
+globs: app/src/main/java/**/tracking/**/*.java,app/src/main/java/**/*Activity.java
+alwaysApply: false
+---
+
+# Memória em visão — sem `yuvData.clone()` por frame
+
+## Crash típico (logcat)
+
+```
+OutOfMemoryError: Failed to allocate a 461836 byte allocation
+  at Object.clone
+  at KinectPoseProcessor... lambda$init$... (yuvData.clone)
+```
+
+640×480 NV21 ≈ **460 KB** por clone. Sem backpressure → dezenas de MB em segundos (heap Sanbot ~192 MB).
+
+## Padrão correto
+
+```java
+// ❌ get() sem travar + clone cada frame
+if (!isPoseProcessing.get()) return;
+final byte[] cloned = yuvData.clone();
+visionExecutor.execute(() -> process(cloned));
+
+// ✅ 1 frame em voo + buffer reutilizado
+if (!isPoseProcessing.compareAndSet(false, true)) return;
+System.arraycopy(yuvData, 0, rgbWorkBuffer, 0, yuvData.length);
+visionExecutor.execute(() -> process(rgbWorkBuffer, ...));
+// listeners ML Kit: isPoseProcessing.set(false)
+```
+
+## VisionMediaDecoder
+
+- `ArrayBlockingQueue(2)` + `offer()` (drop se cheio)
+- `yuvBuffer` único reutilizado no callback — listener não deve reter referência
+
+## Gates
+
+- `checkstyleMemory` em `tracking`
+- `MemoryBackpressureGuardTest`

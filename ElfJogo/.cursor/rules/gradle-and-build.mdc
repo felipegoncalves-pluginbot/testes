@@ -1,0 +1,31 @@
+---
+description: Evita erros de IA em Gradle e builds Android deste projeto
+globs: "**/*.{gradle,gradle.kts}"
+alwaysApply: false
+---
+
+# Gradle / Build (anti-IA)
+
+## Não rodar build sem pedido
+
+Não execute `./gradlew assemble`, `codeQuality` ou testes completos sem o usuário pedir.
+Use leitura estática; builds Gradle são lentos neste projeto (NDK, OpenCV, Prefab).
+
+## Configuração atual — não reinventar
+
+- `compileSdkVersion 33`, `minSdkVersion 21`, Java 8
+- Sanbot SDK: `SanbotOpenSDK_2.0.1.10` via flatDir `libs/`
+- Quality gate: `spotlessCheck` + `checkstyle` + `pmd` + `testDebugUnitTest` (`codeQuality`)
+- Checkstyle: **máx 250 linhas/arquivo**, **50 linhas/método**
+
+## Erros frequentes de IA em Gradle Android
+
+- DSL deprecated de AGP 8.x (este projeto usa AGP clássico)
+- Misturar KAPT/KSP (não usamos annotation processors aqui)
+- Adicionar dependências duplicadas já presentes (ML Kit, OpenCV, nanohttpd)
+- Alterar `abiFilters` ou NDK sem necessidade
+- Introduzir Kotlin/coroutines no app principal
+
+## Ao adicionar dependência
+
+Verificar `app/build.gradle` e `libs/` antes. Preferir versões já usadas no projeto.

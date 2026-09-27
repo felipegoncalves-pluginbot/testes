@@ -1,0 +1,51 @@
+---
+description: Testes unitários concisos e com comportamento real — anti-teste cosmético de IA
+globs: app/src/test/**/*.java
+alwaysApply: false
+---
+
+# Testes unitários (TEST-GUARD)
+
+## O que a IA NÃO deve criar
+
+```java
+// ❌ Placeholder
+@Test public void addition_isCorrect() { assertEquals(4, 2 + 2); }
+
+// ❌ Tautologia
+assertTrue(true);
+
+// ❌ Só existir
+@Test public void testCreates() { assertNotNull(new Foo()); }
+
+// ❌ Teste gigante com 1 assert no final
+```
+
+## O que criar (conciso + importante)
+
+```java
+// ✅ Nome descreve comportamento: quando_X_então_Y
+@Test
+public void closestModePicksNearestPerson() { ... }
+
+// ✅ Arrange mínimo + Act + Assert com valor esperado
+short[] depth = syntheticPlayerBlobAt(1500);
+TrackingResult r = engine.processDepthFrame(depth, 64, 48);
+assertEquals(0.5f, r.playerCentroidX, 0.08f);
+
+// ✅ Múltiplos asserts quando validam estados distintos (histerese, duck vs jump)
+```
+
+## Regras do projeto
+
+- Arquivo de teste: **≤ 220 linhas**, método **≤ 45 linhas**
+- Cada `@Test` → **≥ 1** `assert*` ou `verify()`
+- Pacotes `tracking`, `logic`, `movement`, `server`: setup real (depth map, loop, multi-step act)
+- Com 2+ testes no pacote crítico: **asserts > testes** (não só 1 assert por método vazio)
+- `MeaningfulUnitTestQualityTest` + `checkstyleTests` + `pmdTests` falham se cosmético
+
+## Ao refatorar produção
+
+1. Rodar testes existentes antes de mudar
+2. Se remove comportamento, **atualizar** teste — nunca deletar assert para "passar"
+3. Preferir dados sintéticos (`short[] depth`) como em `KinectTrackingEngineTest`

@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/.cxx/Debug/14166z1k/x86",
+  "command": "/home/pluginbot/Android/Sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/linux-x86_64/bin/clang++ --target=i686-none-linux-android21 --sysroot=/home/pluginbot/Android/Sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/linux-x86_64/sysroot -Dnative_lib_EXPORTS -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mstackrealign -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -std=c++14 -frtti -fexceptions -fno-limit-debug-info  -fPIC -o CMakeFiles/native-lib.dir/native-lib.cpp.o -c /home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/cpp/native-lib.cpp",
+  "file": "/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/cpp/native-lib.cpp"
+}
+]

@@ -1,0 +1,38 @@
+---
+description: Modo Espelho — asas proporcionais e anti-oscilação de braços
+globs: app/src/main/java/com/felipe/elftemplate/logic/MirrorGameEngine.java,app/src/main/java/com/felipe/elftemplate/movement/RobotWingController.java,app/src/main/java/com/felipe/elftemplate/tracking/ArmElevation*.java,app/src/main/java/com/felipe/elftemplate/tracking/KinectGestureClassifier.java,app/src/main/java/com/felipe/elftemplate/MirrorActivity.java
+alwaysApply: false
+---
+
+# Modo Espelho — asas proporcionais
+
+## Problema (logcat)
+
+Oscilação `LEVANTADA ↔ ABAIXADA` gera spam `cmd=545` no Sanbot. Mão estendida à frente da câmera merge com torso no depth blob.
+
+## Pipeline correto
+
+1. `ArmElevationTracker` — EMA + Schmitt (`RAISE_ENTER_ELEV` / `RAISE_EXIT_ELEV`) + `MIN_TOGGLE_MS` 200ms
+2. Mão à frente (`!lateralSeparated`) — escala `FORWARD_REACH_SCALE`, cap `FORWARD_REACH_CAP` (~meio da amplitude)
+3. `ArmElevationMapper.elevationToWingAngle` — mapeia 0..1 → 0°..90° (SDK: RESET=0°, horizontal=90°)
+4. `MirrorGameEngine` — espelha: mão D usuário → asa esquerda robô; suaviza com `WING_ANGLE_SMOOTH` (α≈0.32)
+5. `RobotWingController.updateMirrorAngles` — `doAbsoluteAngleMotion`, debounce 350ms, deadband 8°
+
+## Não fazer
+
+- `setMirrorWings(boolean)` em `MirrorActivity` — usar `setMirrorWingAngles`
+- `NoAngleWingMotion.ACTION_UP/DOWN` no modo espelho — só binário para Pose Match / jogos
+- Copiar `isLeftHandRaised` direto sem passar pelo tracker quando depth blob está ativo
+- Threshold único em Y da mão sem histerese
+
+## Gates
+
+- `checkstyleMirror` (MirrorActivity)
+- `MirrorMotorGuardTest`
+- `ArmElevationTrackerTest`
+
+## Referências
+
+- Histerese temporal depth: US9182838 (hover + delta relativo)
+- EMA/temporal neighbors anti-jitter: DeepHand CVPR, VirtuHand (Kalman/EMA)
+- Orbbec arm angle mimic: vector shoulder–wrist → servo absoluto (ICEEICT 2024)

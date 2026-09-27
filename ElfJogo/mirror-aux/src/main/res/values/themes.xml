@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.MirrorAux" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/mirror_primary</item>
+        <item name="colorOnPrimary">@color/mirror_on_primary</item>
+        <item name="android:statusBarColor">@color/mirror_surface</item>
+        <item name="android:navigationBarColor">@color/mirror_surface</item>
+        <item name="android:windowBackground">@color/mirror_surface</item>
+    </style>
+</resources>

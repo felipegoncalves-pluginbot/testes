@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#1b1035">
+
+    <com.felipe.elftemplate.logic.PoseMatchView
+        android:id="@+id/pose_match_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!-- Botão Voltar (Canto Superior Esquerdo) -->
+    <Button
+        android:id="@+id/btn_back"
+        android:layout_width="wrap_content"
+        android:layout_height="42dp"
+        android:layout_margin="16dp"
+        android:layout_gravity="top|start"
+        android:text="⬅ Voltar"
+        android:textColor="#FFFFFF"
+        android:background="#CC000000"
+        android:textSize="14sp"
+        android:paddingHorizontal="14dp" />
+
+    <!-- Botão Kinect View (Canto Superior Direito) -->
+    <Button
+        android:id="@+id/btn_toggle_kinect_view"
+        android:layout_width="wrap_content"
+        android:layout_height="42dp"
+        android:layout_margin="16dp"
+        android:layout_gravity="top|end"
+        android:text="👁 Kinect View [Y]"
+        android:textColor="#00FF66"
+        android:background="#E6000000"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:paddingHorizontal="14dp" />
+
+    <!-- Visualizador Kinect PIP em Tempo Real -->
+    <com.felipe.elftemplate.tracking.KinectDebugOverlayView
+        android:id="@+id/kinect_debug_overlay"
+        android:layout_width="220dp"
+        android:layout_height="170dp"
+        android:layout_gravity="top|end"
+        android:layout_marginTop="68dp"
+        android:layout_marginEnd="16dp" />
+
+</FrameLayout>

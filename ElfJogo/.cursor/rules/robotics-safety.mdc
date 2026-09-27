@@ -1,0 +1,40 @@
+---
+description: Segurança e concorrência para controle do robô Sanbot (anti-IA)
+globs: app/src/main/java/**/{movement,tracking,server}/**/*.java
+alwaysApply: false
+---
+
+# Robótica Sanbot — Segurança (anti-IA)
+
+## Autoridade de movimento
+
+LLMs não devem comandar motores diretamente sem camadas de segurança.
+
+```java
+// ❌ IA chama SDK Sanbot na camada logic ou tracking
+wheelManager.doNoAngleMotion(motion); // em logic/*
+
+// ✅ Movimento via movement/* com RobotMovement ou controllers dedicados
+// Activities obtêm managers em onMainServiceConnected e delegam
+```
+
+## Concorrência de hardware
+
+- **Um caller por recurso de movimento** — duas chamadas `doNoAngleMotion` concorrentes podem travar o stack.
+- Serialize comandos de roda/cabeça/asas no mesmo worker thread ou controller.
+- Multithreading em hardware USB não aumenta throughput; aumenta latência e jitter.
+
+## Safety guard
+
+- Validar distância com `MovementSafetyGuard` antes de mover para frente.
+- Comandos WASD/web (`RobotWebServer`) devem validar payload e rejeitar nulos.
+
+## Coordenadas e unidades
+
+- Não misturar metros/cm/pixels sem conversão explícita.
+- Profundidade Kinect/Astra: validar limites antes de fusão (`PoseDepthFusion`).
+- Reset de odometria via `MovementSafetyGuard.reset()` ao reiniciar navegação.
+
+## Cleanup obrigatório
+
+Ao sair de Activity: `stopRobot()`, fechar streams HD (`closeStream`), parar depth/tracking.

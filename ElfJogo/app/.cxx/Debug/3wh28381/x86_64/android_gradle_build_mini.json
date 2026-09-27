@@ -1,0 +1,29 @@
+{
+  "buildFiles": [
+    "/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/cpp/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/home/pluginbot/Android/Sdk/cmake/3.22.1/bin/ninja",
+      "-C",
+      "/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/.cxx/Debug/3wh28381/x86_64",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/home/pluginbot/Android/Sdk/cmake/3.22.1/bin/ninja",
+    "-C",
+    "/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/.cxx/Debug/3wh28381/x86_64",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {
+    "native-lib::@6890427a1f51a3e7e1df": {
+      "artifactName": "native-lib",
+      "abi": "x86_64",
+      "output": "/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/build/intermediates/cxx/Debug/3wh28381/obj/x86_64/libnative-lib.so",
+      "runtimeFiles": [
+        "/home/pluginbot/.gradle/caches/transforms-3/70dcea9a455d073e76f3c0ca2a88367c/transformed/jetified-opencv-4.9.0/prefab/modules/opencv_java4/libs/android.x86_64/libopencv_java4.so"
+      ]
+    }
+  }
+}

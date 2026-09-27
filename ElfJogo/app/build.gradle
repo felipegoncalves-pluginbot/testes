@@ -1,0 +1,277 @@
+apply plugin: 'com.android.application'
+apply plugin: 'checkstyle'
+apply plugin: 'pmd'
+apply plugin: 'com.diffplug.spotless'
+
+android {
+    namespace "com.felipe.elftemplate"
+    compileSdkVersion 33
+    defaultConfig {
+        applicationId "com.felipe.elftemplate"
+        minSdkVersion 21
+        targetSdkVersion 33
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        externalNativeBuild {
+            cmake {
+                cppFlags "-std=c++14 -frtti -fexceptions"
+                arguments "-DANDROID_STL=c++_shared"
+            }
+        }
+        ndk {
+            abiFilters "armeabi-v7a"
+        }
+    }
+    buildFeatures {
+        prefab true
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    aaptOptions {
+        noCompress "tflite"
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    sourceSets.main {
+        jniLibs.srcDir 'libs'
+    }
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+    }
+    externalNativeBuild {
+        cmake {
+            path "src/main/cpp/CMakeLists.txt"
+            version "3.22.1"
+        }
+    }
+    ndkVersion "25.1.8937393"
+    testOptions {
+        unitTests.returnDefaultValues = true
+        unitTests.all {
+            def harness = project.findProperty('elf.skeleton.harness')
+            if (harness != null) {
+                systemProperty 'elf.skeleton.harness', harness
+            }
+            // Gerador do modelo de partes do corpo (BodyPartForestGenerator). Repassado por -P
+            // porque -D fica na JVM do Gradle e nunca chega ao JVM de teste.
+            ['train', 'frames', 'seed', 'trees', 'depth', 'features', 'thresholds', 'minSamples'].each { key ->
+                def value = project.findProperty("bodypart.${key}")
+                if (value != null) {
+                    systemProperty "bodypart.${key}", value
+                }
+            }
+        }
+    }
+    packagingOptions {
+        pickFirst 'lib/armeabi-v7a/libc++_shared.so'
+    }
+    lint {
+        abortOnError false
+        warningsAsErrors false
+        enable += [
+            'StaticFieldLeak', 'HandlerLeak', 'Wakelock', 'Recycle',
+            'ClickableViewAccessibility', 'LeakedClosable', 'MissingPermission'
+        ]
+        lintConfig file("${rootProject.rootDir}/config/lint/lint.xml")
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation(name: 'SanbotOpenSDK_2.0.1.10', ext: 'aar')
+    implementation 'androidx.appcompat:appcompat:1.4.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.json:json:20231013'
+    testImplementation 'com.tngtech.archunit:archunit-junit4:1.3.0'
+    androidTestImplementation 'androidx.test:runner:1.4.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    
+    // Web Server para Controle WASD
+    implementation 'org.nanohttpd:nanohttpd:2.3.1'
+    implementation 'org.nanohttpd:nanohttpd-websocket:2.3.1'
+
+    // OpenCV para NDK via Prefab (High Performance SLAM)
+    implementation 'org.opencv:opencv:4.9.0'
+
+    // Google ML Kit para Estabilização Visual e Detecção de Objetos (Compatível com Android 6/API 23)
+    implementation 'com.google.mlkit:object-detection:17.0.2'
+    
+    // TensorFlow Lite para MoveNet SinglePose Lightning (Compatível com Android 6 API 23 sem erro de __aeabi_memcpy4)
+    implementation 'org.tensorflow:tensorflow-lite:2.8.0'
+
+    // Kotlin Stdlib (Necessário pelo SanbotOpenSDK / BindBaseActivity)
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.8.22")
+}
+
+configurations.all {
+    exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk8'
+    exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk7'
+    exclude group: 'com.google.inject', module: 'guice'
+}
+
+// -------------------------------------------------------------
+// CONFIGURAÇÕES DE CODE QUALITY, LINTERS E PADRÕES
+// -------------------------------------------------------------
+
+checkstyle {
+    toolVersion = '10.12.5'
+    configDirectory = file("${rootProject.rootDir}/config/checkstyle")
+    configFile = file("${rootProject.rootDir}/config/checkstyle/checkstyle.xml")
+    ignoreFailures = false
+    showViolations = true
+}
+
+task checkstyle(type: Checkstyle) {
+    description 'Executa analise de estilo e limite de linhas com Checkstyle'
+    group 'verification'
+    configDirectory = file("${rootProject.rootDir}/config/checkstyle")
+    configFile = file("${rootProject.rootDir}/config/checkstyle/checkstyle.xml")
+    source 'src/main/java'
+    include '**/*.java'
+    exclude '**/gen/**'
+    exclude '**/R.java'
+    exclude '**/BuildConfig.java'
+    classpath = files()
+    ignoreFailures = false
+    showViolations = true
+}
+
+task checkstyleTests(type: Checkstyle) {
+    description 'TEST-GUARD: concisão e anti-patterns em testes unitários'
+    group 'verification'
+    configDirectory = file("${rootProject.rootDir}/config/checkstyle")
+    configFile = file("${rootProject.rootDir}/config/checkstyle/checkstyle-tests.xml")
+    source 'src/test/java'
+    include '**/*.java'
+    classpath = files()
+    ignoreFailures = false
+    showViolations = true
+}
+
+task checkstyleTemporal(type: Checkstyle) {
+    description 'FSM-GUARD: anti-heurística sem estado em tracking/logic'
+    group 'verification'
+    configDirectory = file("${rootProject.rootDir}/config/checkstyle")
+    configFile = file("${rootProject.rootDir}/config/checkstyle/checkstyle-temporal.xml")
+    source 'src/main/java/com/felipe/elftemplate/tracking'
+    source 'src/main/java/com/felipe/elftemplate/logic'
+    include '**/*.java'
+    classpath = files()
+    ignoreFailures = false
+    showViolations = true
+}
+
+task checkstyleMemory(type: Checkstyle) {
+    description 'MEM-GUARD: anti-OOM em pipelines YUV/depth (sem clone, backpressure)'
+    group 'verification'
+    configDirectory = file("${rootProject.rootDir}/config/checkstyle")
+    configFile = file("${rootProject.rootDir}/config/checkstyle/checkstyle-memory.xml")
+    source 'src/main/java/com/felipe/elftemplate/tracking'
+    include '**/*.java'
+    classpath = files()
+    ignoreFailures = false
+    showViolations = true
+}
+
+task checkstyleMirror(type: Checkstyle) {
+    description 'ROBOT-GUARD: MirrorActivity usa asas proporcionais'
+    group 'verification'
+    configDirectory = file("${rootProject.rootDir}/config/checkstyle")
+    configFile = file("${rootProject.rootDir}/config/checkstyle/checkstyle-robot.xml")
+    source 'src/main/java/com/felipe/elftemplate/MirrorActivity.java'
+    include '**/*.java'
+    classpath = files()
+    ignoreFailures = false
+    showViolations = true
+}
+
+task checkstyleAlloc(type: Checkstyle) {
+    description 'ALLOC-GUARD: zero new Joint/PoseFrame no hot path + anti-espelho MoveNet'
+    group 'verification'
+    configDirectory = file("${rootProject.rootDir}/config/checkstyle")
+    configFile = file("${rootProject.rootDir}/config/checkstyle/checkstyle-alloc.xml")
+    source 'src/main/java/com/felipe/elftemplate/tracking'
+    include '**/*.java'
+    classpath = files()
+    ignoreFailures = false
+    showViolations = true
+}
+
+pmd {
+    toolVersion = '6.55.0'
+    ruleSets = []
+    ruleSetFiles = files("${rootProject.rootDir}/config/pmd/pmd-ruleset.xml")
+    ignoreFailures = true
+}
+
+task pmd(type: Pmd) {
+    description 'Executa analise estatica de complexidade, dead code e smells com PMD'
+    group 'verification'
+    ruleSetFiles = files("${rootProject.rootDir}/config/pmd/pmd-ruleset.xml")
+    source 'src/main/java'
+    include '**/*.java'
+    exclude '**/gen/**'
+    exclude '**/R.java'
+    exclude '**/BuildConfig.java'
+    reports {
+        xml.required = true
+        html.required = true
+    }
+    ignoreFailures = true
+}
+
+task pmdTests(type: Pmd) {
+    description 'TEST-GUARD: PMD em testes (asserts obrigatórios, métodos não vazios)'
+    group 'verification'
+    ruleSetFiles = files("${rootProject.rootDir}/config/pmd/pmd-tests-ruleset.xml")
+    source 'src/test/java'
+    include '**/*.java'
+    reports {
+        xml.required = true
+        html.required = true
+    }
+    ignoreFailures = false
+}
+
+task pmdTemporal(type: Pmd) {
+    description 'FSM-GUARD: PMD heurísticas sem estado em tracking/logic'
+    group 'verification'
+    ruleSetFiles = files("${rootProject.rootDir}/config/pmd/temporal-signal-ruleset.xml")
+    source 'src/main/java/com/felipe/elftemplate/tracking'
+    source 'src/main/java/com/felipe/elftemplate/logic'
+    include '**/*.java'
+    reports {
+        xml.required = true
+        html.required = true
+    }
+    ignoreFailures = false
+}
+
+spotless {
+    java {
+        target 'src/*/java/**/*.java'
+        googleJavaFormat('1.17.0')
+        removeUnusedImports()
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+}
+
+task codeQuality {
+    description 'Gate unificado: Spotless + Checkstyle + PMD + TEST/FSM/MEM-GUARD + testes'
+    group 'verification'
+    dependsOn 'spotlessCheck', 'checkstyle', 'checkstyleTests', 'checkstyleTemporal', 'checkstyleMemory', 'checkstyleMirror',
+            'checkstyleAlloc', 'pmd', 'pmdTests', 'pmdTemporal', 'testDebugUnitTest'
+}
+

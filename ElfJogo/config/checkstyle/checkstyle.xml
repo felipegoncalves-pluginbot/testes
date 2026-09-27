@@ -1,0 +1,133 @@
+<?xml version="1.0"?>
+<!DOCTYPE module PUBLIC "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
+        "https://checkstyle.org/dtds/configuration_1_3.dtd">
+<module name="Checker">
+    <property name="charset" value="UTF-8"/>
+    <property name="severity" value="error"/>
+    <property name="fileExtensions" value="java"/>
+
+    <!-- Pipeline de visão precisa caber num arquivo; 250 forçava fatiar o DAG. -->
+    <module name="FileLength">
+        <property name="max" value="400"/>
+        <property name="fileExtensions" value="java"/>
+    </module>
+
+    <!-- Limite de colunas por linha (tolerante para anotações e lambdas) -->
+    <module name="LineLength">
+        <property name="max" value="160"/>
+        <property name="ignorePattern" value="^package .*;|^import .*;|https?://|//.*"/>
+    </module>
+
+    <!-- Filtro de supressões para baseline de arquivos legados -->
+    <module name="SuppressionFilter">
+        <property name="file" value="${config_loc}/checkstyle-suppressions.xml"/>
+        <property name="optional" value="false"/>
+    </module>
+
+    <module name="TreeWalker">
+        <!-- Limite de linhas por método: máx 50 linhas -->
+        <module name="MethodLength">
+            <property name="max" value="50"/>
+            <property name="countEmpty" value="false"/>
+        </module>
+
+        <!-- Limite de parâmetros por método/construtor: máx 7 parâmetros -->
+        <module name="ParameterNumber">
+            <property name="max" value="7"/>
+            <property name="tokens" value="METHOD_DEF, CTOR_DEF"/>
+        </module>
+
+        <!-- Imports e Wildcards -->
+        <module name="AvoidStarImport"/>
+        <module name="UnusedImports"/>
+        <module name="RedundantImport"/>
+
+        <!-- Complexidade Ciclomática: máx 10 por método -->
+        <module name="CyclomaticComplexity">
+            <property name="max" value="10"/>
+        </module>
+
+        <!-- Nomenclatura Padrão Java / Android -->
+        <module name="PackageName">
+            <property name="format" value="^[a-z]+(\.[a-z][a-z0-9]*)*$"/>
+        </module>
+        <module name="TypeName"/>
+        <module name="MethodName"/>
+        <module name="MemberName"/>
+        <module name="ConstantName"/>
+        <module name="LocalVariableName"/>
+
+        <!-- Qualidade Estrutural -->
+        <module name="NeedBraces"/>
+        <module name="EmptyBlock"/>
+        <module name="ModifierOrder"/>
+        <module name="StringLiteralEquality"/>
+        <module name="EqualsHashCode"/>
+        <module name="DefaultComesLast"/>
+        <module name="MultipleVariableDeclarations"/>
+
+        <!-- AI-GUARD: padrões perigosos que assistentes de IA introduzem frequentemente -->
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="new\s+Thread\s*\("/>
+            <property name="message" value="AI-GUARD: use ExecutorService com shutdown no lifecycle em vez de new Thread()"/>
+            <property name="ignoreComments" value="true"/>
+        </module>
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="extends\s+AsyncTask"/>
+            <property name="message" value="AI-GUARD: AsyncTask está obsoleto; use ExecutorService + Handler/Looper"/>
+            <property name="ignoreComments" value="true"/>
+        </module>
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="Executors\.newCachedThreadPool\s*\("/>
+            <property name="message" value="AI-GUARD: newCachedThreadPool sem shutdown causa leak; prefira newSingleThreadExecutor"/>
+            <property name="ignoreComments" value="true"/>
+        </module>
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="System\.out\.print"/>
+            <property name="message" value="AI-GUARD: use android.util.Log em código de produção"/>
+            <property name="ignoreComments" value="true"/>
+        </module>
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="(?i)(api[_-]?key|password|secret|token)\s*=\s*&quot;[^&quot;]{8,}&quot;"/>
+            <property name="message" value="AI-GUARD: possível secret hardcoded; use BuildConfig ou recurso seguro"/>
+            <property name="ignoreComments" value="true"/>
+        </module>
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="\bclass\s+(Mock|Dummy)[A-Za-z0-9_]*"/>
+            <property name="message" value="AI-GUARD: Mock/Dummy não pertence a src/main/java"/>
+            <property name="ignoreComments" value="true"/>
+        </module>
+
+        <!-- AI-GUARD: Orbbec/OpenNI + visão computacional -->
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="getData\(\)\.array\s*\("/>
+            <property name="message" value="AI-GUARD: ByteBuffer.array() em frame OpenNI corrompe stream no Android; use ShortBuffer LITTLE_ENDIAN"/>
+            <property name="ignoreComments" value="true"/>
+        </module>
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="getPosition3D\s*\("/>
+            <property name="message" value="AI-GUARD: ML Kit getPosition3D() não é depth real; amostrar depth map via PoseDepthFusion"/>
+            <property name="ignoreComments" value="true"/>
+        </module>
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="\bnew Handler\(\)"/>
+            <property name="message" value="AI-GUARD: Handler() sem Looper causa crash/API deprecated; use new Handler(Looper.getMainLooper())"/>
+            <property name="ignoreComments" value="true"/>
+        </module>
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="GlobalScope|runBlocking|viewModelScope|collectAsState"/>
+            <property name="message" value="AI-GUARD: projeto é Java 8 Activities; não introduza Kotlin coroutines/Compose"/>
+            <property name="ignoreComments" value="true"/>
+        </module>
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="Executors\.newFixedThreadPool\s*\("/>
+            <property name="message" value="AI-GUARD: fixed thread pool sem shutdown causa leak; use newSingleThreadExecutor + shutdown"/>
+            <property name="ignoreComments" value="true"/>
+        </module>
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="setAlignMode|ALIGN_D2C"/>
+            <property name="message" value="AI-GUARD: D2C Orbbec v1 deprecated; em v2 usar Align filter explícito"/>
+            <property name="ignoreComments" value="true"/>
+        </module>
+    </module>
+</module>

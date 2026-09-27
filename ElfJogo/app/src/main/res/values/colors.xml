@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+
+    <!-- Hub PUC / terminal -->
+    <color name="hub_teal_dark">#003840</color>
+    <color name="hub_card_bg">#B3004D56</color>
+    <color name="hub_card_featured_bg">#CC005A63</color>
+    <color name="hub_terminal_green">#39FF14</color>
+    <color name="hub_terminal_green_dim">#8039FF14</color>
+    <color name="hub_text_primary">#FFFFFF</color>
+    <color name="hub_text_secondary">#B8FFE0</color>
+
+    <!-- RCP / primeiros socorros -->
+    <color name="cpr_bg">#140808</color>
+    <color name="cpr_red">#C62828</color>
+    <color name="cpr_red_bright">#E53935</color>
+</resources>

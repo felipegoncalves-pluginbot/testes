@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!DOCTYPE module PUBLIC "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
+        "https://checkstyle.org/dtds/configuration_1_3.dtd">
+<module name="Checker">
+    <property name="charset" value="UTF-8"/>
+    <property name="severity" value="error"/>
+    <property name="fileExtensions" value="java"/>
+
+    <module name="TreeWalker">
+        <!-- FSM-GUARD: threshold instantâneo em delta (jump/duck) sem Schmitt-Trigger -->
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="if\s*\([^)]*deltaFromBaseline\s*[&lt;&gt;]"/>
+            <property name="message" value="FSM-GUARD: deltaFromBaseline em if — use histerese (Prev + banda ENTER/EXIT), não threshold único"/>
+            <property name="ignoreComments" value="true"/>
+        </module>
+
+        <!-- FSM-GUARD: distância/profundidade com literal mm (ex: if (depth &lt; 1000)) -->
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="if\s*\([^)]*\b(depth|distanceZ|distancia|distanceMm)\w*\s*[&lt;&gt;]=?\s*\d{3,}\b"/>
+            <property name="message" value="FSM-GUARD: threshold de depth/distância com literal — use latch/histerese, mediana ou EMA (DepthHistogramSegmenter.updateProximityLatch)"/>
+            <property name="ignoreComments" value="true"/>
+        </module>
+
+        <!-- FSM-GUARD: gesto booleano direto sem pipeline temporal -->
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="\.(isJumping|isDucking)\s*=\s*true"/>
+            <property name="message" value="FSM-GUARD: isJumping/isDucking=true direto — derive de estado Prev + histerese em KinectGestureClassifier"/>
+            <property name="ignoreComments" value="true"/>
+        </module>
+
+        <!-- FSM-GUARD: presença do jogador por threshold único de Z -->
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="isPlayerPresent\s*=\s*[^;]*(distanceZ|depth|distancia)\s*[&lt;&gt;]"/>
+            <property name="message" value="FSM-GUARD: isPlayerPresent por comparação depth — use blob + anatomia ou timeout temporal (PlayerTracker)"/>
+            <property name="ignoreComments" value="true"/>
+        </module>
+    </module>
+</module>

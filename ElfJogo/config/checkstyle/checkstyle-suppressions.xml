@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE suppressions PUBLIC
+    "-//Checkstyle//DTD SuppressionFilter Configuration 1.2//EN"
+    "https://checkstyle.org/dtds/suppressions_1_2.dtd">
+<suppressions>
+    <!-- Supressões para código gerado pelo Android / Gradle / Testes -->
+    <suppress checks=".*" files=".*[/\\]generated[/\\].*" />
+    <suppress checks=".*" files=".*[/\\]build[/\\].*" />
+    <suppress checks=".*" files=".*Test\.java" />
+    <suppress checks=".*" files=".*TestCase\.java" />
+
+    <!-- Supressões de estilo e formatação (Spotless cuida do google-java-format e imports) -->
+    <suppress checks="NeedBraces|MultipleVariableDeclarations|LocalVariableName|ParameterNumber|EmptyBlock|MemberName|LineLength|CyclomaticComplexity|MethodLength" files=".*" />
+
+    <!-- FileLength 400: ver checkstyle.xml. Não fatiar o pipeline de visão para passar lint. -->
+</suppressions>

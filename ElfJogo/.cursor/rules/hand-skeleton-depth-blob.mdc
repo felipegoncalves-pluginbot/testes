@@ -1,0 +1,28 @@
+# Mãos / esqueleto depth-blob (Modo Espelho)
+
+## Causa comum de esqueleto "curto"
+
+- `DepthBlobAnatomy.applyHand`: se `leftCount`/`rightCount` < `MIN_ARM_PIXEL_SAMPLES`, entra fallback.
+- **Proibido** ancorar mão em `playerCentroidY + 0.18` (quadril) — gera linha diagonal ombro→tronco.
+- Fallback correto: `shoulderY + HAND_FALLBACK_SHOULDER_DROP_Y` (~braço ao lado do corpo).
+
+## Fusão ML Kit
+
+- `KinectTrackingEngine.processDepthFrameInternal` chama `PoseDepthFusion.tryFuse` após depth-blob.
+- Se fusion falha (`pose_stale`, `low_core_confidence`), overlay usa só blob.
+- Punho ML Kit exige `InFrameLikelihood >= 0.45`; se punho falha mas cotovelo OK, `PoseDepthFusionArms` extrapola punho.
+- `POSE_MAX_AGE_MS = 750` (pose RGB pode atrasar vs depth 30fps).
+
+## Testes obrigatórios antes de mudar tracking
+
+- `DepthBlobHandDetectionTest` + `GoldenDatasetTrackingTest` com `SyntheticDepthFixtures`.
+- Cenário 640×480: `upscaleNearest` + `injectSensorNoise` + `addSideBlob`.
+
+## Overlay (KinectDebugOverlayView)
+
+- `KinectTrackingEngine` entrega resultado **EMA** ao overlay — `applyEmaSmoothing` deve suavizar **todos** os joints (ombro, cotovelo, mão, quadril, pé), não só mãos.
+- Se cotovelos ficam no default `(0.25, 0.45)` enquanto mãos se movem → esqueleto “curto” no overlay.
+
+
+- Logcat: `adb logcat -s DBG938fa7`
+- Arquivo: `adb pull .../cache/debug-938fa7.log`

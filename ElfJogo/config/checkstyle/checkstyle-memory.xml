@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE module PUBLIC "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
+        "https://checkstyle.org/dtds/configuration_1_3.dtd">
+<module name="Checker">
+    <property name="charset" value="UTF-8"/>
+    <property name="severity" value="error"/>
+    <property name="fileExtensions" value="java"/>
+
+    <module name="TreeWalker">
+        <!-- MEM-GUARD: clone de frame YUV/depth aloca ~460KB/frame → GC/OOM no Sanbot (RAM ~2GB, heap largeHeap 512MB) -->
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="(yuv|Yuv|yuvData|depthData|frameData)\.clone\s*\("/>
+            <property name="message" value="MEM-GUARD: não clone frame YUV/depth — arraycopy em buffer reutilizado + compareAndSet backpressure"/>
+            <property name="ignoreComments" value="true"/>
+        </module>
+
+        <!-- MEM-GUARD: isProcessing verificado mas nunca travado antes do enqueue -->
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="isPoseProcessing\.get\(\)\s*\)\s*return"/>
+            <property name="message" value="MEM-GUARD: use compareAndSet(false,true) para backpressure, não só get()"/>
+            <property name="ignoreComments" value="true"/>
+        </module>
+
+        <!-- MEM-GUARD: fila ilimitada de frames encoded -->
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="new ArrayBlockingQueue&lt;byte\[\]&gt;\(\s*(10|20|50|100)\s*\)"/>
+            <property name="message" value="MEM-GUARD: fila H.264 &gt;2 frames causa OOM; use ArrayBlockingQueue(2) + offer drop"/>
+            <property name="ignoreComments" value="true"/>
+        </module>
+    </module>
+</module>

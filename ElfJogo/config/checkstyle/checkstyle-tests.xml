@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<!DOCTYPE module PUBLIC "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
+        "https://checkstyle.org/dtds/configuration_1_3.dtd">
+<module name="Checker">
+    <property name="charset" value="UTF-8"/>
+    <property name="severity" value="error"/>
+    <property name="fileExtensions" value="java"/>
+
+    <!-- Testes concisos: evitar suites gigantes geradas por IA -->
+    <module name="FileLength">
+        <property name="max" value="220"/>
+        <property name="fileExtensions" value="java"/>
+    </module>
+
+    <module name="LineLength">
+        <property name="max" value="160"/>
+        <property name="ignorePattern" value="^package .*;|^import .*;|https?://|//.*"/>
+    </module>
+
+    <module name="TreeWalker">
+        <module name="MethodLength">
+            <property name="max" value="45"/>
+            <property name="countEmpty" value="false"/>
+        </module>
+
+        <module name="AvoidStarImport"/>
+        <module name="UnusedImports"/>
+
+        <!-- AI-GUARD: testes que não validam comportamento real -->
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="assertTrue\s*\(\s*true\s*\)"/>
+            <property name="message" value="TEST-GUARD: assertTrue(true) é tautologia; teste comportamento real"/>
+            <property name="ignoreComments" value="true"/>
+        </module>
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="assertFalse\s*\(\s*false\s*\)"/>
+            <property name="message" value="TEST-GUARD: assertFalse(false) é tautologia"/>
+            <property name="ignoreComments" value="true"/>
+        </module>
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="assertEquals\s*\(\s*4\s*,\s*2\s*\+\s*2\s*\)"/>
+            <property name="message" value="TEST-GUARD: placeholder 2+2; teste código de produção"/>
+            <property name="ignoreComments" value="true"/>
+        </module>
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="class\s+ExampleUnitTest"/>
+            <property name="message" value="TEST-GUARD: remova ExampleUnitTest placeholder"/>
+            <property name="ignoreComments" value="true"/>
+        </module>
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="assertNotNull\s*\([^)]+\)\s*;\s*$"/>
+            <property name="message" value="TEST-GUARD: só assertNotNull não valida comportamento; adicione assertEquals/True com valor esperado"/>
+            <property name="ignoreComments" value="true"/>
+        </module>
+    </module>
+</module>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Orbbec Astra Mini (Vendor: 0x2bc5, Product: 0x0401) -->
+    <usb-device vendor-id="11205" product-id="1025" />
+    <!-- Orbbec Astra Pro (Vendor: 0x2bc5, Product: 0x0501) -->
+    <usb-device vendor-id="11205" product-id="1281" />
+</resources>

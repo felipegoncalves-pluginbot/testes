@@ -1,0 +1,5 @@
+# ninja log v5
+16	906	1787942910007775687	CMakeFiles/native-lib.dir/native-lib.cpp.o	df9298b475d45328
+906	1019	1787942910133935287	/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/build/intermediates/cxx/Debug/3wh28381/obj/armeabi-v7a/libnative-lib.so	75230ec94cece66b
+16	825	1788456189311830869	CMakeFiles/native-lib.dir/native-lib.cpp.o	7b75d677e0d6d08c
+825	918	1788456189417271407	/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/build/intermediates/cxx/Debug/3wh28381/obj/armeabi-v7a/libnative-lib.so	1c4f327e83afe65f

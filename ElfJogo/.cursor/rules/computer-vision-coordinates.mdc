@@ -1,0 +1,62 @@
+---
+description: Visão computacional — coordenadas, ML Kit Pose, fusão depth (anti-IA)
+globs: app/src/main/java/**/*.java
+alwaysApply: false
+---
+
+# Visão Computacional — Coordenadas (anti-IA)
+
+## ML Kit Pose ≠ depth real
+
+```java
+// ❌ IA trata getPosition3D() como metros/mm da Astra
+landmark.getPosition3D().getZ();
+
+// ✅ Z do ML Kit é experimental, relativo ao quadril — NÃO é depth sensor
+// Para 3D real: amostrar depth map na posição RGB normalizada (PoseDepthFusion)
+```
+
+## Mapeamento RGB → depth → UI
+
+- Landmarks ML Kit são em **pixels do frame de análise** (ex. 640×480), não da TextureView na tela.
+- Converter com `normX = x / rgbWidth`, depois `px = normX * (depthWidth - 1)`.
+- Conta **rotação** do sensor (`rotationDegrees`).
+- **MoveNet X não é invertido.** `TFLitePoseProcessor.opticalXFromMoveNet` é identidade.
+  O único espelho L/R é `RIGHT_*` → juntas `left*` em `PoseDepthFusion`.
+  `1.0f - x` no decoder + swap L/R = espelho duplo. Calibração de selfie só com
+  `CoordinateContractTest` vermelho→verde e dump NDJSON do device.
+- Não escalar manualmente `screenX = x * (screenW/analysisW)` sem Viewport/Matrix — causa "caixa esticada".
+
+## Amostragem de depth
+
+```java
+// ❌ Um pixel no centro do bbox — ruido em ToF/structured light
+depthData[idx];
+
+// ✅ Região com mediana ou validação de faixa (PoseDepthFusion: 500–2200 mm)
+```
+
+## Frames de convenção (silent-axis swap)
+
+| Frame | Eixos | Uso |
+|-------|-------|-----|
+| Optical (OpenCV/ML Kit) | X direita, Y baixo, Z à frente | Landmarks, depth back-project |
+| Body/robô (REP 103) | X frente, Y esquerda, Z cima | `WheelMotionManager`, navegação |
+
+Sem rotação explícita optical→body, o planner acha obstáculo "acima" em vez de "à frente".
+
+## OpenGL vs OpenCV row origin
+
+- OpenGL: row 0 = **bottom** da imagem. OpenCV/ML Kit: row 0 = **top**.
+- Back-projection errada gera erro de 5–8 cm em empilhamento/manipulação.
+
+## Performance
+
+- Processar depth no **worker thread**; só UI no main thread.
+- `ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST` — não enfileirar frames stale.
+- Reutilizar buffers (`depthBuffer`) — não `new short[]` por frame.
+
+## OpenCV (Prefab)
+
+- Mat de depth: `CV_16UC1` em mm, não float meters sem conversão.
+- JNI/OpenCV no thread que criou o Mat; não cruzar threads sem clone.

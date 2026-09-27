@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE suppressions PUBLIC
+    "-//Checkstyle//DTD SuppressionFilter Configuration 1.2//EN"
+    "https://checkstyle.org/dtds/suppressions_1_2.dtd">
+<suppressions>
+    <suppress id="allocNewJoint" files="TrackingResult\.java"/>
+    <suppress id="allocNewJoint" files="Joint\.java"/>
+    <suppress id="allocNewLandmark" files="PoseLandmarkData\.java"/>
+    <suppress id="allocNewPoseFrame" files="PoseFrame\.java"/>
+    <suppress id="allocNewTrackingResult" files="DepthFrameProcessor\.java"/>
+    <suppress id="allocNewTrackingResult" files="KinectTrackingSmoother\.java"/>
+    <suppress id="allocNewTrackingResult" files="KinectTrackingEngine\.java"/>
+    <suppress id="allocNewTrackingResult" files="HybridTrackingProvider\.java"/>
+    <suppress id="allocNewTrackingResult" files="MirrorTrackingRelayWs\.java"/>
+    <suppress id="allocNewPoseFrame" files="TFLitePoseProcessor\.java"/>
+</suppressions>

@@ -1,0 +1,1 @@
+/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/cpp/CMakeLists.txt

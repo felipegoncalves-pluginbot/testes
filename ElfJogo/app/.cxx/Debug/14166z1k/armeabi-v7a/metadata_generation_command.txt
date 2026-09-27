@@ -1,0 +1,20 @@
+                        -H/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/cpp
+-DCMAKE_SYSTEM_NAME=Android
+-DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+-DCMAKE_SYSTEM_VERSION=21
+-DANDROID_PLATFORM=android-21
+-DANDROID_ABI=armeabi-v7a
+-DCMAKE_ANDROID_ARCH_ABI=armeabi-v7a
+-DANDROID_NDK=/home/pluginbot/Android/Sdk/ndk/25.1.8937393
+-DCMAKE_ANDROID_NDK=/home/pluginbot/Android/Sdk/ndk/25.1.8937393
+-DCMAKE_TOOLCHAIN_FILE=/home/pluginbot/Android/Sdk/ndk/25.1.8937393/build/cmake/android.toolchain.cmake
+-DCMAKE_MAKE_PROGRAM=/home/pluginbot/Android/Sdk/cmake/3.22.1/bin/ninja
+-DCMAKE_CXX_FLAGS=-std=c++14 -frtti -fexceptions
+-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/build/intermediates/cxx/Debug/14166z1k/obj/armeabi-v7a
+-DCMAKE_RUNTIME_OUTPUT_DIRECTORY=/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/build/intermediates/cxx/Debug/14166z1k/obj/armeabi-v7a
+-DCMAKE_BUILD_TYPE=Debug
+-B/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/.cxx/Debug/14166z1k/armeabi-v7a
+-GNinja
+-DANDROID_STL=c++_shared
+                        Build command args: []
+                        Version: 2

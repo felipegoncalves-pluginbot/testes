@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>SLAM Debug Mode - Robot Map</title>
+    <style>
+        body { background: #000; color: #0f0; font-family: monospace; margin: 0; overflow: hidden; }
+        #canvas-container { width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; }
+        canvas { border: 1px solid #333; image-rendering: pixelated; }
+        #log-panel { position: absolute; bottom: 0; left: 0; width: 100%; height: 150px; background: rgba(0,0,0,0.8); border-top: 1px solid #0f0; overflow-y: scroll; padding: 10px; font-size: 12px; }
+        .stat { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.7); padding: 10px; border: 1px solid #0f0; }
+    </style>
+</head>
+<body>
+    <div class="stat">
+        <h3>CONTROLE DE MAPA 2D</h3>
+        <div>X: <span id="val-x">0</span> | Y: <span id="val-y">0</span></div>
+        <div>Grid Cells: <span id="val-cells">0</span></div>
+        <div>Astra Cam: <span id="val-astra">OFF</span></div>
+    </div>
+    <div id="canvas-container">
+        <canvas id="map-canvas"></canvas>
+    </div>
+    <div id="log-panel" id="log-output"></div>
+
+    <script src="three.min.js"></script>
+    <script>
+        const canvas = document.getElementById('map-canvas');
+        const ctx = canvas.getContext('2d');
+        const GRID_SIZE = 200;
+        const CELL_PIXELS = 4;
+        canvas.width = GRID_SIZE * CELL_PIXELS;
+        canvas.height = GRID_SIZE * CELL_PIXELS;
+
+        let warnedEmptyGrid = false;
+
+        function log(msg) {
+            const panel = document.getElementById('log-panel');
+            const div = document.createElement('div');
+            div.innerText = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            panel.appendChild(div);
+            panel.scrollTop = panel.scrollHeight;
+            console.log(msg);
+        }
+
+        function poll() {
+            fetch('/map_data')
+                .then(r => r.json())
+                .then(data => {
+                    document.getElementById('val-x').innerText = data.x.toFixed(2);
+                    document.getElementById('val-y').innerText = data.y.toFixed(2);
+
+                    const astraSpan = document.getElementById('val-astra');
+                    if (data.astraActive) {
+                        astraSpan.innerText = `ON (${data.astraFrames})`;
+                        astraSpan.style.color = '#0f0';
+                    } else {
+                        astraSpan.innerText = 'OFF';
+                        astraSpan.style.color = '#f00';
+                    }
+
+                    if (data.gridBase64) {
+                        const binary = atob(data.gridBase64);
+                        const grid = new Uint8Array(binary.length);
+                        let count = 0;
+                        for(let i=0; i<binary.length; i++) {
+                            grid[i] = binary.charCodeAt(i);
+                            if (grid[i] > 0) count++;
+                        }
+                        document.getElementById('val-cells').innerText = count;
+                        drawGrid(grid);
+                    } else {
+                        if (!warnedEmptyGrid) {
+                            log("Aviso: gridBase64 veio vazio! (O módulo C++ do RTAB-Map ainda não está emitindo o mapa)");
+                            warnedEmptyGrid = true;
+                        }
+                    }
+                    setTimeout(poll, 100);
+                })
+                .catch(e => {
+                    log("Erro na requisição: " + e);
+                    setTimeout(poll, 1000);
+                });
+        }
+
+        function drawGrid(grid) {
+            ctx.fillStyle = '#111';
+            ctx.fillRect(0,0, canvas.width, canvas.height);
+
+            for (let i = 0; i < grid.length; i++) {
+                const val = grid[i];
+                if (val === 0) continue;
+
+                const gx = i % GRID_SIZE;
+                const gy = Math.floor(i / GRID_SIZE);
+
+                ctx.fillStyle = val === 2 ? '#fff' : '#444'; // Branco para parede, cinza para livre
+                ctx.fillRect(gx * CELL_PIXELS, gy * CELL_PIXELS, CELL_PIXELS, CELL_PIXELS);
+            }
+
+            // Desenha Robô (Ponto Verde)
+            ctx.fillStyle = '#0f0';
+            const rx = Math.floor(canvas.width/2 + (0 / 0.1) * CELL_PIXELS); // Placeholder simplificado
+            const ry = Math.floor(canvas.height/2 + (0 / 0.1) * CELL_PIXELS);
+            ctx.beginPath();
+            ctx.arc(GRID_SIZE*CELL_PIXELS/2, GRID_SIZE*CELL_PIXELS/2, 5, 0, Math.PI*2);
+            ctx.fill();
+        }
+
+        log("Depurador de Mapa Iniciado.");
+        poll();
+    </script>
+</body>
+</html>

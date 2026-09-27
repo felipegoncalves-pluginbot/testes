@@ -1,0 +1,15 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+        maven { url 'https://maven.aliyun.com/repository/public' }
+    }
+}
+plugins {
+    id 'com.android.application' version '8.1.0' apply false
+}
+
+include ':app'
+include ':mirror-aux'
+rootProject.name = 'ElfTemplate'

@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<ruleset name="ElfJogo PMD Ruleset"
+    xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.io/ruleset_2_0_0.xsd">
+
+    <description>
+        Regras de análise de complexidade ciclomática, código morto, boas práticas e integridade para ElfJogo.
+    </description>
+
+    <!-- Exclusão de código de testes e gerado -->
+    <exclude-pattern>.*/test/.*</exclude-pattern>
+    <exclude-pattern>.*/androidTest/.*</exclude-pattern>
+    <exclude-pattern>.*/build/.*</exclude-pattern>
+
+    <!-- 1. COMPLEXIDADE E DESIGN -->
+    <rule ref="category/java/design.xml/CyclomaticComplexity">
+        <properties>
+            <property name="methodReportLevel" value="10"/>
+            <property name="classReportLevel" value="80"/>
+        </properties>
+    </rule>
+
+    <rule ref="category/java/design.xml/NPathComplexity">
+        <properties>
+            <property name="reportLevel" value="200"/>
+        </properties>
+    </rule>
+
+    <rule ref="category/java/design.xml/SingularField"/>
+
+    <!-- 2. CÓDIGO MORTO E BOAS PRÁTICAS -->
+    <rule ref="category/java/bestpractices.xml/UnusedPrivateField"/>
+    <rule ref="category/java/bestpractices.xml/UnusedLocalVariable"/>
+    <rule ref="category/java/bestpractices.xml/UnusedPrivateMethod"/>
+    <rule ref="category/java/bestpractices.xml/UnusedFormalParameter"/>
+    <rule ref="category/java/bestpractices.xml/AvoidReassigningParameters"/>
+
+    <!-- 3. ERROR PRONE E PREVENÇÃO DE BUGS -->
+    <rule ref="category/java/errorprone.xml/EqualsNull"/>
+    <rule ref="category/java/errorprone.xml/IdempotentOperations"/>
+    <rule ref="category/java/errorprone.xml/EmptyCatchBlock"/>
+    <rule ref="category/java/errorprone.xml/AvoidCatchingThrowable"/>
+    <rule ref="category/java/errorprone.xml/BrokenNullCheck"/>
+    <rule ref="category/java/errorprone.xml/MisplacedNullCheck"/>
+
+    <!-- 4. AI-GUARD: threading, segurança e padrões que LLMs introduzem -->
+    <rule ref="category/java/multithreading.xml/DoNotUseThreads"/>
+    <rule ref="category/java/multithreading.xml/AvoidThreadGroup"/>
+    <rule ref="category/java/multithreading.xml/DontCallThreadRun"/>
+
+    <rule ref="category/java/design.xml/CognitiveComplexity">
+        <properties>
+            <property name="reportLevel" value="12"/>
+        </properties>
+    </rule>
+
+    <rule ref="category/java/design.xml/AvoidDeeplyNestedIfStmts">
+        <properties>
+            <property name="problemDepth" value="4"/>
+        </properties>
+    </rule>
+
+    <rule ref="category/java/security.xml/HardCodedCryptoKey"/>
+
+    <rule ref="category/java/bestpractices.xml/LooseCoupling">
+        <properties>
+            <property name="allowedTypes" value="java.util.List,java.util.Map,java.util.Set,java.util.Collection,java.util.concurrent.ExecutorService"/>
+        </properties>
+    </rule>
+
+    <!-- 5. AI-GUARD: visão computacional e OpenNI -->
+    <rule ref="category/java/errorprone.xml/AvoidDecimalLiteralsInBigDecimalConstructor"/>
+    <rule ref="category/java/errorprone.xml/CompareObjectsWithEquals"/>
+    <rule ref="category/java/errorprone.xml/UseEqualsToCompareStrings"/>
+
+    <rule ref="category/java/performance.xml/BooleanInstantiation"/>
+    <rule ref="category/java/performance.xml/ByteInstantiation"/>
+    <rule ref="category/java/performance.xml/IntegerInstantiation"/>
+
+    <rule ref="category/java/multithreading.xml/DoubleCheckedLocking"/>
+    <rule ref="category/java/multithreading.xml/UnsynchronizedStaticFormatter"/>
+</ruleset>

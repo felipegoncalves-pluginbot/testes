@@ -1,0 +1,42 @@
+---
+description: Modos de rastreamento single/multi pessoa para eventos com público
+globs: app/src/main/java/**/tracking/**/*.java
+alwaysApply: false
+---
+
+# Rastreamento multi-pessoa (Kinect-style)
+
+## Como Kinect original diferencia pessoas
+
+1. **Player index** — cada pixel depth carrega ID 1–6 (segmentação NUI + esqueleto)
+2. **Closest1Player** — menor Z (mais próximo)
+3. **Sticky1Player** — trava tracking ID até perder o jogador
+4. **Closest2Player** — dois mais próximos (Kinect Xbox limitava 2 ativos)
+
+OpenNI/Astra **não** fornece player index — simular com blobs depth + seleção.
+
+## Modos (`TrackingMode` / `TrackingModeConfig`)
+
+| Modo | Uso em evento |
+|------|----------------|
+| `SINGLE_CLOSEST` | Jogador na frente; público ao fundo ignorado (mais distante) |
+| `SINGLE_STICKY` | Trava quem começou; ignora quem passa na frente |
+| `SINGLE_CENTER` | Quem está no centro do palco |
+| `MULTI_CLOSEST_TWO` | Dois jogadores (ex. espelho competitivo) |
+| `MULTI_ALL` | Até `maxPersons` blobs válidos |
+
+```java
+trackingEngine.setTrackingMode(TrackingMode.SINGLE_CLOSEST); // evento com público
+trackingEngine.getTrackingModeConfig().setMaxPersons(4);
+```
+
+## Limitações sem NUI Kinect
+
+- Pessoas lado a lado **na mesma profundidade** podem formar um blob único
+- Fundo distante funciona bem (depth + closest)
+- Cadeiras/móveis: filtro antropomórfico + rejeição sem cabeça
+
+## Telemetria
+
+`result.diagnostics.trackedPersonCount` — quantos blobs humanos no frame
+`result.diagnostics.trackingMode` — modo ativo

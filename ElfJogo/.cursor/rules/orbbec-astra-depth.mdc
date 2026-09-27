@@ -1,0 +1,49 @@
+---
+description: Orbbec Astra/OpenNI2 depth camera — erros típicos de IA em Android
+globs: app/src/main/java/**/tracking/**/*.java
+alwaysApply: false
+---
+
+# Orbbec Astra / OpenNI2 (anti-IA)
+
+Stack deste projeto: **OpenNI2** (`org.openni.*`) + `AstraDepthController`, não Orbbec SDK v2 Pipeline.
+
+## Leitura de depth buffer
+
+```java
+// ❌ Corrompe stream no Android — frames param de chegar
+byte[] raw = frame.getData().array();
+
+// ✅ ShortBuffer little-endian + release obrigatório
+ByteBuffer buf = frame.getData().order(ByteOrder.LITTLE_ENDIAN);
+buf.asShortBuffer().get(depthBuffer);
+frame.release();
+```
+
+## VideoMode e resolução
+
+- **Não hardcodar** 640×480 sem verificar `getSupportedVideoModes()` — Astra 2 não suporta 640×480 depth; modelos variam (ex.: 400×300).
+- Usar `PixelFormat.DEPTH_1_MM`; valores são **mm** (`short`, mascarar com `& 0xFFFF`).
+- Depth inválido/zero: tratar como missing, não como 65535 sem máscara.
+
+## Lifecycle OpenNI
+
+- `OpenNI.initialize()` ↔ shutdown no `stop()` via `openNIHelper.shutdown()`.
+- `depthStream.stop()` → `destroy()` → `device.close()` — ordem importa.
+- USB: permissão via `OpenNIHelper.requestDeviceOpen` antes de `Device.open()`.
+
+## Dual camera (HD Sanbot + Astra)
+
+- HD (`HDCameraManager`) e Astra competem por USB — fechar streams antigos antes de abrir (`closeStream`).
+- Não iniciar HD + Astra + ML Kit em alta resolução simultaneamente sem reduzir FPS.
+- Delay entre `start()` de cada câmera (~500ms–2s) evita falha de inicialização.
+
+## D2C / alinhamento RGB-depth
+
+- OpenNI v1 não alinha automaticamente RGB Orbbec com depth.
+- Mapear landmark RGB→depth via **normalização** (`normX/normY`) como em `PoseDepthFusion`, não assumir pixel-align nativo.
+- Orbbec SDK v2 exige **Align filter** explícito; não usar flags deprecated de v1.
+
+## minSdk
+
+- Orbbec Astra Android SDK falha em `getAvailableModes()` com minSdk &lt; 23; projeto usa minSdk 21 — testar em device real.

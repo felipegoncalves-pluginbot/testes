@@ -1,0 +1,43 @@
+<resources>
+    <string name="app_name">Elf Jogo</string>
+    <string name="hub_background_desc">PUC Poços de Caldas — robôs e Ciência da Computação</string>
+    <string name="hub_rail_left">Jogos Kinect — coluna esquerda</string>
+    <string name="hub_rail_right">Arcade corporal — coluna direita</string>
+    <string name="hub_prompt">>_ escolha um jogo</string>
+
+    <string name="cpr_btn_back">⬅ Voltar</string>
+    <string name="cpr_btn_prev">◀ Anterior</string>
+    <string name="cpr_btn_next">Próximo ▶</string>
+    <string name="cpr_btn_music_play">▶ Tocar</string>
+    <string name="cpr_btn_music_pause">⏸ Pausar</string>
+    <string name="cpr_btn_music_restart">↺ Reiniciar</string>
+    <string name="cpr_btn_music_pick">📂 Escolher música</string>
+    <string name="cpr_picker_title">Escolher arquivo de áudio</string>
+    <string name="cpr_music_pick_prompt">Toque em Escolher música para abrir o armazenamento</string>
+    <string name="cpr_music_loading">Carregando música…</string>
+    <string name="cpr_music_load_error">Erro ao abrir o arquivo selecionado</string>
+    <string name="cpr_hub_title">RCP / Primeiros Socorros</string>
+    <string name="cpr_hub_subtitle">Treino de reanimação cardiopulmonar</string>
+
+    <string name="hand_cursor_title">Mouse Kinect</string>
+    <string name="hand_cursor_subtitle">Mão direita = cursor nativo</string>
+    <string name="hand_cursor_status_idle">Levante a mão direita na frente do robô</string>
+    <string name="hand_cursor_status_track">Mova a mão — empurre ou segure ~0,5 s para clicar</string>
+    <string name="hand_cursor_status_click">Clique!</string>
+    <string name="hand_cursor_status_miss">Empurre mais para a câmera para clicar</string>
+    <string name="hand_cursor_status_a">Botão A acionado</string>
+    <string name="hand_cursor_status_b">Botão B acionado</string>
+    <string name="hand_cursor_btn_a">Botão A</string>
+    <string name="hand_cursor_btn_b">Botão B</string>
+    <string name="hand_cursor_btn_back">Voltar</string>
+
+    <string name="tracking3d_title">Tracking 3D métrico</string>
+    <string name="tracking3d_subtitle">Novo motor: esqueleto geodésico em metros</string>
+    <string name="tracking3d_overlay_description">Máscara de segmentação e esqueleto do jogador</string>
+    <string name="tracking3d_waiting_sensor">Abrindo o Orbbec Astra…</string>
+    <string name="tracking3d_waiting_body">Aguardando pessoa no volume de jogo</string>
+    <string name="tracking3d_gesture_idle">sem jogador</string>
+    <string name="tracking3d_back">Voltar</string>
+    <string name="tracking3d_speech_on">Narrar gestos: OFF</string>
+    <string name="tracking3d_speech_off">Narrar gestos: ON</string>
+</resources>

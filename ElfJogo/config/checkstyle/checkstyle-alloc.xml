@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!DOCTYPE module PUBLIC "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
+        "https://checkstyle.org/dtds/configuration_1_3.dtd">
+<module name="Checker">
+    <property name="charset" value="UTF-8"/>
+    <property name="severity" value="error"/>
+    <property name="fileExtensions" value="java"/>
+
+    <module name="SuppressionFilter">
+        <property name="file" value="${config_loc}/checkstyle-alloc-suppressions.xml"/>
+        <property name="optional" value="false"/>
+    </module>
+
+    <module name="TreeWalker">
+        <module name="RegexpSinglelineJava">
+            <property name="id" value="allocNewJoint"/>
+            <property name="format" value="new\s+Joint\s*\("/>
+            <property name="message" value="ALLOC-GUARD: reutilize TrackingResult.*.set(); new Joint no hot path gera GC no Sanbot"/>
+            <property name="ignoreComments" value="true"/>
+        </module>
+        <module name="RegexpSinglelineJava">
+            <property name="id" value="allocNewLandmark"/>
+            <property name="format" value="new\s+PoseLandmarkData\s*\("/>
+            <property name="message" value="ALLOC-GUARD: mute keypoints pré-alocados; new PoseLandmarkData é proibido no loop RGB"/>
+            <property name="ignoreComments" value="true"/>
+        </module>
+        <module name="RegexpSinglelineJava">
+            <property name="id" value="allocNewTrackingResult"/>
+            <property name="format" value="new\s+TrackingResult\s*\("/>
+            <property name="message" value="ALLOC-GUARD: reutilize um TrackingResult; new por frame aloca 15 Joints"/>
+            <property name="ignoreComments" value="true"/>
+        </module>
+        <module name="RegexpSinglelineJava">
+            <property name="id" value="allocNewPoseFrame"/>
+            <property name="format" value="new\s+PoseFrame\s*\("/>
+            <property name="message" value="ALLOC-GUARD: reutilize PoseFrame; new por inferência é proibido"/>
+            <property name="ignoreComments" value="true"/>
+        </module>
+        <module name="RegexpSinglelineJava">
+            <property name="id" value="mirrorMoveNetX"/>
+            <property name="format" value="1\.0f\s*-\s*outputArray"/>
+            <property name="message" value="MIRROR-GUARD: não inverta X do MoveNet; o swap L/R está em PoseDepthFusion. Ver COORDINATE_FRAMES.md"/>
+            <property name="ignoreComments" value="true"/>
+        </module>
+        <module name="RegexpSinglelineJava">
+            <property name="id" value="tfliteThreadCount"/>
+            <property name="format" value="setNumThreads\(\s*[2-9]"/>
+            <property name="message" value="MEM-GUARD: TFLite com &gt;1 thread briga com o worker de depth no RK3288"/>
+            <property name="ignoreComments" value="true"/>
+        </module>
+    </module>
+</module>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <!-- AI-GUARD: leaks e lifecycle -->
+    <issue id="StaticFieldLeak" severity="error" />
+    <issue id="HandlerLeak" severity="error" />
+    <issue id="Wakelock" severity="warning" />
+    <issue id="Recycle" severity="warning" />
+    <issue id="LeakedClosable" severity="error" />
+
+    <!-- Câmera / TextureView / Surface -->
+    <issue id="InvalidWakeLockTag" severity="warning" />
+    <issue id="ClickableViewAccessibility" severity="warning" />
+
+    <!-- Segurança -->
+    <issue id="HardcodedDebugMode" severity="warning" />
+    <issue id="SetJavaScriptEnabled" severity="warning" />
+
+    <!-- Performance visão computacional -->
+    <issue id="DrawAllocation" severity="warning" />
+    <issue id="Overdraw" severity="informational" />
+
+    <!-- USB / hardware -->
+    <issue id="MissingPermission" severity="error" />
+</lint>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Elf Mirror Aux</string>
+    <string name="host_ip_hint">IP do Sanbot (ex. 192.168.0.42)</string>
+    <string name="connect">Conectar</string>
+    <string name="disconnect">Desconectar</string>
+    <string name="status_idle">Desconectado</string>
+    <string name="status_connecting">Conectando…</string>
+    <string name="status_connected">Conectado — aguardando frames</string>
+    <string name="status_processing">Processando pose</string>
+    <string name="pref_host_ip">mirror_host_ip</string>
+    <string name="port_label">Porta: 8765 (WebSocket /mirror)</string>
+    <string name="help_text">No robô, abra o Modo Espelho. Este app recebe frames da Astra, roda ML Kit e devolve tracking ao Sanbot.</string>
+</resources>

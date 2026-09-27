@@ -1,0 +1,59 @@
+---
+description: FSM-GUARD — histerese temporal, EMA e janelas em tracking/gestos (anti-heurística IA)
+globs: app/src/main/java/**/tracking/**/*.java,app/src/main/java/**/logic/**/*.java
+alwaysApply: false
+---
+
+# Sinais temporais — FSM, não `if (dist < 1000)`
+
+## O erro típico da IA (heurística sem estado)
+
+```java
+// ❌ Um frame ruidoso alterna presença/gesto
+if (distanceZ < 1000) {
+  result.isPlayerPresent = true;
+}
+if (deltaFromBaseline < -0.09f) {
+  result.isJumping = true;
+}
+```
+
+## Padrões corretos neste projeto
+
+| Problema | Solução no ElfJogo |
+|----------|-------------------|
+| Proximidade depth | `DepthHistogramSegmenter.updateProximityLatch` (ENTER/EXIT mm) |
+| Posição suavizada | EMA em `KinectTrackingEngine.applyEmaSmoothing` (`EMA_ALPHA`) |
+| Braço levantado | Schmitt-Trigger em `KinectGestureClassifier` (`*Prev`, bandas ±0.03/0.05) |
+| Jump / duck | `isJumpingPrev` / `isDuckingPrev` com ENTER/EXIT em delta |
+| Cabeça SIM/NÃO | `HeadGestureDetector` — janela 1200ms, reversões, cooldown |
+| Swing | Velocidade + `SWING_COOLDOWN_MS` + `lastGestureTriggerTime` |
+| Presença timeout | `PlayerTracker` — `lastDetectionTime` + `DETECTION_TIMEOUT_MS` |
+| Depth por região | Mediana em `DepthHistogramSegmenter.calculateMedian` |
+
+```java
+// ✅ Schmitt-Trigger (braço)
+if (isLeftHandRaisedPrev) {
+  isLeftHandRaisedPrev = isSeparated && (highestY < shoulderY + 0.03f);
+} else {
+  isLeftHandRaisedPrev = isSeparated && (highestY < shoulderY - 0.05f);
+}
+
+// ✅ Latch de proximidade (depth mm)
+if (!proximityModeLatch && peakZ <= NEAR_PROXIMITY_ENTER_MM) {
+  proximityModeLatch = true;
+} else if (proximityModeLatch && peakZ >= NEAR_PROXIMITY_EXIT_MM) {
+  proximityModeLatch = false;
+}
+```
+
+## Gates automáticos
+
+- `checkstyleTemporal` + `pmdTemporal` em `tracking` e `logic`
+- `TemporalSignalGuardTest` — classes Classifier/Detector/Segmenter/Tracker precisam marcadores temporais
+
+## Ao criar classificador novo
+
+1. Campo `*Prev` ou `history` / janela deslizante
+2. Constantes `ENTER` e `EXIT` (ou cooldown) — nunca um único threshold
+3. Teste multi-frame em `KinectTrackingEngineTest` ou `*ClassifierTest`

@@ -1,0 +1,60 @@
+---
+description: Evita erros típicos de IA em Activities Java Android (lifecycle, threads, UI)
+globs: app/src/main/java/**/*.java
+alwaysApply: false
+---
+
+# Android Java — Lifecycle e Threads (anti-IA)
+
+Este projeto usa **Java 8 + Activities**, não Kotlin/Compose. Não introduza coroutines, ViewModel, Flow ou Compose.
+
+## Handler e game loops
+
+```java
+// ❌ IA cria Handler sem Looper ou sem cleanup
+private final Handler h = new Handler();
+h.postDelayed(runnable, 500); // leak se não remove em onDestroy
+
+// ✅ Handler com main looper + removeCallbacks no cleanup
+private final Handler h = new Handler(Looper.getMainLooper());
+// onDestroy/onStop: h.removeCallbacks(runnable);
+```
+
+## ExecutorService (visão, tracking, rede)
+
+```java
+// ❌ Cached/fixed pool sem shutdown — leak clássico de IA
+Executors.newCachedThreadPool();
+
+// ✅ Single thread para pipeline de visão + shutdown em onDestroy
+private ExecutorService visionExecutor = Executors.newSingleThreadExecutor();
+// cleanup: visionExecutor.shutdownNow(); visionExecutor = null;
+```
+
+## UI thread
+
+- Atualize Views só via `runOnUiThread()` ou em callbacks já no main thread.
+- Nunca bloqueie o main thread (inferência ML, I/O, parsing JSON pesado).
+
+## Activity lifecycle
+
+- `onDestroy`/`onStop`: parar câmera, Kinect, WebView, handlers, executors e **parar o robô**.
+- Não acesse `WheelMotionManager` antes de `onMainServiceConnected()` em `BindBaseActivity`.
+
+## Proibido em produção
+
+- `new Thread(...)`, `AsyncTask`, `GlobalScope`, `runBlocking`
+- `System.out.println` — use `android.util.Log`
+
+## Sanbot / API 21 — sem lambdas em hot path
+
+```java
+// ❌ NoClassDefFoundError: PersonTargetSelector$$ExternalSyntheticLambda1 no robô
+copy.sort(Comparator.comparingInt(b -> b.distanceZ));
+
+// ✅ Comparator estático com classe anônima
+private static final Comparator<PersonBlob> BY_Z = new Comparator<PersonBlob>() { ... };
+Collections.sort(copy, BY_Z);
+```
+
+Evitar `Comparator.comparing*`, `Stream`, method references em `tracking` e pipelines de depth.

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.usb.host"
+        android:required="true" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.qihancloud.opensdk.permission.MAIN_SERVICE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <application
+        android:name=".ElfApp"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:largeHeap="true"
+        android:fullBackupContent="@xml/backup_descriptor">
+
+        <activity android:name="com.felipe.elftemplate.MainActivity"
+            android:exported="true"
+            android:screenOrientation="landscape">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
+            </intent-filter>
+            <meta-data android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
+                android:resource="@xml/device_filter" />
+        </activity>
+
+        <activity android:name="com.felipe.elftemplate.Tracking3dActivity"
+            android:exported="true"
+            android:screenOrientation="landscape">
+            <intent-filter>
+                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
+            </intent-filter>
+            <meta-data android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
+                android:resource="@xml/device_filter" />
+        </activity>
+
+        <activity android:name="com.felipe.elftemplate.MirrorActivity"
+            android:exported="true"
+            android:screenOrientation="landscape" />
+
+        <activity android:name="com.felipe.elftemplate.TennisActivity"
+            android:exported="true"
+            android:screenOrientation="landscape" />
+
+        <activity android:name="com.felipe.elftemplate.FruitSlicerActivity"
+            android:exported="true"
+            android:screenOrientation="landscape" />
+
+        <activity android:name="com.felipe.elftemplate.PoseMatchActivity"
+            android:exported="true"
+            android:screenOrientation="landscape" />
+
+        <activity android:name="com.felipe.elftemplate.DodgerActivity"
+            android:exported="true"
+            android:screenOrientation="landscape" />
+
+        <activity android:name="com.felipe.elftemplate.KinectWebGameActivity"
+            android:exported="true"
+            android:screenOrientation="landscape" />
+
+        <activity android:name="com.felipe.elftemplate.FollowActivity"
+            android:exported="true"
+            android:screenOrientation="landscape" />
+
+        <activity android:name="com.felipe.elftemplate.HandCursorActivity"
+            android:exported="true"
+            android:screenOrientation="landscape" />
+
+        <activity android:name="com.felipe.elftemplate.CprActivity"
+            android:exported="true"
+            android:screenOrientation="landscape" />
+
+        <activity android:name="com.felipe.elftemplate.MapActivity"
+            android:exported="true"
+            android:screenOrientation="landscape">
+            <intent-filter>
+                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
+            </intent-filter>
+            <meta-data android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
+                android:resource="@xml/device_filter" />
+        </activity>
+
+        <provider
+            android:name="com.sanbot.opensdk.utils.GrammarProvider"
+            android:authorities="com.felipe.elftemplate.grammar"
+            android:exported="true" />
+    </application>
+</manifest>

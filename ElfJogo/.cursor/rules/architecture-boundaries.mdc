@@ -1,0 +1,31 @@
+---
+description: Camadas hexagonais e limites de 250 linhas — padrões do ElfJogo
+alwaysApply: true
+---
+
+# Arquitetura ElfJogo (anti-IA)
+
+## Camadas
+
+| Pacote | Responsabilidade | Não pode |
+|--------|------------------|----------|
+| `logic` | Game engines e Views de jogo | `server`, Sanbot SDK, HTTP |
+| `tracking` | Câmera, pose, Kinect, ML Kit | `movement` (motores) |
+| `movement` | Motores, navegação, fusão sensores | depender de Activities |
+| `server` | NanoHTTPD, telemetria web | `KinectTrackingEngine` direto |
+
+## Tamanho e modularização
+
+- Arquivo Java: **≤ 250 linhas** (Checkstyle falha se exceder).
+- Método: **≤ 50 linhas**. Se crescer, extrair classe (Facade + SRP).
+- Padrão do projeto: classe principal como fachada delegando a submódulos.
+
+## Produção
+
+- Sem classes `Mock*` ou `Dummy*` em `src/main/java`.
+- Sem secrets hardcoded (API keys, tokens, senhas literais).
+- Testes usam fakes em `src/test/java` (`FakeMovement`, `ConsoleLogger`).
+
+## Refatoração
+
+Ao dividir arquivos grandes, manter assinaturas públicas estáveis para Activities existentes.
