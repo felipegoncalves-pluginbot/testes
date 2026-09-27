@@ -32,26 +32,46 @@ public final class GroundPlaneEstimator {
   private static final int SAMPLE_STRIDE = 3;
 
   /**
-   * Alturas de montagem plausíveis para o Astra no tronco do Sanbot Elf.
+   * Alturas de montagem fisicamente possíveis para o Astra no Sanbot Elf.
    *
-   * <p>Faixa deliberadamente estreita. No robô real, o estimador aceitou um ajuste de 0,68 m com 30,5°
-   * de inclinação: não era o piso, era o tampo de uma mesa. Um ajuste desses desloca o referencial
-   * inteiro e faz o gate antropométrico rejeitar todo mundo. É melhor recusar a medição e cair no
-   * fallback da montagem conhecida do que aceitar um plano que a mecânica do robô não permite.
+   * <p>O robô inteiro mede 0,90 m (ficha técnica: 902 mm), então o sensor não pode estar acima
+   * disso. A faixa antiga, de 0,75 a 1,45 m, era quase toda impossível e recusava as medições reais
+   * do piso: no robô o estimador chegou a medir 0,68 m, que foi descartado como "tampo de mesa".
+   * Tampo de mesa ou assento de cadeira ficam a menos de 0,45 m abaixo de um sensor dessa altura, e
+   * são eles que o piso mínimo recusa. O teto de 1,10 m só deixa folga para os cenários sintéticos
+   * dos testes.
    */
-  private static final float MIN_PLAUSIBLE_HEIGHT_M = 0.75f;
+  private static final float MIN_PLAUSIBLE_HEIGHT_M = 0.45f;
 
-  private static final float MAX_PLAUSIBLE_HEIGHT_M = 1.45f;
+  private static final float MAX_PLAUSIBLE_HEIGHT_M = 1.10f;
 
-  /** Inclinação plausível da montagem, em graus. */
-  private static final float MIN_PLAUSIBLE_PITCH_DEG = -12f;
+  /**
+   * Inclinação plausível, em graus.
+   *
+   * <p>O Astra fica na cabeça do Elf, que inclina; por isso a faixa cobre quase toda a busca.
+   */
+  private static final float MIN_PLAUSIBLE_PITCH_DEG = -20f;
 
-  private static final float MAX_PLAUSIBLE_PITCH_DEG = 25f;
+  private static final float MAX_PLAUSIBLE_PITCH_DEG = 35f;
 
   /** Suavização em direção à nova medida, para o referencial não pular entre frames. */
   private static final float BLEND_ALPHA = 0.25f;
 
+  /**
+   * Faixa de baixo do quadro que o piso tem de alcançar, em fração da altura da grade.
+   *
+   * <p>Para uma câmera acima do chão, o chão visível começa sempre na borda de baixo da imagem. Com
+   * o Astra na cabeça inclinado para cima, o chão perto do jogador sai do quadro e a busca de pitch
+   * achava um "piso" a 22–30° para baixo feito de uma fatia diagonal de parede e pessoa, sem nenhum
+   * ponto no chão verdadeiro e sem passar da linha 67 de 96. Um piso assim deslocava todas as
+   * alturas e o jogador era reprovado por estatura.
+   */
+  private static final float FLOOR_BOTTOM_BAND = 0.15f;
+
   private final int[] histogram = new int[BIN_COUNT];
+
+  /** Linha mais baixa da grade que caiu em cada bin, para o teste da borda de baixo. */
+  private final int[] lowestRowInBin = new int[BIN_COUNT];
 
   private boolean lastFitSucceeded;
   private int lastFloorSupport;
@@ -95,7 +115,7 @@ public final class GroundPlaneEstimator {
       float pitchRad = (float) Math.toRadians(deg);
       fillHistogram(cloud, pitchRad);
       int floorBin = findFloorModeBin(minSupport);
-      if (floorBin < 0) {
+      if (floorBin < 0 || !reachesFrameBottom(floorBin, cloud.getGridHeight())) {
         continue;
       }
       int score = binScore(floorBin);
@@ -130,8 +150,21 @@ public final class GroundPlaneEstimator {
     return sampled;
   }
 
+  /** O piso candidato encosta na faixa de baixo do quadro? */
+  private boolean reachesFrameBottom(int floorBin, int gridHeight) {
+    int lowest = lowestRowInBin[floorBin];
+    if (floorBin > 0) {
+      lowest = Math.max(lowest, lowestRowInBin[floorBin - 1]);
+    }
+    if (floorBin + 1 < BIN_COUNT) {
+      lowest = Math.max(lowest, lowestRowInBin[floorBin + 1]);
+    }
+    return lowest >= gridHeight * (1f - FLOOR_BOTTOM_BAND);
+  }
+
   private void fillHistogram(DepthPointCloud cloud, float pitchRad) {
     Arrays.fill(histogram, 0);
+    Arrays.fill(lowestRowInBin, -1);
     float cos = (float) Math.cos(pitchRad);
     float sin = (float) Math.sin(pitchRad);
     for (int gy = 0; gy < cloud.getGridHeight(); gy += SAMPLE_STRIDE) {
@@ -145,6 +178,7 @@ public final class GroundPlaneEstimator {
         int bin = (int) ((value - RANGE_MIN_M) / BIN_SIZE_M);
         if (bin >= 0 && bin < BIN_COUNT) {
           histogram[bin]++;
+          lowestRowInBin[bin] = gy; // a varredura desce: a última linha é a mais baixa
         }
       }
     }

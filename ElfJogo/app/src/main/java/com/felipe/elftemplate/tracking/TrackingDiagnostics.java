@@ -37,6 +37,33 @@ public class TrackingDiagnostics {
 
   public float rightArmConfidence = CONFIDENCE_NOT_REPORTED;
 
+  /** Cópia campo a campo, sem alocar, para entregar um retrato do frame a outra thread. */
+  public void copyFrom(TrackingDiagnostics src) {
+    if (src == null) {
+      return;
+    }
+    cameraFps = src.cameraFps;
+    frameWidth = src.frameWidth;
+    frameHeight = src.frameHeight;
+    peakDepthZ = src.peakDepthZ;
+    sliceMinZ = src.sliceMinZ;
+    sliceMaxZ = src.sliceMaxZ;
+    validPixelCount = src.validPixelCount;
+    headPixelCount = src.headPixelCount;
+    leftHandPixelCount = src.leftHandPixelCount;
+    rightHandPixelCount = src.rightHandPixelCount;
+    processingLatencyMs = src.processingLatencyMs;
+    bodyAspectHW = src.bodyAspectHW;
+    isNearProximityMode = src.isNearProximityMode;
+    isSeatedPose = src.isSeatedPose;
+    isPoseFusionActive = src.isPoseFusionActive;
+    isRemoteAuxActive = src.isRemoteAuxActive;
+    trackedPersonCount = src.trackedPersonCount;
+    trackingMode = src.trackingMode;
+    leftArmConfidence = src.leftArmConfidence;
+    rightArmConfidence = src.rightArmConfidence;
+  }
+
   public void reset() {
     cameraFps = 0.0f;
     frameWidth = 0;

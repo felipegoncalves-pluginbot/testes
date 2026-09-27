@@ -31,14 +31,13 @@ final class MetricPipelineFixture {
   }
 
   /**
-   * Cenário padrão: Astra no tronco do Sanbot a 1,05 m, inclinado 5° para baixo, pessoa de frente.
+   * Cenário padrão: Astra na cabeça do Sanbot, a 0,80 m, nivelado, pessoa de frente.
    *
-   * <p>Com esse pitch e essa altura, um adulto cabe inteiro no quadro a partir de ~2,2 m e o piso
-   * aparece a partir de ~2,0 m. É a geometria real de operação, e é por isso que os testes usam 2,5 m
-   * como distância de referência em vez de um número arbitrário.
+   * <p>Nessa geometria a cabeça de um adulto de 1,75 m entra no quadro a partir de ~2,3 m e o piso
+   * aparece a partir de ~1,9 m. Por isso os testes usam 2,5 m como distância de referência.
    */
   void standardScene(float statureM, float depthM, SyntheticHumanScene.Pose pose) {
-    renderer.setCamera(1.05f, 5f);
+    renderer.setCamera(0.80f, 0f);
     renderer.setBackWallDepthM(Math.max(3.8f, depthM + 1.2f));
     renderer.getTracer().clear();
     scene.addPerson(statureM, depthM, 0f, pose);

@@ -113,7 +113,6 @@ public class MirrorGameEngineTest {
     result.playerCentroidY = 0.50f;
     engine.processTracking(result);
     assertEquals("Yaw centro deve ser 0", 0, engine.getTargetHeadYaw());
-    assertEquals("Pitch nível deve ser 0", 0, engine.getTargetHeadPitch());
     assertFalse("Não deve girar a base", engine.shouldRotateBase());
   }
 
@@ -122,33 +121,38 @@ public class MirrorGameEngineTest {
     TrackingResult result = new TrackingResult();
     result.isPlayerPresent = true;
     float[] jitterX = {0.48f, 0.52f, 0.49f, 0.51f, 0.50f};
-    float[] jitterY = {0.29f, 0.31f, 0.30f, 0.28f, 0.32f};
     for (int i = 0; i < jitterX.length; i++) {
       result.head.x = jitterX[i];
-      result.head.y = jitterY[i];
-      engine.processTracking(result);
+      engine.processTracking(result, 1000L * i);
       assertEquals("Deadzone X", 0, engine.getTargetHeadYaw());
-      assertEquals("Deadzone Y", 0, engine.getTargetHeadPitch());
     }
   }
 
+  /**
+   * Com o Astra na cabeça, girar a cabeça move o jogador na imagem. O yaw anda em passos, espera a
+   * cabeça assentar entre eles, e para quando o jogador volta à zona central.
+   */
   @Test
-  public void testHead2DAngleMappingSanbotHardware() {
+  public void testHeadYawStepsTowardPlayerAndWaitsForTheHeadToSettle() {
     TrackingResult result = new TrackingResult();
     result.isPlayerPresent = true;
     result.head.x = 0.20f;
-    result.head.y = 0.15f;
-    engine.processTracking(result);
-    assertTrue("Yaw positivo para usuário à direita (x < 0.5)", engine.getTargetHeadYaw() > 5);
-    assertTrue("Pitch positivo para cabeça erguida (y < 0.30)", engine.getTargetHeadPitch() > 5);
+    engine.processTracking(result, 0L);
+    int firstStep = engine.getTargetHeadYaw();
+    assertTrue("Yaw positivo para usuário à direita (x < 0.5)", firstStep > 5);
+
+    engine.processTracking(result, 100L);
+    assertEquals(
+        "nada de novo passo antes de a cabeça assentar", firstStep, engine.getTargetHeadYaw());
+
+    result.head.x = 0.45f;
+    engine.processTracking(result, 1000L);
+    assertEquals("jogador recentrado: cabeça fica onde está", firstStep, engine.getTargetHeadYaw());
 
     result.head.x = 0.80f;
-    result.head.y = 0.45f;
-    for (int i = 0; i < 10; i++) {
-      engine.processTracking(result);
-    }
+    engine.processTracking(result, 2000L);
+    engine.processTracking(result, 3000L);
     assertTrue("Yaw negativo para usuário à esquerda (x > 0.5)", engine.getTargetHeadYaw() < -5);
-    assertTrue("Pitch negativo para cabeça abaixada (y > 0.30)", engine.getTargetHeadPitch() < -5);
   }
 
   @Test

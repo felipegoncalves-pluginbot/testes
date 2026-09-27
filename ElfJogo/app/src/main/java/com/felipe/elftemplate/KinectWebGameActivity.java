@@ -166,10 +166,13 @@ public class KinectWebGameActivity extends BindBaseActivity {
   }
 
   private void startTracking() {
+    // onStop marca isDestroyed; ao voltar para a tela o SDK reconecta e chama isto de novo, e sem
+    // zerar a flag todo frame era descartado e o jogo ficava parado.
+    isDestroyed = false;
     HDCameraManager hdCamera = (HDCameraManager) getUnitManager(FuncConstant.HDCAMERA_MANAGER);
     trackingEngine.attachHdCamera(hdCamera);
 
-    trackingEngine.start(
+    trackingEngine.startOnMainThread(
         this,
         (result, debugSilhouette) -> {
           if (isDestroyed) return;

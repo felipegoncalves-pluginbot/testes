@@ -27,9 +27,44 @@ final class RandomPoseSampler {
   private static final float MAX_LATERAL_M = 0.55f;
   private static final float MAX_YAW_DEG = 40f;
 
-  private static final float MIN_CAMERA_HEIGHT_M = 0.92f;
-  private static final float MAX_CAMERA_HEIGHT_M = 1.18f;
-  private static final float MAX_CAMERA_PITCH_DEG = 13f;
+  /** Faixas de altura e inclinação do sensor sorteadas em cada quadro. */
+  static final class Mount {
+    final float minHeightM;
+    final float maxHeightM;
+    final float minPitchDeg;
+    final float maxPitchDeg;
+
+    Mount(float minHeightM, float maxHeightM, float minPitchDeg, float maxPitchDeg) {
+      this.minHeightM = minHeightM;
+      this.maxHeightM = maxHeightM;
+      this.minPitchDeg = minPitchDeg;
+      this.maxPitchDeg = maxPitchDeg;
+    }
+  }
+
+  /**
+   * Astra na cabeça do Sanbot Elf (robô de 0,90 m): de 0,62 a 0,92 m, de 12° para cima a 20° para
+   * baixo (pitch positivo aponta para baixo, como em {@link GroundPlane}). Cobre a posição do
+   * sensor dentro da cabeça e a faixa de inclinação da cabeça.
+   */
+  static final Mount ROBOT_HEAD = new Mount(0.62f, 0.92f, -12f, 20f);
+
+  /** Montagem que o modelo antigo usava (sensor imaginado no peito a ~1 m); só para comparação. */
+  static final Mount LEGACY_TORSO = new Mount(0.92f, 1.18f, 0f, 13f);
+
+  private final Mount mount;
+
+  RandomPoseSampler() {
+    this(ROBOT_HEAD);
+  }
+
+  RandomPoseSampler(Mount mount) {
+    this.mount = mount;
+  }
+
+  Mount getMount() {
+    return mount;
+  }
 
   /** Quadril de 0,78 a 1,02 da altura nominal cobre de agachamento profundo a joelho travado. */
   private static final float MIN_HIP_RATIO = 0.78f;
@@ -68,8 +103,8 @@ final class RandomPoseSampler {
   void apply(PosedHumanSkeleton body, SyntheticDepthRenderer renderer, Random random) {
     float depth = range(random, MIN_DEPTH_M, MAX_DEPTH_M);
     renderer.setCamera(
-        range(random, MIN_CAMERA_HEIGHT_M, MAX_CAMERA_HEIGHT_M),
-        range(random, 0f, MAX_CAMERA_PITCH_DEG));
+        range(random, mount.minHeightM, mount.maxHeightM),
+        range(random, mount.minPitchDeg, mount.maxPitchDeg));
     renderer.setBackWallDepthM(depth + range(random, 0.35f, 2.2f));
     renderer.setNoise(
         range(random, MIN_NOISE_COEFF, MAX_NOISE_COEFF), range(random, MIN_DROPOUT, MAX_DROPOUT));

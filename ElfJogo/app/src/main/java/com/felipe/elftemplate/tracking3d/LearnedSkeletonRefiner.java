@@ -5,15 +5,17 @@ import android.content.Context;
 /**
  * Sobrepõe ao esqueleto geométrico as juntas propostas pelo classificador aprendido.
  *
- * <p>Junta os dois estimadores que o projeto agora tem, e a ordem de preferência é deliberada: quando
- * o classificador tem convicção, ele manda. O motivo é estrutural, não de gosto. O caminho geodésico
- * só acha um membro se ele produzir um extremo na superfície do corpo, e existem poses inteiras em que
- * isso não acontece — mão apoiada no tronco, braço estendido para a frente, braço cruzando o corpo. Nos
+ * <p>Junta os dois estimadores que o projeto agora tem, e a ordem de preferência é deliberada:
+ * quando o classificador tem convicção, ele manda, com uma exceção: mão ou pé que a geometria mediu
+ * como extremidade só são trocados se a proposta concordar com eles (ver {@code
+ * EXTREMITY_DISAGREEMENT_M}). O motivo é estrutural, não de gosto. O caminho geodésico só acha um
+ * membro se ele produzir um extremo na superfície do corpo, e existem poses inteiras em que isso
+ * não acontece — mão apoiada no tronco, braço estendido para a frente, braço cruzando o corpo. Nos
  * casos em que o geodésico falha ele não fica impreciso, ele fica ausente, e a junta passa a ser
  * inventada por proporção. O classificador não tem esse ponto cego: ele decide pixel por pixel.
  *
- * <p>O geodésico permanece como fallback porque tem a propriedade oposta: não depende de ter visto a
- * pose antes. Onde o classificador não tem suporte suficiente, a geometria ainda entrega algo
+ * <p>O geodésico permanece como fallback porque tem a propriedade oposta: não depende de ter visto
+ * a pose antes. Onde o classificador não tem suporte suficiente, a geometria ainda entrega algo
  * plausível.
  *
  * <p>Roda antes do filtro temporal, sobre a medição crua. Filtrar e depois sobrescrever jogaria a
@@ -28,6 +30,19 @@ public final class LearnedSkeletonRefiner {
    * nuvem é pequena demais para o modo ser estável, e o mean shift passa a seguir ruído.
    */
   private static final float ACCEPT_CONFIDENCE = 0.35f;
+
+  /**
+   * Discordância, em metros, a partir da qual uma mão ou um pé medidos pela geometria vencem a
+   * proposta.
+   *
+   * <p>Quando o caminho geodésico acha a extremidade, ela é a ponta real do membro na nuvem. Em
+   * 1.000 poses de validação com o Astra na cabeça, substituí-la sempre pela proposta piorava
+   * justamente o braço erguido e o aberto para o lado, que são os dos jogos: punho lateral de
+   * 63–69% para 51–52% dentro de 15 cm. Com esta regra os punhos no geral passam de 29% para
+   * 33–34%, e o braço para a frente, onde a geometria não tem extremo, continua vindo do
+   * classificador.
+   */
+  private static final float EXTREMITY_DISAGREEMENT_M = 0.15f;
 
   private final BodyPartLabeler labeler = new BodyPartLabeler();
   private final BodyPartJointProposer proposer = new BodyPartJointProposer();
@@ -80,6 +95,9 @@ public final class LearnedSkeletonRefiner {
       if (confidence < ACCEPT_CONFIDENCE) {
         continue;
       }
+      if (keepsMeasuredExtremity(skeleton, joint)) {
+        continue;
+      }
       skeleton.set(
           joint,
           proposer.x(joint),
@@ -89,6 +107,26 @@ public final class LearnedSkeletonRefiner {
       overriddenJoints++;
     }
     return overriddenJoints;
+  }
+
+  /** Mão ou pé que a geometria mediu como extremidade e dos quais a proposta discorda demais. */
+  private boolean keepsMeasuredExtremity(MetricSkeleton skeleton, int joint) {
+    if (!isExtremity(joint)
+        || skeleton.confidence(joint) < GeodesicSkeletonFitter.CONFIDENCE_MEASURED) {
+      return false;
+    }
+    float dx = proposer.x(joint) - skeleton.x(joint);
+    float dy = proposer.y(joint) - skeleton.y(joint);
+    float dz = proposer.z(joint) - skeleton.z(joint);
+    float limit = EXTREMITY_DISAGREEMENT_M * EXTREMITY_DISAGREEMENT_M;
+    return (dx * dx) + (dy * dy) + (dz * dz) > limit;
+  }
+
+  private static boolean isExtremity(int joint) {
+    return joint == MetricSkeleton.LEFT_WRIST
+        || joint == MetricSkeleton.RIGHT_WRIST
+        || joint == MetricSkeleton.LEFT_ANKLE
+        || joint == MetricSkeleton.RIGHT_ANKLE;
   }
 
   /**

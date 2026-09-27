@@ -99,7 +99,7 @@ public class FruitSlicerActivity extends BindBaseActivity {
     HDCameraManager hdCamera = (HDCameraManager) getUnitManager(FuncConstant.HDCAMERA_MANAGER);
     trackingEngine.attachHdCamera(hdCamera);
 
-    trackingEngine.start(
+    trackingEngine.startOnMainThread(
         this,
         (result, debugSilhouette) -> {
           runOnUiThread(

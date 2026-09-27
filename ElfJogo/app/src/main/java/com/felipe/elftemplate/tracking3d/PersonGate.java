@@ -25,6 +25,37 @@ public final class PersonGate {
   /** Largura máxima do "pescoço": a faixa mais estreita acima da cintura. */
   public static final float MAX_NECK_BAND_M = 0.45f;
 
+  /**
+   * Largura máxima da faixa mais estreita quando a cabeça está fora do quadro.
+   *
+   * <p>Sem a cabeça no quadro não existe pescoço para medir: a faixa mais estreita visível é peito
+   * ou cintura com os braços ao lado, 0,45 a 0,60 m num adulto. Exigir os 0,45 m do pescoço
+   * reprovava justamente o jogador na distância de jogo. Com o Astra a menos de 0,9 m do chão (o
+   * Sanbot Elf tem 0,90 m de altura), a cabeça de um adulto só entra no quadro a partir de ~2,3 m.
+   */
+  public static final float MAX_TORSO_BAND_HEAD_CUT_M = 0.70f;
+
+  /**
+   * Fração máxima da borda encostada em superfície mais próxima.
+   *
+   * <p>Acima disso o aglomerado é fundo visto por uma fresta (ver {@link ClusterBoundary}). Medido
+   * no sintético com o Astra na cabeça: pessoa livre 0%; pessoa atrás de mesa, caixa ou balcão
+   * 4–14%; pessoa com outra na frente 17–18%; parede entre as pernas 78–100%; parede presa entre o
+   * jogador e a borda da imagem 52–60%.
+   */
+  public static final float MAX_OCCLUDED_BOUNDARY = 0.4f;
+
+  /**
+   * Fração máxima da borda que continua a mesma superfície além do alcance.
+   *
+   * <p>Acima disso o aglomerado é pedaço de uma superfície maior cortada pelo alcance de 4,2 m.
+   * Pessoa até 9%, parede fatiada no limite 97–100%.
+   */
+  public static final float MAX_BEYOND_RANGE_BOUNDARY = 0.5f;
+
+  /** Borda mínima para a fração de oclusão significar algo. */
+  private static final int MIN_BOUNDARY_EDGES = 8;
+
   /** Piso absoluto de pontos, para o caso de grades muito decimadas. */
   private static final int ABSOLUTE_MIN_POINTS = 40;
 
@@ -62,6 +93,8 @@ public final class PersonGate {
   public static final int REJECT_TOO_THICK = 3;
   public static final int REJECT_NO_NECK = 4;
   public static final int REJECT_STATURE = 5;
+  public static final int REJECT_SEEN_THROUGH_GAP = 6;
+  public static final int REJECT_CUT_BY_RANGE = 7;
 
   /**
    * Aplica todos os critérios métricos ao aglomerado.
@@ -71,11 +104,12 @@ public final class PersonGate {
    * @return {@link #ACCEPTED} ou o código do critério que reprovou.
    */
   public static int evaluate(BodyCluster cluster, DepthPointCloud cloud, boolean floorMeasured) {
-    if (cluster == null || cluster.pointCount <= 0) {
+    if (!hasEnoughPoints(cluster, cloud)) {
       return REJECT_TOO_FEW_POINTS;
     }
-    if (cluster.pointCount < minPointsAt(cluster.nearestDepthM, cloud)) {
-      return REJECT_TOO_FEW_POINTS;
+    int boundary = boundaryVerdict(cluster);
+    if (boundary != ACCEPTED) {
+      return boundary;
     }
     if (cluster.widthM > MAX_SPAN_M) {
       return REJECT_TOO_WIDE;
@@ -83,10 +117,30 @@ public final class PersonGate {
     if (cluster.thicknessM > MAX_THICKNESS_M) {
       return REJECT_TOO_THICK;
     }
-    if (cluster.narrowestUpperBandM > MAX_NECK_BAND_M) {
+    float maxBand = cluster.headOutOfFrame ? MAX_TORSO_BAND_HEAD_CUT_M : MAX_NECK_BAND_M;
+    if (cluster.narrowestUpperBandM > maxBand) {
       return REJECT_NO_NECK;
     }
     return hasPlausibleStature(cluster, floorMeasured) ? ACCEPTED : REJECT_STATURE;
+  }
+
+  private static boolean hasEnoughPoints(BodyCluster cluster, DepthPointCloud cloud) {
+    return cluster != null
+        && cluster.pointCount > 0
+        && cluster.pointCount >= minPointsAt(cluster.nearestDepthM, cloud);
+  }
+
+  /** Borda que denuncia fundo em vez de corpo; {@link #ACCEPTED} quando a borda é de pessoa. */
+  private static int boundaryVerdict(BodyCluster cluster) {
+    if (cluster.boundaryEdges < MIN_BOUNDARY_EDGES) {
+      return ACCEPTED;
+    }
+    if (cluster.occludedEdges > cluster.boundaryEdges * MAX_OCCLUDED_BOUNDARY) {
+      return REJECT_SEEN_THROUGH_GAP;
+    }
+    return cluster.beyondRangeEdges > cluster.boundaryEdges * MAX_BEYOND_RANGE_BOUNDARY
+        ? REJECT_CUT_BY_RANGE
+        : ACCEPTED;
   }
 
   /** Texto curto para o HUD do robô. */
@@ -104,6 +158,10 @@ public final class PersonGate {
         return "sem pescoco";
       case REJECT_STATURE:
         return "estatura fora da faixa";
+      case REJECT_SEEN_THROUGH_GAP:
+        return "fundo visto por fresta";
+      case REJECT_CUT_BY_RANGE:
+        return "superficie cortada pelo alcance";
       default:
         return "desconhecido";
     }

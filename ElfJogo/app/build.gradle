@@ -63,7 +63,8 @@ android {
             }
             // Gerador do modelo de partes do corpo (BodyPartForestGenerator). Repassado por -P
             // porque -D fica na JVM do Gradle e nunca chega ao JVM de teste.
-            ['train', 'frames', 'seed', 'trees', 'depth', 'features', 'thresholds', 'minSamples'].each { key ->
+            ['train', 'frames', 'seed', 'trees', 'depth', 'features', 'thresholds', 'minSamples',
+             'minHeight', 'maxHeight', 'minPitch', 'maxPitch'].each { key ->
                 def value = project.findProperty("bodypart.${key}")
                 if (value != null) {
                     systemProperty "bodypart.${key}", value

@@ -12,7 +12,6 @@ public class MirrorGameEngine {
   private static final String TAG = "MirrorGameEngine";
 
   private static final float HEAD_YAW_DEADZONE = 0.05f;
-  private static final float HEAD_PITCH_DEADZONE = 0.04f;
   private static final float WING_ELEV_DEADZONE = 0.07f;
   private static final float HEAD_EMA_ALPHA = 0.35f;
 
@@ -21,26 +20,31 @@ public class MirrorGameEngine {
   private int targetLeftWingAngle = ArmElevationMapper.WING_ANGLE_MIN;
   private int targetRightWingAngle = ArmElevationMapper.WING_ANGLE_MIN;
   private int targetHeadYaw = 0;
-  private int targetHeadPitch = 0;
+
+  /** Olhar para o jogador em pé: o Astra está na cabeça, então o yaw é servo, não mapa absoluto. */
+  private final HeadGazeServo gazeServo = new HeadGazeServo();
 
   private float smoothedYaw = 0.0f;
-  private float smoothedPitch = 0.0f;
   private boolean headInitialized = false;
 
   private boolean lastLeftWingLogged = false;
   private boolean lastRightWingLogged = false;
 
   public void processTracking(TrackingResult result) {
+    processTracking(result, System.currentTimeMillis());
+  }
+
+  /** Igual a {@link #processTracking(TrackingResult)}, com o relógio explícito (testes). */
+  public void processTracking(TrackingResult result, long nowMs) {
     if (result == null || !result.isPlayerPresent) {
       leftWingUp = false;
       rightWingUp = false;
       targetLeftWingAngle = ArmElevationMapper.WING_ANGLE_MIN;
       targetRightWingAngle = ArmElevationMapper.WING_ANGLE_MIN;
       targetHeadYaw = 0;
-      targetHeadPitch = 0;
       smoothedYaw = 0.0f;
-      smoothedPitch = 0.0f;
       headInitialized = false;
+      gazeServo.reset();
       return;
     }
 
@@ -72,24 +76,41 @@ public class MirrorGameEngine {
       lastRightWingLogged = this.rightWingUp;
     }
 
-    mapHeadAngles(result);
+    mapHeadYaw(result, nowMs);
   }
 
-  private void mapHeadAngles(TrackingResult result) {
+  /**
+   * Yaw da cabeça. O pitch não é comandado: o Astra está na cabeça, e inclinar a cabeça invalida o
+   * plano do chão até ele ser reestimado. No sintético, 6° para baixo tiram o jogador por 4
+   * reestimativas (~120 frames).
+   *
+   * <p>Em pé, a cabeça só acompanha o jogador ({@link HeadGazeServo}). O mapa absoluto antigo,
+   * {@code yaw = −60·(x − 0,5)}, pressupunha câmera fixa: com ela na cabeça, a malha deixava o
+   * jogador a 20% do centro (com EMA) ou oscilava sem parar (sem EMA, como nos jogos).
+   *
+   * <p>Sentado, a cabeça imita o giro da cabeça do usuário em relação ao tronco. Essa diferença não
+   * muda quando a câmera gira, e o termo absoluto tem ganho 0,35: a malha fica estável com a câmera
+   * na cabeça, então esse caminho continua como era.
+   */
+  private void mapHeadYaw(TrackingResult result, long nowMs) {
     float headNormX = result.head != null ? result.head.x : result.playerCentroidX;
-    float headNormY = result.head != null ? result.head.y : result.playerCentroidY;
     float spineNormX = result.spine != null ? result.spine.x : result.playerCentroidX;
 
-    float deltaX;
     boolean usePoseFusion = result.diagnostics != null && result.diagnostics.isPoseFusionActive;
-    if (!usePoseFusion && result.diagnostics != null && result.diagnostics.isSeatedPose) {
-      float relativeTurn = headNormX - spineNormX;
-      float absoluteShift = headNormX - 0.5f;
-      deltaX = (relativeTurn * 2.2f) + (absoluteShift * 0.35f);
-    } else {
-      deltaX = headNormX - 0.5f;
+    boolean seatedMimic =
+        !usePoseFusion && result.diagnostics != null && result.diagnostics.isSeatedPose;
+    if (!seatedMimic) {
+      if (headInitialized) {
+        gazeServo.syncTo(smoothedYaw);
+        headInitialized = false;
+      }
+      this.targetHeadYaw = gazeServo.update(headNormX, nowMs);
+      return;
     }
 
+    float relativeTurn = headNormX - spineNormX;
+    float absoluteShift = headNormX - 0.5f;
+    float deltaX = (relativeTurn * 2.2f) + (absoluteShift * 0.35f);
     float rawTargetYaw;
     if (Math.abs(deltaX) <= HEAD_YAW_DEADZONE) {
       rawTargetYaw = 0.0f;
@@ -102,28 +123,12 @@ public class MirrorGameEngine {
       if (rawTargetYaw < -45.0f) rawTargetYaw = -45.0f;
     }
 
-    float deltaY = 0.30f - headNormY;
-    float rawTargetPitch;
-    if (Math.abs(deltaY) <= HEAD_PITCH_DEADZONE) {
-      rawTargetPitch = 0.0f;
-    } else {
-      float signY = deltaY > 0 ? 1.0f : -1.0f;
-      rawTargetPitch = (deltaY - signY * HEAD_PITCH_DEADZONE) * 55.0f;
-      if (rawTargetPitch > 25.0f) rawTargetPitch = 25.0f;
-      if (rawTargetPitch < -20.0f) rawTargetPitch = -20.0f;
-    }
-
     if (!headInitialized) {
-      smoothedYaw = rawTargetYaw;
-      smoothedPitch = rawTargetPitch;
+      smoothedYaw = gazeServo.getYawOffset();
       headInitialized = true;
-    } else {
-      smoothedYaw = smoothedYaw + HEAD_EMA_ALPHA * (rawTargetYaw - smoothedYaw);
-      smoothedPitch = smoothedPitch + HEAD_EMA_ALPHA * (rawTargetPitch - smoothedPitch);
     }
-
+    smoothedYaw = smoothedYaw + HEAD_EMA_ALPHA * (rawTargetYaw - smoothedYaw);
     this.targetHeadYaw = Math.round(smoothedYaw);
-    this.targetHeadPitch = Math.round(smoothedPitch);
   }
 
   private static float applyElevationDeadzone(float elevation) {
@@ -151,10 +156,6 @@ public class MirrorGameEngine {
 
   public int getTargetHeadYaw() {
     return targetHeadYaw;
-  }
-
-  public int getTargetHeadPitch() {
-    return targetHeadPitch;
   }
 
   public int getTargetHeadAngle() {

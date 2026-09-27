@@ -42,8 +42,31 @@ public class AstraDepthController implements OpenNIHelper.DeviceOpenListener {
   private OpenNIHelper openNIHelper;
   private Device device;
   private VideoStream depthStream;
-  private boolean isRunning = false;
+  private volatile boolean isRunning = false;
+  private boolean openNiInitialized = false;
   private short[] depthBuffer;
+
+  /**
+   * Listener guardado para ser removido no {@link #stop()}.
+   *
+   * <p>O {@code VideoStream} do OpenNI.jar da Orbbec guarda os listeners num mapa estático. Sem o
+   * {@code removeNewFrameListener}, cada tela de jogo aberta deixava lá o stream, este controlador
+   * e, por ele, a Activity inteira: memória que nunca volta e que se acumula a cada partida.
+   */
+  private final VideoStream.NewFrameListener frameListener =
+      new VideoStream.NewFrameListener() {
+        @Override
+        public void onFrameReady(VideoStream stream) {
+          if (!isRunning) {
+            return;
+          }
+          VideoFrameRef frame = stream.readFrame();
+          if (frame != null) {
+            processFrame(frame);
+            frame.release();
+          }
+        }
+      };
 
   // Telemetria de FPS
   private long frameCount = 0;
@@ -76,6 +99,7 @@ public class AstraDepthController implements OpenNIHelper.DeviceOpenListener {
     try {
       OpenNI.setLogAndroidOutput(true);
       OpenNI.initialize();
+      openNiInitialized = true;
 
       List<DeviceInfo> devices = OpenNI.enumerateDevices();
       if (devices.isEmpty()) {
@@ -102,25 +126,37 @@ public class AstraDepthController implements OpenNIHelper.DeviceOpenListener {
       vm.setPixelFormat(PixelFormat.DEPTH_1_MM);
       depthStream.setVideoMode(vm);
 
-      depthStream.addNewFrameListener(
-          new VideoStream.NewFrameListener() {
-            @Override
-            public void onFrameReady(VideoStream stream) {
-              VideoFrameRef frame = stream.readFrame();
-              if (frame != null) {
-                processFrame(frame);
-                frame.release();
-              }
-            }
-          });
-
-      depthStream.start();
+      logStreamGeometry();
       isRunning = true;
+      depthStream.addNewFrameListener(frameListener);
+      depthStream.start();
       lastFpsLogTime = System.currentTimeMillis();
       Log.i(TAG, "[ASTRA-STREAM] Stream de Profundidade INICIADO (640x480 @ 30fps)!");
 
     } catch (Exception e) {
+      isRunning = false;
       Log.e(TAG, "[ASTRA-STREAM] Erro ao configurar stream Astra: " + e.getMessage(), e);
+    }
+  }
+
+  /**
+   * Registra espelhamento e FOV reais do stream.
+   *
+   * <p>O pipeline assume imagem não espelhada (o lado esquerdo da imagem é a mão direita do
+   * jogador) e o FOV de 58,4° x 45,5° da ficha. Nenhum dos dois é configurado explicitamente aqui,
+   * então o logcat é o único jeito de conferir no robô o que o firmware entrega.
+   */
+  private void logStreamGeometry() {
+    try {
+      Log.i(
+          TAG,
+          String.format(
+              "[ASTRA-STREAM] Espelhado=%b | FOV=%.1f x %.1f graus",
+              depthStream.getMirroringEnabled(),
+              Math.toDegrees(depthStream.getHorizontalFieldOfView()),
+              Math.toDegrees(depthStream.getVerticalFieldOfView())));
+    } catch (Throwable t) {
+      Log.w(TAG, "[ASTRA-STREAM] Não foi possível ler espelhamento/FOV: " + t.getMessage());
     }
   }
 
@@ -172,14 +208,34 @@ public class AstraDepthController implements OpenNIHelper.DeviceOpenListener {
   public void stop() {
     Log.i(TAG, "[ASTRA-STREAM] Encerrando stream Astra Cam...");
     isRunning = false;
+    // Ordem do OpenNI: tirar o listener, parar e destruir o stream, fechar o device, desligar o
+    // contexto (pareado com o initialize) e só então soltar a conexão USB do helper. Cada passo é
+    // isolado para que uma falha no meio não deixe o USB preso para a próxima tela.
     if (depthStream != null) {
-      depthStream.stop();
-      depthStream.destroy();
+      try {
+        depthStream.removeNewFrameListener(frameListener);
+        depthStream.stop();
+        depthStream.destroy();
+      } catch (Throwable t) {
+        Log.w(TAG, "[ASTRA-STREAM] Falha ao fechar stream: " + t.getMessage());
+      }
       depthStream = null;
     }
     if (device != null) {
-      device.close();
+      try {
+        device.close();
+      } catch (Throwable t) {
+        Log.w(TAG, "[ASTRA-STREAM] Falha ao fechar device: " + t.getMessage());
+      }
       device = null;
+    }
+    if (openNiInitialized) {
+      openNiInitialized = false;
+      try {
+        OpenNI.shutdown();
+      } catch (Throwable t) {
+        Log.w(TAG, "[ASTRA-STREAM] Falha no OpenNI.shutdown: " + t.getMessage());
+      }
     }
     if (openNIHelper != null) {
       openNIHelper.shutdown();

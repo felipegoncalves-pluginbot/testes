@@ -115,10 +115,7 @@ public class MetricPipelineAccuracyTest {
     assertEquals("envergadura punho a punho em metros", expected, span, 0.20f);
   }
 
-  /**
-   * Mão erguida fica a ~2,0 m do chão. Com o Astra a 1,05 m e 5° para baixo, essa altura só entra no
-   * quadro a partir de ~3,1 m de distância — limitação física do FOV vertical, não do algoritmo.
-   */
+  /** Mão erguida (~2,0 m do chão) só entra no quadro a partir de ~2,9 m: limite do FOV vertical. */
   private static final float RAISED_ARM_DISTANCE_M = 3.2f;
 
   @Test

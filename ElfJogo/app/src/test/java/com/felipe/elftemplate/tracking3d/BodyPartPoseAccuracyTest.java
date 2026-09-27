@@ -48,19 +48,24 @@ public class BodyPartPoseAccuracyTest {
         fixture.proposalErrorM(MetricSkeleton.HEAD) < 0.14f);
   }
 
+  /**
+   * Pose T em 12 sementes, no esqueleto final. Com o Astra na cabeça a proposta crua desta pose
+   * oscila em qualquer modelo; quem segura o punho é a regra de extremidade do refinador.
+   */
   @Test
-  public void tposeWristsAreProposedNearTheRenderedWrists() {
-    fixture.standardCamera(2.6f);
+  public void tposeWristsEndNearTheRenderedWristsAcrossNoiseSeeds() {
     fixture.poseArms(STATURE, 0f, 0f, 0f);
-    fixture.run(2.6f, 5353L);
-
-    assertTrue("esqueleto deve ser ajustado", fixture.skeletonFitted);
-    assertTrue(
-        fixture.describe(MetricSkeleton.LEFT_WRIST, "punho esquerdo T-pose"),
-        fixture.proposalErrorM(MetricSkeleton.LEFT_WRIST) < 0.16f);
-    assertTrue(
-        fixture.describe(MetricSkeleton.RIGHT_WRIST, "punho direito T-pose"),
-        fixture.proposalErrorM(MetricSkeleton.RIGHT_WRIST) < 0.16f);
+    for (long seed = 5353L; seed < 5353L + 12; seed++) {
+      fixture.standardCamera(2.6f);
+      fixture.run(2.6f, seed);
+      assertTrue("esqueleto deve ser ajustado, semente " + seed, fixture.skeletonFitted);
+      fixture.refineSkeletonWithLearnedModel();
+      float left = fixture.skeletonErrorM(MetricSkeleton.LEFT_WRIST);
+      float right = fixture.skeletonErrorM(MetricSkeleton.RIGHT_WRIST);
+      assertTrue(
+          String.format("semente %d: punhos a %.1f e %.1f cm", seed, left * 100f, right * 100f),
+          left < 0.16f && right < 0.16f);
+    }
   }
 
   @Test

@@ -8,8 +8,9 @@ package com.felipe.elftemplate.tracking3d;
  * em vez de "0,18 do quadro", que era o vocabulário do pipeline antigo e mudava conforme a distância
  * e a inclinação do sensor.
  *
- * <p>Assume roll zero: o Astra é fixado no tronco do Sanbot, sem rotação lateral. Só pitch e altura
- * são estimados.
+ * <p>Assume roll zero: o Astra fica na cabeça do Sanbot, que gira (yaw) e inclina (pitch) mas não
+ * rola. Só pitch e altura são estimados. Girar a cabeça não muda o plano; incliná-la muda, e o
+ * plano só volta ao lugar na reestimativa seguinte.
  *
  * <p>Transformação (θ = pitch, positivo com a câmera apontada para baixo):
  *
@@ -21,8 +22,14 @@ package com.felipe.elftemplate.tracking3d;
  */
 public final class GroundPlane {
 
-  /** Altura assumida do Astra no tronco do Sanbot Elf quando o piso não está visível. */
-  public static final float DEFAULT_CAMERA_HEIGHT_M = 1.05f;
+  /**
+   * Altura assumida do Astra quando o piso não está visível.
+   *
+   * <p>O Sanbot Elf mede 0,90 m e o Astra fica na cabeça (confirmado no robô); 1,05 m, o valor
+   * antigo, ficava acima do próprio robô. Com o fallback errado em 0,3 m o piso passava no corte de
+   * 8 cm e se fundia aos pés do jogador.
+   */
+  public static final float DEFAULT_CAMERA_HEIGHT_M = 0.80f;
 
   /** Pitch assumido quando o piso não está visível (câmera praticamente nivelada). */
   public static final float DEFAULT_PITCH_RAD = 0.0f;
