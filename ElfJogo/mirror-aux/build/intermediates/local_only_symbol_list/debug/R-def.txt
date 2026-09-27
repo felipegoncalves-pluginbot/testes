@@ -1,0 +1,26 @@
+R_DEF: Internal format may change without notice
+local
+color mirror_on_primary
+color mirror_on_surface
+color mirror_primary
+color mirror_status_ok
+color mirror_status_warn
+color mirror_surface
+drawable ic_launcher
+id connectButton
+id hostIpInput
+id metricsText
+id statusText
+layout activity_main
+string app_name
+string connect
+string disconnect
+string help_text
+string host_ip_hint
+string port_label
+string pref_host_ip
+string status_connected
+string status_connecting
+string status_idle
+string status_processing
+style Theme.MirrorAux

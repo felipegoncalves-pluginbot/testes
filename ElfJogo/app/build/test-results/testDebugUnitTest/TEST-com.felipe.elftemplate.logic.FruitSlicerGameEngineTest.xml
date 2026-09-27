@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.felipe.elftemplate.logic.FruitSlicerGameEngineTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-09-11T19:20:13" hostname="fedora" time="0.002">
+  <properties/>
+  <testcase name="testGameOverWhenLivesReachZero" classname="com.felipe.elftemplate.logic.FruitSlicerGameEngineTest" time="0.002"/>
+  <testcase name="testSliceFruitIncreasesScoreAndCombo" classname="com.felipe.elftemplate.logic.FruitSlicerGameEngineTest" time="0.0"/>
+  <testcase name="testSliceBombDecreasesLivesAndResetsCombo" classname="com.felipe.elftemplate.logic.FruitSlicerGameEngineTest" time="0.0"/>
+  <testcase name="testFruitSpawningAndPhysics" classname="com.felipe.elftemplate.logic.FruitSlicerGameEngineTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

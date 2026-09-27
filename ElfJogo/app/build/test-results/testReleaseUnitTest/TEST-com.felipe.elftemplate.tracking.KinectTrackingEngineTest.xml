@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.felipe.elftemplate.tracking.KinectTrackingEngineTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2026-08-27T19:00:30" hostname="fedora" time="0.008">
+  <properties/>
+  <testcase name="testHandDetectionWhenRaised" classname="com.felipe.elftemplate.tracking.KinectTrackingEngineTest" time="0.004"/>
+  <testcase name="testRejectInanimateChairOrTableBlob" classname="com.felipe.elftemplate.tracking.KinectTrackingEngineTest" time="0.0"/>
+  <testcase name="testFullBodyModeEnablesFeet" classname="com.felipe.elftemplate.tracking.KinectTrackingEngineTest" time="0.0"/>
+  <testcase name="testSeatedNearPoseIsDetected" classname="com.felipe.elftemplate.tracking.KinectTrackingEngineTest" time="0.0"/>
+  <testcase name="testDepthSlicingExtractsPlayerCentroid" classname="com.felipe.elftemplate.tracking.KinectTrackingEngineTest" time="0.001"/>
+  <testcase name="testJumpAndDuckDetection" classname="com.felipe.elftemplate.tracking.KinectTrackingEngineTest" time="0.0"/>
+  <testcase name="testSwipeGestureDetection" classname="com.felipe.elftemplate.tracking.KinectTrackingEngineTest" time="0.001"/>
+  <testcase name="testUpperBodyModeDisablesFeet" classname="com.felipe.elftemplate.tracking.KinectTrackingEngineTest" time="0.0"/>
+  <testcase name="testSwingGestureDetection" classname="com.felipe.elftemplate.tracking.KinectTrackingEngineTest" time="0.0"/>
+  <testcase name="testPlayerDetectedWithArmsDownNarrowSilhouette" classname="com.felipe.elftemplate.tracking.KinectTrackingEngineTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

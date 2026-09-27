@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="10.12.5">
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/AstraDepthController.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/BodyPoseTracker.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/CameraController.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/FaceOverlayView.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/FrameData.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/GoogleVisionController.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/GyroscopeData.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/HeadGestureDetector.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/HybridPersonTracker.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/KinectWebBridge.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/PlayerTracker.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/Pose.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/PoseLandmark.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/PoseMatrix.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/PoseOverlayView.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/RtabmapWrapper.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/UsbPermissionException.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/VisionMediaDecoder.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/DepthHistogramSegmenter.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/Joint.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/KinectDebugRenderer.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/KinectGestureClassifier.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/KinectSkeletonExtractor.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/TrackingDiagnostics.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/TrackingResult.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/KinectDebugOverlayView.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/KinectTrackingEngine.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/PoseDepthFusion.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/TrackingMode.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/TrackingModeConfig.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/PersonBlob.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/PersonTargetSelector.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/DepthBlobClusterer.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/DepthFrameProcessor.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/DepthBlobAnatomy.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/DepthBlobLimbScanner.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/ArmElevationTracker.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/ArmElevationMapper.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/DebugTrace.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/PoseDepthFusionArms.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/KinectTrackingSmoother.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/DepthBlobHandPicker.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/KinectHoltHandFilter.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/ArmElevationBridge.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/PoseDepthHandBlend.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/PoseLandmarkData.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/PoseFrame.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/TFLitePoseProcessor.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/OpenCVDepthFilter.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/FusionModeLatch.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/RgbPreviewBridge.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/Nv21PreviewView.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/Yuv420pConverter.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/H264NalUtil.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/LatestEncodedSlot.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/PreviewViewport.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/TrackingProvider.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/LocalKinectTrackingProvider.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/DepthPreviewBridge.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/MirrorTrackingRelay.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/TrackingResultCodec.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/MirrorProtocolCodec.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/MirrorFrameDownscaler.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/HybridTrackingProvider.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/Nv21LumaEnhancer.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/PoseFrameHold.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/HybridRemoteMerge.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/MirrorRgbDepthAlign.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/HybridRemoteArms.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/java/com/felipe/elftemplate/tracking/DepthGeodesicParts.java">
+</file>
+</checkstyle>

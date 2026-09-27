@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.felipe.elftemplate.tracking.KinectGestureClassifierTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-09-11T19:20:18" hostname="fedora" time="0.222">
+  <properties/>
+  <testcase name="testArmHysteresisSchmittTrigger" classname="com.felipe.elftemplate.tracking.KinectGestureClassifierTest" time="0.221"/>
+  <testcase name="testDuckAndJumpClassification" classname="com.felipe.elftemplate.tracking.KinectGestureClassifierTest" time="0.001"/>
+  <system-out><![CDATA[D/NavController: NAV -> Dist: 1,06m | ErrAng: 20 deg | Pose: (0,00, 0,00) | Target: (1,00, 0,36) | CMD: turn_left
+D/NavController: NAV -> Dist: 1,41m | ErrAng: 45 deg | Pose: (0,00, 0,00) | Target: (1,00, 1,00) | CMD: left
+W/NavController: NAV -> CAMINHO BLOQUEADO! Parando robô.
+D/NavController: NAV -> Dist: 1,06m | ErrAng: 20 deg | Pose: (0,00, 0,00) | Target: (1,00, 0,36) | CMD: turn_left
+D/NavController: NAV -> Dist: 1,41m | ErrAng: 45 deg | Pose: (0,00, 0,00) | Target: (1,00, 1,00) | CMD: left
+W/NavController: NAV -> CAMINHO BLOQUEADO! Parando robô.
+D/NavController: NAV -> Dist: 1,06m | ErrAng: 20 deg | Pose: (0,00, 0,00) | Target: (1,00, 0,36) | CMD: turn_left
+D/NavController: NAV -> Dist: 1,41m | ErrAng: 45 deg | Pose: (0,00, 0,00) | Target: (1,00, 1,00) | CMD: left
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,2 @@
+ninja: Entering directory `/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/.cxx/Debug/3wh28381/x86'
+ninja: no work to do.

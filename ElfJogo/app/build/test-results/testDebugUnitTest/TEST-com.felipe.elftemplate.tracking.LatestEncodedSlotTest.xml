@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.felipe.elftemplate.tracking.LatestEncodedSlotTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-09-11T19:20:18" hostname="fedora" time="0.001">
+  <properties/>
+  <testcase name="copiesPayloadAndClearsPending" classname="com.felipe.elftemplate.tracking.LatestEncodedSlotTest" time="0.001"/>
+  <testcase name="shortDestDoesNotConsume" classname="com.felipe.elftemplate.tracking.LatestEncodedSlotTest" time="0.0"/>
+  <testcase name="keepsLatestAndFlagsDrop" classname="com.felipe.elftemplate.tracking.LatestEncodedSlotTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

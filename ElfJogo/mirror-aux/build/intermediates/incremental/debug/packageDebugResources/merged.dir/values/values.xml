@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="mirror_on_primary">#FFFFFF</color>
+    <color name="mirror_on_surface">#E8E8E8</color>
+    <color name="mirror_primary">#1565C0</color>
+    <color name="mirror_status_ok">#66BB6A</color>
+    <color name="mirror_status_warn">#FFA726</color>
+    <color name="mirror_surface">#121212</color>
+    <string name="app_name">Elf Mirror Aux</string>
+    <string name="connect">Conectar</string>
+    <string name="disconnect">Desconectar</string>
+    <string name="help_text">No robô, abra o Modo Espelho. Este app recebe frames da Astra, roda ML Kit e devolve tracking ao Sanbot.</string>
+    <string name="host_ip_hint">IP do Sanbot (ex. 192.168.0.42)</string>
+    <string name="port_label">Porta: 8765 (WebSocket /mirror)</string>
+    <string name="pref_host_ip">mirror_host_ip</string>
+    <string name="status_connected">Conectado — aguardando frames</string>
+    <string name="status_connecting">Conectando…</string>
+    <string name="status_idle">Desconectado</string>
+    <string name="status_processing">Processando pose</string>
+    <style name="Theme.MirrorAux" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/mirror_primary</item>
+        <item name="colorOnPrimary">@color/mirror_on_primary</item>
+        <item name="android:statusBarColor">@color/mirror_surface</item>
+        <item name="android:navigationBarColor">@color/mirror_surface</item>
+        <item name="android:windowBackground">@color/mirror_surface</item>
+    </style>
+</resources>

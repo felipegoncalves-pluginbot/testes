@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0b1329">
+
+    <!-- Botão Voltar -->
+    <Button
+        android:id="@+id/btn_back"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_margin="12dp"
+        android:text="⬅ Voltar"
+        android:textColor="#FFFFFF"
+        android:background="#CC000000"
+        android:textSize="13sp"
+        android:paddingHorizontal="14dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Título do Modo Espelho -->
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="🪞 Modo Espelho / Marionete"
+        android:textColor="#00E5FF"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Subtítulo -->
+    <TextView
+        android:id="@+id/tv_instruction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:text="Mova os braços, suba/abaixe ou vire a cabeça e o corpo para o Elf te copiar!"
+        android:textColor="#B0BEC5"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_title" />
+
+    <!-- Painel Esquerdo: Telemetria das Articulações Espelhadas e HUD de Diagnóstico -->
+    <LinearLayout
+        android:id="@+id/panel_telemetry"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="12dp"
+        android:background="#99101935"
+        android:orientation="vertical"
+        android:padding="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/kinect_debug_overlay"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_instruction">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TELEMETRIA DO ROBÔ (ESPELHO)"
+            android:textColor="#00FF66"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <!-- Card Asa Esquerda -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:background="#B31A274E"
+            android:orientation="horizontal"
+            android:padding="8dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Asa Esquerda (Seu Braço D):"
+                android:textColor="#ECEFF1"
+                android:textSize="13sp" />
+            <TextView
+                android:id="@+id/tv_left_wing_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="BAIXADA"
+                android:textColor="#90A4AE"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Card Asa Direita -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:background="#B31A274E"
+            android:orientation="horizontal"
+            android:padding="8dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Asa Direita (Seu Braço E):"
+                android:textColor="#ECEFF1"
+                android:textSize="13sp" />
+            <TextView
+                android:id="@+id/tv_right_wing_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="BAIXADA"
+                android:textColor="#90A4AE"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Card Cabeça 2D -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:background="#B31A274E"
+            android:orientation="horizontal"
+            android:padding="8dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Cabeça 2D (Yaw + Pitch):"
+                android:textColor="#ECEFF1"
+                android:textSize="13sp" />
+            <TextView
+                android:id="@+id/tv_head_angle_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Yaw: 0° | Pitch: 0°"
+                android:textColor="#FFD700"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Card Giro da Base no Eixo -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:background="#B31A274E"
+            android:orientation="horizontal"
+            android:padding="8dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Giro do Corpo no Eixo:"
+                android:textColor="#ECEFF1"
+                android:textSize="13sp" />
+            <TextView
+                android:id="@+id/tv_base_rotation_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ALINHADO"
+                android:textColor="#00E5FF"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- HUD CONSOLE DE DIAGNÓSTICO EM TEMPO REAL -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="📊 DIAGNÓSTICO 3D (ASTRA &amp; KINECT)"
+            android:textColor="#FFD54F"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="4dp"
+            android:layout_weight="1"
+            android:background="#CC050A14"
+            android:padding="6dp">
+
+            <TextView
+                android:id="@+id/tv_diagnostic_hud"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="monospace"
+                android:text="[ASTRA] Inicializando...\n[KINECT] Aguardando câmera..."
+                android:textColor="#00FFCC"
+                android:textSize="11sp" />
+        </ScrollView>
+
+    </LinearLayout>
+
+    <!-- Visualizador Kinect 3D em Tempo Real (Painel Direito) -->
+    <com.felipe.elftemplate.tracking.KinectDebugOverlayView
+        android:id="@+id/kinect_debug_overlay"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="4:3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_instruction" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

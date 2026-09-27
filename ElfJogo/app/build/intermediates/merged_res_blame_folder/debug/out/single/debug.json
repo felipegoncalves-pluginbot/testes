@@ -1,0 +1,162 @@
+[
+    {
+        "merged": "com.felipe.elftemplate.app-merged_res-26:/xml_device_filter.xml.flat",
+        "source": "com.felipe.elftemplate.app-main-28:/xml/device_filter.xml"
+    },
+    {
+        "merged": "com.felipe.elftemplate.app-merged_res-26:/drawable-nodpi_hub_background.png.flat",
+        "source": "com.felipe.elftemplate.app-main-28:/drawable-nodpi/hub_background.png"
+    },
+    {
+        "merged": "com.felipe.elftemplate.app-merged_res-26:/layout_activity_map.xml.flat",
+        "source": "com.felipe.elftemplate.app-main-28:/layout/activity_map.xml"
+    },
+    {
+        "merged": "com.felipe.elftemplate.app-merged_res-26:/layout_activity_main.xml.flat",
+        "source": "com.felipe.elftemplate.app-main-28:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.felipe.elftemplate.app-merged_res-26:/drawable_cpr_btn_secondary.xml.flat",
+        "source": "com.felipe.elftemplate.app-main-28:/drawable/cpr_btn_secondary.xml"
+    },
+    {
+        "merged": "com.felipe.elftemplate.app-merged_res-26:/layout_activity_cpr.xml.flat",
+        "source": "com.felipe.elftemplate.app-main-28:/layout/activity_cpr.xml"
+    },
+    {
+        "merged": "com.felipe.elftemplate.app-merged_res-26:/mipmap-xxxhdpi_ic_launcher_round.png.flat",
+        "source": "com.felipe.elftemplate.app-main-28:/mipmap-xxxhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "com.felipe.elftemplate.app-merged_res-26:/drawable_ic_launcher_foreground.xml.flat",
+        "source": "com.felipe.elftemplate.app-main-28:/drawable/ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "com.felipe.elftemplate.app-merged_res-26:/layout_activity_pose_match.xml.flat",
+        "source": "com.felipe.elftemplate.app-main-28:/layout/activity_pose_match.xml"
+    },
+    {
+        "merged": "com.felipe.elftemplate.app-merged_res-26:/mipmap-hdpi_ic_launcher_round.png.flat",
+        "source": "com.felipe.elftemplate.app-main-28:/mipmap-hdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "com.felipe.elftemplate.app-merged_res-26:/drawable_ic_follow.png.flat",
+        "source": "com.felipe.elftemplate.app-main-28:/drawable/ic_follow.png"
+    },
+    {
+        "merged": "com.felipe.elftemplate.app-merged_res-26:/layout_activity_mirror.xml.flat",
+        "source": "com.felipe.elftemplate.app-main-28:/layout/activity_mirror.xml"
+    },
+    {
+        "merged": "com.felipe.elftemplate.app-merged_res-26:/drawable_tennis_court_background.png.flat",
+        "source": "com.felipe.elftemplate.app-main-28:/drawable/tennis_court_background.png"
+    },
+    {
+        "merged": "com.felipe.elftemplate.app-merged_res-26:/mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "com.felipe.elftemplate.app-main-28:/mipmap-xxxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.felipe.elftemplate.app-merged_res-26:/layout_activity_hand_cursor.xml.flat",
+        "source": "com.felipe.elftemplate.app-main-28:/layout/activity_hand_cursor.xml"
+    },
+    {
+        "merged": "com.felipe.elftemplate.app-merged_res-26:/layout_activity_follow.xml.flat",
+        "source": "com.felipe.elftemplate.app-main-28:/layout/activity_follow.xml"
+    },
+    {
+        "merged": "com.felipe.elftemplate.app-merged_res-26:/drawable_cpr_btn_dark.xml.flat",
+        "source": "com.felipe.elftemplate.app-main-28:/drawable/cpr_btn_dark.xml"
+    },
+    {
+        "merged": "com.felipe.elftemplate.app-merged_res-26:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "com.felipe.elftemplate.app-main-28:/mipmap-anydpi-v26/ic_launcher_round.xml"
+    },
+    {
+        "merged": "com.felipe.elftemplate.app-merged_res-26:/mipmap-mdpi_ic_launcher.png.flat",
+        "source": "com.felipe.elftemplate.app-main-28:/mipmap-mdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.felipe.elftemplate.app-merged_res-26:/drawable_cpr_btn_primary.xml.flat",
+        "source": "com.felipe.elftemplate.app-main-28:/drawable/cpr_btn_primary.xml"
+    },
+    {
+        "merged": "com.felipe.elftemplate.app-merged_res-26:/mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "com.felipe.elftemplate.app-main-28:/mipmap-xhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.felipe.elftemplate.app-merged_res-26:/layout_activity_dodger.xml.flat",
+        "source": "com.felipe.elftemplate.app-main-28:/layout/activity_dodger.xml"
+    },
+    {
+        "merged": "com.felipe.elftemplate.app-merged_res-26:/drawable_hub_scrim_overlay.xml.flat",
+        "source": "com.felipe.elftemplate.app-main-28:/drawable/hub_scrim_overlay.xml"
+    },
+    {
+        "merged": "com.felipe.elftemplate.app-merged_res-26:/layout_activity_kinect_web_game.xml.flat",
+        "source": "com.felipe.elftemplate.app-main-28:/layout/activity_kinect_web_game.xml"
+    },
+    {
+        "merged": "com.felipe.elftemplate.app-merged_res-26:/layout_activity_tracking3d.xml.flat",
+        "source": "com.felipe.elftemplate.app-main-28:/layout/activity_tracking3d.xml"
+    },
+    {
+        "merged": "com.felipe.elftemplate.app-merged_res-26:/drawable_ic_launcher_background.xml.flat",
+        "source": "com.felipe.elftemplate.app-main-28:/drawable/ic_launcher_background.xml"
+    },
+    {
+        "merged": "com.felipe.elftemplate.app-merged_res-26:/drawable_target_frame.xml.flat",
+        "source": "com.felipe.elftemplate.app-main-28:/drawable/target_frame.xml"
+    },
+    {
+        "merged": "com.felipe.elftemplate.app-merged_res-26:/layout_activity_fruit_slicer.xml.flat",
+        "source": "com.felipe.elftemplate.app-main-28:/layout/activity_fruit_slicer.xml"
+    },
+    {
+        "merged": "com.felipe.elftemplate.app-merged_res-26:/drawable_circle_yellow.xml.flat",
+        "source": "com.felipe.elftemplate.app-main-28:/drawable/circle_yellow.xml"
+    },
+    {
+        "merged": "com.felipe.elftemplate.app-merged_res-26:/drawable_hub_game_card_featured_bg.xml.flat",
+        "source": "com.felipe.elftemplate.app-main-28:/drawable/hub_game_card_featured_bg.xml"
+    },
+    {
+        "merged": "com.felipe.elftemplate.app-merged_res-26:/mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "com.felipe.elftemplate.app-main-28:/mipmap-xxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.felipe.elftemplate.app-merged_res-26:/mipmap-mdpi_ic_launcher_round.png.flat",
+        "source": "com.felipe.elftemplate.app-main-28:/mipmap-mdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "com.felipe.elftemplate.app-merged_res-26:/drawable_ic_tennis.png.flat",
+        "source": "com.felipe.elftemplate.app-main-28:/drawable/ic_tennis.png"
+    },
+    {
+        "merged": "com.felipe.elftemplate.app-merged_res-26:/mipmap-hdpi_ic_launcher.png.flat",
+        "source": "com.felipe.elftemplate.app-main-28:/mipmap-hdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.felipe.elftemplate.app-merged_res-26:/drawable_hub_game_card_bg.xml.flat",
+        "source": "com.felipe.elftemplate.app-main-28:/drawable/hub_game_card_bg.xml"
+    },
+    {
+        "merged": "com.felipe.elftemplate.app-merged_res-26:/mipmap-xxhdpi_ic_launcher_round.png.flat",
+        "source": "com.felipe.elftemplate.app-main-28:/mipmap-xxhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "com.felipe.elftemplate.app-merged_res-26:/layout_activity_tennis.xml.flat",
+        "source": "com.felipe.elftemplate.app-main-28:/layout/activity_tennis.xml"
+    },
+    {
+        "merged": "com.felipe.elftemplate.app-merged_res-26:/mipmap-xhdpi_ic_launcher_round.png.flat",
+        "source": "com.felipe.elftemplate.app-main-28:/mipmap-xhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "com.felipe.elftemplate.app-merged_res-26:/xml_backup_descriptor.xml.flat",
+        "source": "com.felipe.elftemplate.app-main-28:/xml/backup_descriptor.xml"
+    },
+    {
+        "merged": "com.felipe.elftemplate.app-merged_res-26:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "com.felipe.elftemplate.app-main-28:/mipmap-anydpi-v26/ic_launcher.xml"
+    }
+]

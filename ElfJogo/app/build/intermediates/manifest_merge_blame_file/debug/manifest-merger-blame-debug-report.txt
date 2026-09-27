@@ -1,0 +1,362 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.felipe.elftemplate"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="21"
+9        android:targetSdkVersion="33" />
+10
+11    <uses-feature
+11-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:4:5-6:36
+12        android:name="android.hardware.camera"
+12-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:5:9-47
+13        android:required="false" />
+13-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:6:9-33
+14    <uses-feature
+14-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:7:5-9:35
+15        android:name="android.hardware.usb.host"
+15-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:8:9-49
+16        android:required="true" />
+16-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:9:9-32
+17
+18    <uses-permission android:name="android.permission.CAMERA" />
+18-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:11:5-65
+18-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:11:22-62
+19    <uses-permission android:name="android.permission.INTERNET" />
+19-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:12:5-67
+19-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:12:22-64
+20    <uses-permission android:name="com.qihancloud.opensdk.permission.MAIN_SERVICE" />
+20-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:13:5-86
+20-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:13:22-83
+21    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+21-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:14:5-80
+21-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:14:22-77
+22    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+22-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:15:5-81
+22-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:15:22-78
+23    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+23-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:16:5-76
+23-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:16:22-73
+24    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+24-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:17:5-76
+24-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:17:22-73
+25    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+25-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:18:5-81
+25-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:18:22-78
+26    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+26-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:19:5-79
+26-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:19:22-76
+27    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+27-->[:SanbotOpenSDK_2.0.1.10:] /home/pluginbot/.gradle/caches/transforms-3/490401e6087c44827f1753128e83c403/transformed/jetified-SanbotOpenSDK_2.0.1.10/AndroidManifest.xml:13:5-79
+27-->[:SanbotOpenSDK_2.0.1.10:] /home/pluginbot/.gradle/caches/transforms-3/490401e6087c44827f1753128e83c403/transformed/jetified-SanbotOpenSDK_2.0.1.10/AndroidManifest.xml:13:22-76
+28
+29    <permission
+29-->[androidx.core:core:1.9.0] /home/pluginbot/.gradle/caches/transforms-3/cf89ab1ea7cc19352d4f47103c74320d/transformed/core-1.9.0/AndroidManifest.xml:22:5-24:47
+30        android:name="com.felipe.elftemplate.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+30-->[androidx.core:core:1.9.0] /home/pluginbot/.gradle/caches/transforms-3/cf89ab1ea7cc19352d4f47103c74320d/transformed/core-1.9.0/AndroidManifest.xml:23:9-81
+31        android:protectionLevel="signature" />
+31-->[androidx.core:core:1.9.0] /home/pluginbot/.gradle/caches/transforms-3/cf89ab1ea7cc19352d4f47103c74320d/transformed/core-1.9.0/AndroidManifest.xml:24:9-44
+32
+33    <uses-permission android:name="com.felipe.elftemplate.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+33-->[androidx.core:core:1.9.0] /home/pluginbot/.gradle/caches/transforms-3/cf89ab1ea7cc19352d4f47103c74320d/transformed/core-1.9.0/AndroidManifest.xml:26:5-97
+33-->[androidx.core:core:1.9.0] /home/pluginbot/.gradle/caches/transforms-3/cf89ab1ea7cc19352d4f47103c74320d/transformed/core-1.9.0/AndroidManifest.xml:26:22-94
+34
+35    <application
+35-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:21:5-106:19
+36        android:name="com.felipe.elftemplate.ElfApp"
+36-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:22:9-31
+37        android:allowBackup="true"
+37-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:23:9-35
+38        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+38-->[androidx.core:core:1.9.0] /home/pluginbot/.gradle/caches/transforms-3/cf89ab1ea7cc19352d4f47103c74320d/transformed/core-1.9.0/AndroidManifest.xml:28:18-86
+39        android:debuggable="true"
+40        android:extractNativeLibs="true"
+41        android:fullBackupContent="@xml/backup_descriptor"
+41-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:30:9-59
+42        android:icon="@mipmap/ic_launcher"
+42-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:24:9-43
+43        android:label="@string/app_name"
+43-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:25:9-41
+44        android:largeHeap="true"
+44-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:29:9-33
+45        android:roundIcon="@mipmap/ic_launcher_round"
+45-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:26:9-54
+46        android:supportsRtl="true"
+46-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:27:9-35
+47        android:theme="@style/AppTheme" >
+47-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:28:9-40
+48        <activity
+48-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:32:9-44:20
+49            android:name="com.felipe.elftemplate.MainActivity"
+49-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:32:19-69
+50            android:exported="true"
+50-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:33:13-36
+51            android:screenOrientation="landscape" >
+51-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:34:13-50
+52            <intent-filter>
+52-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:35:13-38:29
+53                <action android:name="android.intent.action.MAIN" />
+53-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:36:17-69
+53-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:36:25-66
+54
+55                <category android:name="android.intent.category.LAUNCHER" />
+55-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:37:17-77
+55-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:37:27-74
+56            </intent-filter>
+57            <intent-filter>
+57-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:39:13-41:29
+58                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
+58-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:40:17-90
+58-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:40:25-87
+59            </intent-filter>
+60
+61            <meta-data
+61-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:42:13-43:57
+62                android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
+62-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:42:24-86
+63                android:resource="@xml/device_filter" />
+63-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:43:17-54
+64        </activity>
+65        <activity
+65-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:46:9-54:20
+66            android:name="com.felipe.elftemplate.Tracking3dActivity"
+66-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:46:19-75
+67            android:exported="true"
+67-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:47:13-36
+68            android:screenOrientation="landscape" >
+68-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:48:13-50
+69            <intent-filter>
+69-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:39:13-41:29
+70                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
+70-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:40:17-90
+70-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:40:25-87
+71            </intent-filter>
+72
+73            <meta-data
+73-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:42:13-43:57
+74                android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
+74-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:42:24-86
+75                android:resource="@xml/device_filter" />
+75-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:43:17-54
+76        </activity>
+77        <activity
+77-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:56:9-58:53
+78            android:name="com.felipe.elftemplate.MirrorActivity"
+78-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:56:19-71
+79            android:exported="true"
+79-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:57:13-36
+80            android:screenOrientation="landscape" />
+80-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:58:13-50
+81        <activity
+81-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:60:9-62:53
+82            android:name="com.felipe.elftemplate.TennisActivity"
+82-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:60:19-71
+83            android:exported="true"
+83-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:61:13-36
+84            android:screenOrientation="landscape" />
+84-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:62:13-50
+85        <activity
+85-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:64:9-66:53
+86            android:name="com.felipe.elftemplate.FruitSlicerActivity"
+86-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:64:19-76
+87            android:exported="true"
+87-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:65:13-36
+88            android:screenOrientation="landscape" />
+88-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:66:13-50
+89        <activity
+89-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:68:9-70:53
+90            android:name="com.felipe.elftemplate.PoseMatchActivity"
+90-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:68:19-74
+91            android:exported="true"
+91-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:69:13-36
+92            android:screenOrientation="landscape" />
+92-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:70:13-50
+93        <activity
+93-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:72:9-74:53
+94            android:name="com.felipe.elftemplate.DodgerActivity"
+94-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:72:19-71
+95            android:exported="true"
+95-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:73:13-36
+96            android:screenOrientation="landscape" />
+96-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:74:13-50
+97        <activity
+97-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:76:9-78:53
+98            android:name="com.felipe.elftemplate.KinectWebGameActivity"
+98-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:76:19-78
+99            android:exported="true"
+99-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:77:13-36
+100            android:screenOrientation="landscape" />
+100-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:78:13-50
+101        <activity
+101-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:80:9-82:53
+102            android:name="com.felipe.elftemplate.FollowActivity"
+102-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:80:19-71
+103            android:exported="true"
+103-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:81:13-36
+104            android:screenOrientation="landscape" />
+104-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:82:13-50
+105        <activity
+105-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:84:9-86:53
+106            android:name="com.felipe.elftemplate.HandCursorActivity"
+106-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:84:19-75
+107            android:exported="true"
+107-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:85:13-36
+108            android:screenOrientation="landscape" />
+108-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:86:13-50
+109        <activity
+109-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:88:9-90:53
+110            android:name="com.felipe.elftemplate.CprActivity"
+110-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:88:19-68
+111            android:exported="true"
+111-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:89:13-36
+112            android:screenOrientation="landscape" />
+112-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:90:13-50
+113        <activity
+113-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:92:9-100:20
+114            android:name="com.felipe.elftemplate.MapActivity"
+114-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:92:19-68
+115            android:exported="true"
+115-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:93:13-36
+116            android:screenOrientation="landscape" >
+116-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:94:13-50
+117            <intent-filter>
+117-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:39:13-41:29
+118                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
+118-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:40:17-90
+118-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:40:25-87
+119            </intent-filter>
+120
+121            <meta-data
+121-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:42:13-43:57
+122                android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
+122-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:42:24-86
+123                android:resource="@xml/device_filter" />
+123-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:43:17-54
+124        </activity>
+125
+126        <provider
+126-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:102:9-105:39
+127            android:name="com.sanbot.opensdk.utils.GrammarProvider"
+127-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:103:13-68
+128            android:authorities="com.felipe.elftemplate.grammar"
+128-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:104:13-65
+129            android:exported="true" />
+129-->/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/AndroidManifest.xml:105:13-36
+130
+131        <service
+131-->[com.google.mlkit:object-detection:17.0.2] /home/pluginbot/.gradle/caches/transforms-3/5376459fdbf5361a8c027c257e421a5f/transformed/jetified-object-detection-17.0.2/AndroidManifest.xml:11:9-17:19
+132            android:name="com.google.mlkit.common.internal.MlKitComponentDiscoveryService"
+132-->[com.google.mlkit:object-detection:17.0.2] /home/pluginbot/.gradle/caches/transforms-3/5376459fdbf5361a8c027c257e421a5f/transformed/jetified-object-detection-17.0.2/AndroidManifest.xml:12:13-91
+133            android:directBootAware="true"
+133-->[com.google.mlkit:common:18.11.0] /home/pluginbot/.gradle/caches/transforms-3/ff9c226fba44f95f8538f101186bb4e7/transformed/jetified-common-18.11.0/AndroidManifest.xml:17:13-43
+134            android:exported="false" >
+134-->[com.google.mlkit:object-detection:17.0.2] /home/pluginbot/.gradle/caches/transforms-3/5376459fdbf5361a8c027c257e421a5f/transformed/jetified-object-detection-17.0.2/AndroidManifest.xml:13:13-37
+135            <meta-data
+135-->[com.google.mlkit:object-detection:17.0.2] /home/pluginbot/.gradle/caches/transforms-3/5376459fdbf5361a8c027c257e421a5f/transformed/jetified-object-detection-17.0.2/AndroidManifest.xml:14:13-16:85
+136                android:name="com.google.firebase.components:com.google.mlkit.vision.objects.defaults.internal.DefaultObjectsRegistrar"
+136-->[com.google.mlkit:object-detection:17.0.2] /home/pluginbot/.gradle/caches/transforms-3/5376459fdbf5361a8c027c257e421a5f/transformed/jetified-object-detection-17.0.2/AndroidManifest.xml:15:17-136
+137                android:value="com.google.firebase.components.ComponentRegistrar" />
+137-->[com.google.mlkit:object-detection:17.0.2] /home/pluginbot/.gradle/caches/transforms-3/5376459fdbf5361a8c027c257e421a5f/transformed/jetified-object-detection-17.0.2/AndroidManifest.xml:16:17-82
+138            <meta-data
+138-->[com.google.mlkit:vision-internal-vkp:18.2.3] /home/pluginbot/.gradle/caches/transforms-3/f8e03ef9503343e9dd49bb4bbc5a273d/transformed/jetified-vision-internal-vkp-18.2.3/AndroidManifest.xml:14:13-16:85
+139                android:name="com.google.firebase.components:com.google.mlkit.vision.vkp.VkpRegistrar"
+139-->[com.google.mlkit:vision-internal-vkp:18.2.3] /home/pluginbot/.gradle/caches/transforms-3/f8e03ef9503343e9dd49bb4bbc5a273d/transformed/jetified-vision-internal-vkp-18.2.3/AndroidManifest.xml:15:17-103
+140                android:value="com.google.firebase.components.ComponentRegistrar" />
+140-->[com.google.mlkit:vision-internal-vkp:18.2.3] /home/pluginbot/.gradle/caches/transforms-3/f8e03ef9503343e9dd49bb4bbc5a273d/transformed/jetified-vision-internal-vkp-18.2.3/AndroidManifest.xml:16:17-82
+141            <meta-data
+141-->[com.google.mlkit:vision-common:17.3.0] /home/pluginbot/.gradle/caches/transforms-3/9779cee88ec38287fcd2539b7f3c0af0/transformed/jetified-vision-common-17.3.0/AndroidManifest.xml:12:13-14:85
+142                android:name="com.google.firebase.components:com.google.mlkit.vision.common.internal.VisionCommonRegistrar"
+142-->[com.google.mlkit:vision-common:17.3.0] /home/pluginbot/.gradle/caches/transforms-3/9779cee88ec38287fcd2539b7f3c0af0/transformed/jetified-vision-common-17.3.0/AndroidManifest.xml:13:17-124
+143                android:value="com.google.firebase.components.ComponentRegistrar" />
+143-->[com.google.mlkit:vision-common:17.3.0] /home/pluginbot/.gradle/caches/transforms-3/9779cee88ec38287fcd2539b7f3c0af0/transformed/jetified-vision-common-17.3.0/AndroidManifest.xml:14:17-82
+144            <meta-data
+144-->[com.google.mlkit:common:18.11.0] /home/pluginbot/.gradle/caches/transforms-3/ff9c226fba44f95f8538f101186bb4e7/transformed/jetified-common-18.11.0/AndroidManifest.xml:20:13-22:85
+145                android:name="com.google.firebase.components:com.google.mlkit.common.internal.CommonComponentRegistrar"
+145-->[com.google.mlkit:common:18.11.0] /home/pluginbot/.gradle/caches/transforms-3/ff9c226fba44f95f8538f101186bb4e7/transformed/jetified-common-18.11.0/AndroidManifest.xml:21:17-120
+146                android:value="com.google.firebase.components.ComponentRegistrar" />
+146-->[com.google.mlkit:common:18.11.0] /home/pluginbot/.gradle/caches/transforms-3/ff9c226fba44f95f8538f101186bb4e7/transformed/jetified-common-18.11.0/AndroidManifest.xml:22:17-82
+147        </service>
+148
+149        <provider
+149-->[com.google.mlkit:common:18.11.0] /home/pluginbot/.gradle/caches/transforms-3/ff9c226fba44f95f8538f101186bb4e7/transformed/jetified-common-18.11.0/AndroidManifest.xml:9:9-13:38
+150            android:name="com.google.mlkit.common.internal.MlKitInitProvider"
+150-->[com.google.mlkit:common:18.11.0] /home/pluginbot/.gradle/caches/transforms-3/ff9c226fba44f95f8538f101186bb4e7/transformed/jetified-common-18.11.0/AndroidManifest.xml:10:13-78
+151            android:authorities="com.felipe.elftemplate.mlkitinitprovider"
+151-->[com.google.mlkit:common:18.11.0] /home/pluginbot/.gradle/caches/transforms-3/ff9c226fba44f95f8538f101186bb4e7/transformed/jetified-common-18.11.0/AndroidManifest.xml:11:13-69
+152            android:exported="false"
+152-->[com.google.mlkit:common:18.11.0] /home/pluginbot/.gradle/caches/transforms-3/ff9c226fba44f95f8538f101186bb4e7/transformed/jetified-common-18.11.0/AndroidManifest.xml:12:13-37
+153            android:initOrder="99" />
+153-->[com.google.mlkit:common:18.11.0] /home/pluginbot/.gradle/caches/transforms-3/ff9c226fba44f95f8538f101186bb4e7/transformed/jetified-common-18.11.0/AndroidManifest.xml:13:13-35
+154
+155        <activity
+155-->[com.google.android.gms:play-services-base:18.5.0] /home/pluginbot/.gradle/caches/transforms-3/3db798182addd83e8d275dec02ff9915/transformed/jetified-play-services-base-18.5.0/AndroidManifest.xml:5:9-173
+156            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+156-->[com.google.android.gms:play-services-base:18.5.0] /home/pluginbot/.gradle/caches/transforms-3/3db798182addd83e8d275dec02ff9915/transformed/jetified-play-services-base-18.5.0/AndroidManifest.xml:5:19-85
+157            android:exported="false"
+157-->[com.google.android.gms:play-services-base:18.5.0] /home/pluginbot/.gradle/caches/transforms-3/3db798182addd83e8d275dec02ff9915/transformed/jetified-play-services-base-18.5.0/AndroidManifest.xml:5:146-170
+158            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+158-->[com.google.android.gms:play-services-base:18.5.0] /home/pluginbot/.gradle/caches/transforms-3/3db798182addd83e8d275dec02ff9915/transformed/jetified-play-services-base-18.5.0/AndroidManifest.xml:5:86-145
+159
+160        <meta-data
+160-->[com.google.android.gms:play-services-basement:18.4.0] /home/pluginbot/.gradle/caches/transforms-3/32bf25539a1990004f5499d95fad149e/transformed/jetified-play-services-basement-18.4.0/AndroidManifest.xml:6:9-122
+161            android:name="com.google.android.gms.version"
+161-->[com.google.android.gms:play-services-basement:18.4.0] /home/pluginbot/.gradle/caches/transforms-3/32bf25539a1990004f5499d95fad149e/transformed/jetified-play-services-basement-18.4.0/AndroidManifest.xml:6:20-65
+162            android:value="@integer/google_play_services_version" />
+162-->[com.google.android.gms:play-services-basement:18.4.0] /home/pluginbot/.gradle/caches/transforms-3/32bf25539a1990004f5499d95fad149e/transformed/jetified-play-services-basement-18.4.0/AndroidManifest.xml:6:66-119
+163
+164        <provider
+164-->[androidx.emoji2:emoji2:1.2.0] /home/pluginbot/.gradle/caches/transforms-3/acd7b7be712c1ada299bcfc81b726076/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:24:9-32:20
+165            android:name="androidx.startup.InitializationProvider"
+165-->[androidx.emoji2:emoji2:1.2.0] /home/pluginbot/.gradle/caches/transforms-3/acd7b7be712c1ada299bcfc81b726076/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:25:13-67
+166            android:authorities="com.felipe.elftemplate.androidx-startup"
+166-->[androidx.emoji2:emoji2:1.2.0] /home/pluginbot/.gradle/caches/transforms-3/acd7b7be712c1ada299bcfc81b726076/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:26:13-68
+167            android:exported="false" >
+167-->[androidx.emoji2:emoji2:1.2.0] /home/pluginbot/.gradle/caches/transforms-3/acd7b7be712c1ada299bcfc81b726076/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:27:13-37
+168            <meta-data
+168-->[androidx.emoji2:emoji2:1.2.0] /home/pluginbot/.gradle/caches/transforms-3/acd7b7be712c1ada299bcfc81b726076/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:29:13-31:52
+169                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+169-->[androidx.emoji2:emoji2:1.2.0] /home/pluginbot/.gradle/caches/transforms-3/acd7b7be712c1ada299bcfc81b726076/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:30:17-75
+170                android:value="androidx.startup" />
+170-->[androidx.emoji2:emoji2:1.2.0] /home/pluginbot/.gradle/caches/transforms-3/acd7b7be712c1ada299bcfc81b726076/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:31:17-49
+171            <meta-data
+171-->[androidx.lifecycle:lifecycle-process:2.4.1] /home/pluginbot/.gradle/caches/transforms-3/2f569bc5cc97ee66011fd77f4e8c57ec/transformed/jetified-lifecycle-process-2.4.1/AndroidManifest.xml:31:13-33:52
+172                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+172-->[androidx.lifecycle:lifecycle-process:2.4.1] /home/pluginbot/.gradle/caches/transforms-3/2f569bc5cc97ee66011fd77f4e8c57ec/transformed/jetified-lifecycle-process-2.4.1/AndroidManifest.xml:32:17-78
+173                android:value="androidx.startup" />
+173-->[androidx.lifecycle:lifecycle-process:2.4.1] /home/pluginbot/.gradle/caches/transforms-3/2f569bc5cc97ee66011fd77f4e8c57ec/transformed/jetified-lifecycle-process-2.4.1/AndroidManifest.xml:33:17-49
+174        </provider>
+175
+176        <service
+176-->[com.google.android.datatransport:transport-backend-cct:2.3.3] /home/pluginbot/.gradle/caches/transforms-3/7c21f363f75a6eda8c436d533d8120ff/transformed/jetified-transport-backend-cct-2.3.3/AndroidManifest.xml:29:9-35:19
+177            android:name="com.google.android.datatransport.runtime.backends.TransportBackendDiscovery"
+177-->[com.google.android.datatransport:transport-backend-cct:2.3.3] /home/pluginbot/.gradle/caches/transforms-3/7c21f363f75a6eda8c436d533d8120ff/transformed/jetified-transport-backend-cct-2.3.3/AndroidManifest.xml:30:13-103
+178            android:exported="false" >
+178-->[com.google.android.datatransport:transport-backend-cct:2.3.3] /home/pluginbot/.gradle/caches/transforms-3/7c21f363f75a6eda8c436d533d8120ff/transformed/jetified-transport-backend-cct-2.3.3/AndroidManifest.xml:31:13-37
+179            <meta-data
+179-->[com.google.android.datatransport:transport-backend-cct:2.3.3] /home/pluginbot/.gradle/caches/transforms-3/7c21f363f75a6eda8c436d533d8120ff/transformed/jetified-transport-backend-cct-2.3.3/AndroidManifest.xml:32:13-34:39
+180                android:name="backend:com.google.android.datatransport.cct.CctBackendFactory"
+180-->[com.google.android.datatransport:transport-backend-cct:2.3.3] /home/pluginbot/.gradle/caches/transforms-3/7c21f363f75a6eda8c436d533d8120ff/transformed/jetified-transport-backend-cct-2.3.3/AndroidManifest.xml:33:17-94
+181                android:value="cct" />
+181-->[com.google.android.datatransport:transport-backend-cct:2.3.3] /home/pluginbot/.gradle/caches/transforms-3/7c21f363f75a6eda8c436d533d8120ff/transformed/jetified-transport-backend-cct-2.3.3/AndroidManifest.xml:34:17-36
+182        </service>
+183        <service
+183-->[com.google.android.datatransport:transport-runtime:2.2.6] /home/pluginbot/.gradle/caches/transforms-3/5072d5ba03e2970c260b8bcf0766bac8/transformed/jetified-transport-runtime-2.2.6/AndroidManifest.xml:26:9-30:19
+184            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService"
+184-->[com.google.android.datatransport:transport-runtime:2.2.6] /home/pluginbot/.gradle/caches/transforms-3/5072d5ba03e2970c260b8bcf0766bac8/transformed/jetified-transport-runtime-2.2.6/AndroidManifest.xml:27:13-117
+185            android:exported="false"
+185-->[com.google.android.datatransport:transport-runtime:2.2.6] /home/pluginbot/.gradle/caches/transforms-3/5072d5ba03e2970c260b8bcf0766bac8/transformed/jetified-transport-runtime-2.2.6/AndroidManifest.xml:28:13-37
+186            android:permission="android.permission.BIND_JOB_SERVICE" >
+186-->[com.google.android.datatransport:transport-runtime:2.2.6] /home/pluginbot/.gradle/caches/transforms-3/5072d5ba03e2970c260b8bcf0766bac8/transformed/jetified-transport-runtime-2.2.6/AndroidManifest.xml:29:13-69
+187        </service>
+188
+189        <receiver
+189-->[com.google.android.datatransport:transport-runtime:2.2.6] /home/pluginbot/.gradle/caches/transforms-3/5072d5ba03e2970c260b8bcf0766bac8/transformed/jetified-transport-runtime-2.2.6/AndroidManifest.xml:32:9-34:40
+190            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.AlarmManagerSchedulerBroadcastReceiver"
+190-->[com.google.android.datatransport:transport-runtime:2.2.6] /home/pluginbot/.gradle/caches/transforms-3/5072d5ba03e2970c260b8bcf0766bac8/transformed/jetified-transport-runtime-2.2.6/AndroidManifest.xml:33:13-132
+191            android:exported="false" />
+191-->[com.google.android.datatransport:transport-runtime:2.2.6] /home/pluginbot/.gradle/caches/transforms-3/5072d5ba03e2970c260b8bcf0766bac8/transformed/jetified-transport-runtime-2.2.6/AndroidManifest.xml:34:13-37
+192    </application>
+193
+194</manifest>

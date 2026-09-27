@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.felipe.elftemplate.server.RobotWebServerTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-08-27T19:00:30" hostname="fedora" time="0.155">
+  <properties/>
+  <testcase name="testGracefulHandlingOnPrematureClientClose" classname="com.felipe.elftemplate.server.RobotWebServerTest" time="0.142"/>
+  <testcase name="testGzipDisabledForMapData" classname="com.felipe.elftemplate.server.RobotWebServerTest" time="0.013"/>
+  <system-out><![CDATA[W/NavController: NAV -> CAMINHO BLOQUEADO! Parando robô.
+D/NavController: NAV -> Dist: 0,28m | ErrAng: 45 deg | Pose: (0,00, 0,00) | Target: (0,20, 0,20) | CMD: left
+D/NavController: NAV -> Dist: 1,06m | ErrAng: 20 deg | Pose: (0,00, 0,00) | Target: (1,00, 0,36) | CMD: turn_left
+D/NavController: NAV -> Dist: 1,41m | ErrAng: 45 deg | Pose: (0,00, 0,00) | Target: (1,00, 1,00) | CMD: left
+W/NavController: NAV -> CAMINHO BLOQUEADO! Parando robô.
+D/NavController: NAV -> Dist: 0,28m | ErrAng: 45 deg | Pose: (0,00, 0,00) | Target: (0,20, 0,20) | CMD: left
+]]></system-out>
+  <system-err><![CDATA[ago. 27, 2026 4:00:30 PM fi.iki.elonen.NanoHTTPD$Response send
+GRAVE: Could not send response to the client
+java.net.SocketException: Pipe quebrado
+	at java.base/sun.nio.ch.SocketDispatcher.write0(Native Method)
+	at java.base/sun.nio.ch.SocketDispatcher.write(SocketDispatcher.java:65)
+	at java.base/sun.nio.ch.NioSocketImpl.tryWrite(NioSocketImpl.java:402)
+	at java.base/sun.nio.ch.NioSocketImpl.implWrite(NioSocketImpl.java:418)
+	at java.base/sun.nio.ch.NioSocketImpl.write(NioSocketImpl.java:448)
+	at java.base/sun.nio.ch.NioSocketImpl$2.write(NioSocketImpl.java:821)
+	at java.base/java.net.Socket$SocketOutputStream.implWrite(Socket.java:1086)
+	at java.base/java.net.Socket$SocketOutputStream.write(Socket.java:1076)
+	at fi.iki.elonen.NanoHTTPD$Response.sendBody(NanoHTTPD.java:1694)
+	at fi.iki.elonen.NanoHTTPD$Response.sendBodyWithCorrectEncoding(NanoHTTPD.java:1667)
+	at fi.iki.elonen.NanoHTTPD$Response.sendBodyWithCorrectTransferAndEncoding(NanoHTTPD.java:1657)
+	at fi.iki.elonen.NanoHTTPD$Response.send(NanoHTTPD.java:1624)
+	at fi.iki.elonen.NanoHTTPD$HTTPSession.execute(NanoHTTPD.java:957)
+	at fi.iki.elonen.NanoHTTPD$ClientHandler.run(NanoHTTPD.java:192)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+
+]]></system-err>
+</testsuite>

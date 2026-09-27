@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.felipe.elftemplate.tracking3d.BodyPartForestGenerator" tests="1" skipped="1" failures="0" errors="0" timestamp="2026-09-11T19:20:20" hostname="fedora" time="0.002">
+  <properties/>
+  <testcase name="trainsAndWritesTheForestAsset" classname="com.felipe.elftemplate.tracking3d.BodyPartForestGenerator" time="0.002">
+    <skipped/>
+  </testcase>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

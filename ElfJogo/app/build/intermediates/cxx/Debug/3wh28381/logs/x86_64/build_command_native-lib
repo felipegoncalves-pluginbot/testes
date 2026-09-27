@@ -1,0 +1,4 @@
+/home/pluginbot/Android/Sdk/cmake/3.22.1/bin/ninja \
+  -C \
+  /home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/.cxx/Debug/3wh28381/x86_64 \
+  native-lib

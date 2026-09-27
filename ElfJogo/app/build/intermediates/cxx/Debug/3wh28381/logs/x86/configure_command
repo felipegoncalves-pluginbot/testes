@@ -1,0 +1,20 @@
+/home/pluginbot/Android/Sdk/cmake/3.22.1/bin/cmake \
+  -H/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/main/cpp \
+  -DCMAKE_SYSTEM_NAME=Android \
+  -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
+  -DCMAKE_SYSTEM_VERSION=21 \
+  -DANDROID_PLATFORM=android-21 \
+  -DANDROID_ABI=x86 \
+  -DCMAKE_ANDROID_ARCH_ABI=x86 \
+  -DANDROID_NDK=/home/pluginbot/Android/Sdk/ndk/25.1.8937393 \
+  -DCMAKE_ANDROID_NDK=/home/pluginbot/Android/Sdk/ndk/25.1.8937393 \
+  -DCMAKE_TOOLCHAIN_FILE=/home/pluginbot/Android/Sdk/ndk/25.1.8937393/build/cmake/android.toolchain.cmake \
+  -DCMAKE_MAKE_PROGRAM=/home/pluginbot/Android/Sdk/cmake/3.22.1/bin/ninja \
+  "-DCMAKE_CXX_FLAGS=-std=c++14 -frtti -fexceptions" \
+  -DCMAKE_LIBRARY_OUTPUT_DIRECTORY=/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/build/intermediates/cxx/Debug/3wh28381/obj/x86 \
+  -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/build/intermediates/cxx/Debug/3wh28381/obj/x86 \
+  -DCMAKE_BUILD_TYPE=Debug \
+  -DCMAKE_FIND_ROOT_PATH=/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/.cxx/Debug/3wh28381/prefab/x86/prefab \
+  -B/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/.cxx/Debug/3wh28381/x86 \
+  -GNinja \
+  -DANDROID_STL=c++_shared

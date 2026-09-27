@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.felipe.elftemplate.tracking.PoseDepthFusionExtrapolationTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-09-11T19:20:18" hostname="fedora" time="0.001">
+  <properties/>
+  <testcase name="reconcileElbowMidpoint_placesElbowBetweenShoulderAndHand" classname="com.felipe.elftemplate.tracking.PoseDepthFusionExtrapolationTest" time="0.0"/>
+  <testcase name="lostWristKeepsDepthBlobHandInsteadOfClampingToZero" classname="com.felipe.elftemplate.tracking.PoseDepthFusionExtrapolationTest" time="0.001"/>
+  <testcase name="extrapolateHand_extendsBeyondElbowAlongArmVector" classname="com.felipe.elftemplate.tracking.PoseDepthFusionExtrapolationTest" time="0.0"/>
+  <testcase name="blendIgnoresDepthWhenItLooksLikeAFoot" classname="com.felipe.elftemplate.tracking.PoseDepthFusionExtrapolationTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

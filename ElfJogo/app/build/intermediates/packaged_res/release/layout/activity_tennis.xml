@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#1B5E20">
+
+    <!-- Background do Jogo -->
+    <ImageView
+        android:id="@+id/iv_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/tennis_court_background" />
+
+    <!-- Container da Bola de Tênis -->
+    <FrameLayout
+        android:id="@+id/game_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <View
+            android:id="@+id/ball_view"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/circle_yellow"
+            android:elevation="10dp" />
+    </FrameLayout>
+
+    <!-- Botão Voltar (Canto Superior Esquerdo) -->
+    <Button
+        android:id="@+id/btn_back"
+        android:layout_width="wrap_content"
+        android:layout_height="42dp"
+        android:layout_margin="16dp"
+        android:text="⬅ Voltar"
+        android:textColor="#FFFFFF"
+        android:background="#CC000000"
+        android:textSize="14sp"
+        android:paddingHorizontal="14dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Botão Kinect View (Canto Superior Direito - Estilo Botão Y do Kinect) -->
+    <Button
+        android:id="@+id/btn_toggle_kinect_view"
+        android:layout_width="wrap_content"
+        android:layout_height="42dp"
+        android:layout_margin="16dp"
+        android:text="👁 Kinect View [Y]"
+        android:textColor="#00FF66"
+        android:background="#E6000000"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:paddingHorizontal="14dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Overlay do Placar -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="#B3000000"
+        android:orientation="horizontal"
+        android:paddingHorizontal="24dp"
+        android:paddingVertical="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00 - 00"
+            android:textColor="#FFEB3B"
+            android:textSize="36sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Visualizador Kinect PIP em Tempo Real (Canto Superior Direito) -->
+    <com.felipe.elftemplate.tracking.KinectDebugOverlayView
+        android:id="@+id/kinect_debug_overlay"
+        android:layout_width="220dp"
+        android:layout_height="170dp"
+        android:layout_marginTop="68dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:background="#B3000000"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp"
+        android:text="AGUARDANDO SAQUE..."
+        android:textColor="#00E5FF"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

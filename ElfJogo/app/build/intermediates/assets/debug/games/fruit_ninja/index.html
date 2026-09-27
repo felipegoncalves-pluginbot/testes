@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Fruit Ninja Kinect</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; -webkit-user-select: none; }
+        body, html { width: 100%; height: 100%; overflow: hidden; background: #111; font-family: 'Segoe UI', Roboto, sans-serif; }
+        #canvas { display: block; width: 100vw; height: 100vh; }
+        #hud {
+            position: absolute; top: 16px; left: 16px; right: 16px;
+            display: -webkit-flex; display: flex;
+            -webkit-justify-content: space-between; justify-content: space-between;
+            -webkit-align-items: flex-start; align-items: flex-start;
+            pointer-events: none;
+        }
+        .hud-card {
+            background: rgba(0,0,0,0.65); padding: 10px 18px; border-radius: 14px;
+            color: #fff; border: 2px solid rgba(255,255,255,0.2);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+        }
+        .score-val { font-size: 28px; font-weight: bold; color: #ffd700; }
+        .combo-val { font-size: 20px; font-weight: bold; color: #ff5722; }
+        .lives-val { font-size: 22px; color: #ff1744; }
+        #game-over-modal {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.85);
+            display: none;
+            -webkit-flex-direction: column; flex-direction: column;
+            -webkit-justify-content: center; justify-content: center;
+            -webkit-align-items: center; align-items: center;
+            color: #fff; z-index: 10;
+        }
+        #game-over-modal h1 { font-size: 48px; color: #ff1744; margin-bottom: 12px; }
+        #game-over-modal p { font-size: 24px; margin-bottom: 24px; color: #ffd700; }
+        #restart-btn {
+            background: #ff9800; color: #fff; border: none; padding: 14px 32px;
+            font-size: 20px; font-weight: bold; border-radius: 30px; cursor: pointer;
+            box-shadow: 0 6px 16px rgba(255,152,0,0.4);
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <div id="hud">
+        <div class="hud-card">
+            <div style="font-size: 14px; color: #aaa;">PONTUAÇÃO</div>
+            <div id="score" class="score-val">0</div>
+            <div id="combo" class="combo-val"></div>
+        </div>
+        <div class="hud-card" style="text-align: right;">
+            <div id="lives" class="lives-val">❤️❤️❤️</div>
+            <div id="timer" style="font-size: 16px; color: #00e5ff; margin-top: 4px;">60s</div>
+        </div>
+    </div>
+
+    <div id="game-over-modal">
+        <h1>FIM DE JOGO!</h1>
+        <p id="final-score-text">PONTOS: 0</p>
+        <button id="restart-btn" onclick="restartGame()">JOGAR NOVAMENTE</button>
+    </div>
+
+    <script>
+        'use strict';
+
+        var canvas = document.getElementById('canvas');
+        var ctx = canvas.getContext('2d');
+
+        function resize() {
+            canvas.width = window.innerWidth || 800;
+            canvas.height = window.innerHeight || 480;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        var score = 0;
+        var combo = 0;
+        var lives = 3;
+        var timeLeft = 60;
+        var gameOver = false;
+        var lastComboTime = 0;
+
+        var items = [];
+        var particles = [];
+        var trail = [];
+
+        var FRUIT_TYPES = [
+            { name: 'watermelon', color: '#e53935', outerColor: '#2e7d32', radius: 45 },
+            { name: 'apple', color: '#d32f2f', outerColor: '#388e3c', radius: 38 },
+            { name: 'banana', color: '#fbc02d', outerColor: '#f57f17', radius: 36 },
+            { name: 'orange', color: '#ff9800', outerColor: '#e65100', radius: 40 }
+        ];
+
+        function Fruit(x, y, vx, vy, isBomb) {
+            this.x = x;
+            this.y = y;
+            this.vx = vx;
+            this.vy = vy;
+            this.isBomb = isBomb;
+            this.type = isBomb ? null : FRUIT_TYPES[Math.floor(Math.random() * FRUIT_TYPES.length)];
+            this.radius = isBomb ? 40 : this.type.radius;
+            this.isSliced = false;
+            this.angle = 0;
+            this.rotSpeed = (Math.random() - 0.5) * 0.08;
+            this.half1X = 0; this.half1Y = 0; this.half1Vx = 0; this.half1Vy = 0;
+            this.half2X = 0; this.half2Y = 0; this.half2Vx = 0; this.half2Vy = 0;
+        }
+
+        Fruit.prototype.update = function() {
+            if (!this.isSliced) {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.vy += 0.28; // Gravidade
+                this.angle += this.rotSpeed;
+            } else {
+                this.half1X += this.half1Vx;
+                this.half1Y += this.half1Vy;
+                this.half1Vy += 0.35;
+
+                this.half2X += this.half2Vx;
+                this.half2Y += this.half2Vy;
+                this.half2Vy += 0.35;
+            }
+        };
+
+        Fruit.prototype.draw = function() {
+            ctx.save();
+            if (!this.isSliced) {
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.angle);
+                if (this.isBomb) {
+                    // Bomba com círculo escuro e pavio
+                    ctx.beginPath();
+                    ctx.arc(0, 0, this.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = '#212121';
+                    ctx.fill();
+                    ctx.lineWidth = 4;
+                    ctx.strokeStyle = '#ff1744';
+                    ctx.stroke();
+
+                    ctx.beginPath();
+                    ctx.arc(this.radius * 0.4, -this.radius * 0.4, 8, 0, Math.PI * 2);
+                    ctx.fillStyle = '#ffeb3b';
+                    ctx.fill();
+                } else {
+                    // Fruta inteira
+                    ctx.beginPath();
+                    ctx.arc(0, 0, this.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = this.type.outerColor;
+                    ctx.fill();
+
+                    ctx.beginPath();
+                    ctx.arc(0, 0, this.radius * 0.8, 0, Math.PI * 2);
+                    ctx.fillStyle = this.type.color;
+                    ctx.fill();
+                }
+            } else {
+                // Metades cortadas
+                ctx.fillStyle = this.isBomb ? '#000' : this.type.color;
+                ctx.beginPath();
+                ctx.arc(this.half1X, this.half1Y, this.radius * 0.7, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.beginPath();
+                ctx.arc(this.half2X, this.half2Y, this.radius * 0.7, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            ctx.restore();
+        };
+
+        Fruit.prototype.slice = function(angle) {
+            if (this.isSliced) return;
+            this.isSliced = true;
+
+            var perpX = -Math.sin(angle) * 4;
+            var perpY = Math.cos(angle) * 4;
+
+            this.half1X = this.x; this.half1Y = this.y;
+            this.half1Vx = this.vx + perpX; this.half1Vy = this.vy + perpY - 2;
+
+            this.half2X = this.x; this.half2Y = this.y;
+            this.half2Vx = this.vx - perpX; this.half2Vy = this.vy - perpY - 2;
+
+            // Partículas de suco
+            for (var i = 0; i < 14; i++) {
+                particles.push({
+                    x: this.x, y: this.y,
+                    vx: (Math.random() - 0.5) * 8, vy: (Math.random() - 0.5) * 8,
+                    color: this.isBomb ? '#ff1744' : this.type.color,
+                    radius: Math.random() * 5 + 2,
+                    alpha: 1
+                });
+            }
+        };
+
+        function spawnWave() {
+            if (gameOver) return;
+            var count = Math.floor(Math.random() * 3) + 1;
+            for (var i = 0; i < count; i++) {
+                var x = canvas.width * 0.2 + Math.random() * (canvas.width * 0.6);
+                var y = canvas.height + 40;
+                var vx = (canvas.width * 0.5 - x) * 0.012 + (Math.random() - 0.5) * 3;
+                var vy = -(Math.random() * 4 + 14);
+                var isBomb = Math.random() < 0.22;
+                items.push(new Fruit(x, y, vx, vy, isBomb));
+            }
+        }
+
+        function checkSlice(x1, y1, x2, y2) {
+            if (gameOver) return;
+            var angle = Math.atan2(y2 - y1, x2 - x1);
+
+            for (var i = 0; i < items.length; i++) {
+                var item = items[i];
+                if (item.isSliced) continue;
+                var dist = distToSegment({ x: item.x, y: item.y }, { x: x1, y: y1 }, { x: x2, y: y2 });
+                if (dist < item.radius) {
+                    item.slice(angle);
+                    if (item.isBomb) {
+                        combo = 0;
+                        lives--;
+                        updateHUD();
+                        if (window.KinectBridge && window.KinectBridge.onBombHit) {
+                            window.KinectBridge.onBombHit();
+                        }
+                        if (lives <= 0) endGame();
+                    } else {
+                        combo++;
+                        score += 10 * combo;
+                        lastComboTime = Date.now();
+                        updateHUD();
+                        if (window.KinectBridge && window.KinectBridge.onScore) {
+                            window.KinectBridge.onScore(10 * combo, combo);
+                        }
+                    }
+                }
+            }
+        }
+
+        function distToSegment(p, v, w) {
+            var l2 = Math.pow(v.x - w.x, 2) + Math.pow(v.y - w.y, 2);
+            if (l2 === 0) return Math.sqrt(Math.pow(p.x - v.x, 2) + Math.pow(p.y - v.y, 2));
+            var t = ((p.x - v.x) * (w.x - v.x) + (p.y - v.y) * (w.y - v.y)) / l2;
+            t = Math.max(0, Math.min(1, t));
+            return Math.sqrt(Math.pow(p.x - (v.x + t * (w.x - v.x)), 2) + Math.pow(p.y - (v.y + t * (w.y - v.y)), 2));
+        }
+
+        function updateHUD() {
+            document.getElementById('score').innerText = score;
+            document.getElementById('combo').innerText = combo > 1 ? ('COMBO x' + combo + '!') : '';
+            var livesStr = '';
+            for (var i = 0; i < lives; i++) livesStr += '❤️ ';
+            document.getElementById('lives').innerText = livesStr;
+        }
+
+        function endGame() {
+            gameOver = true;
+            document.getElementById('final-score-text').innerText = 'PONTUAÇÃO FINAL: ' + score;
+            document.getElementById('game-over-modal').style.display = 'flex';
+            if (window.KinectBridge && window.KinectBridge.onGameOver) {
+                window.KinectBridge.onGameOver(score);
+            }
+        }
+
+        function restartGame() {
+            score = 0;
+            combo = 0;
+            lives = 3;
+            timeLeft = 60;
+            gameOver = false;
+            items.length = 0;
+            particles.length = 0;
+            trail.length = 0;
+            document.getElementById('game-over-modal').style.display = 'none';
+            updateHUD();
+        }
+
+        // Timer
+        setInterval(function() {
+            if (!gameOver && timeLeft > 0) {
+                timeLeft--;
+                document.getElementById('timer').innerText = timeLeft + 's';
+                if (timeLeft <= 0) endGame();
+            }
+        }, 1000);
+
+        setInterval(spawnWave, 2200);
+
+        // Entrada via Kinect (Injetada pelo Android Java)
+        window.onKinectFrame = function(data) {
+            if (!data || !data.isPlayerPresent) return;
+            var hx = (data.isRightHandRaised ? data.rightHandX : data.leftHandX) * canvas.width;
+            var hy = (data.isRightHandRaised ? data.rightHandY : data.leftHandY) * canvas.height;
+
+            addTrailPoint(hx, hy);
+        };
+
+        // Entrada via Toque / Mouse
+        var lastTouch = null;
+        window.addEventListener('touchstart', function(e) {
+            var t = e.touches[0];
+            lastTouch = { x: t.clientX, y: t.clientY };
+            addTrailPoint(t.clientX, t.clientY);
+        });
+        window.addEventListener('touchmove', function(e) {
+            var t = e.touches[0];
+            addTrailPoint(t.clientX, t.clientY);
+        });
+        window.addEventListener('mousemove', function(e) {
+            if (e.buttons === 1) addTrailPoint(e.clientX, e.clientY);
+        });
+
+        function addTrailPoint(x, y) {
+            var now = Date.now();
+            trail.push({ x: x, y: y, time: now });
+            if (lastTouch) {
+                checkSlice(lastTouch.x, lastTouch.y, x, y);
+            }
+            lastTouch = { x: x, y: y };
+        }
+
+        // Loop Principal de Renderização Canvas 60 FPS
+        function render() {
+            ctx.fillStyle = '#1a1a24';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            var now = Date.now();
+            if (combo > 0 && now - lastComboTime > 800) {
+                combo = 0;
+                updateHUD();
+            }
+
+            // Atualiza e desenha frutas
+            for (var i = items.length - 1; i >= 0; i--) {
+                var item = items[i];
+                item.update();
+                item.draw();
+                if (item.y > canvas.height + 100 || (item.half1Y > canvas.height + 100 && item.half2Y > canvas.height + 100)) {
+                    items.splice(i, 1);
+                }
+            }
+
+            // Partículas de suco
+            for (var pIdx = particles.length - 1; pIdx >= 0; pIdx--) {
+                var p = particles[pIdx];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.alpha -= 0.03;
+                if (p.alpha <= 0) {
+                    particles.splice(pIdx, 1);
+                    continue;
+                }
+                ctx.save();
+                ctx.globalAlpha = p.alpha;
+                ctx.fillStyle = p.color;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+
+            // Rastro da Lâmina Neon
+            if (trail.length > 1) {
+                ctx.beginPath();
+                var first = true;
+                for (var tIdx = 0; tIdx < trail.length; tIdx++) {
+                    var pt = trail[tIdx];
+                    if (now - pt.time > 200) continue;
+                    if (first) { ctx.moveTo(pt.x, pt.y); first = false; }
+                    else { ctx.lineTo(pt.x, pt.y); }
+                }
+                ctx.strokeStyle = '#00e5ff';
+                ctx.lineWidth = 14;
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+                ctx.stroke();
+
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 6;
+                ctx.stroke();
+            }
+
+            while (trail.length > 0 && now - trail[0].time > 220) {
+                trail.shift();
+            }
+
+            requestAnimationFrame(render);
+        }
+
+        render();
+    </script>
+</body>
+</html>

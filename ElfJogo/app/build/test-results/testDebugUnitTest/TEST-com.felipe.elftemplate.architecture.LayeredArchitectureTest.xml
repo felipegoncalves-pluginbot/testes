@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.felipe.elftemplate.architecture.LayeredArchitectureTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-09-11T19:20:08" hostname="fedora" time="2.788">
+  <properties/>
+  <testcase name="packageSlicesShouldBeFreeOfCycles" classname="com.felipe.elftemplate.architecture.LayeredArchitectureTest" time="0.908"/>
+  <testcase name="logicLayerShouldNotDependOnWebServer" classname="com.felipe.elftemplate.architecture.LayeredArchitectureTest" time="1.129"/>
+  <testcase name="serverLayerShouldNotDirectlyAccessTrackingAlgorithms" classname="com.felipe.elftemplate.architecture.LayeredArchitectureTest" time="0.751"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.felipe.elftemplate.architecture.DesignPatternsArchitectureTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-09-11T19:20:04" hostname="fedora" time="2.137">
+  <properties/>
+  <testcase name="exceptionsShouldInheritFromException" classname="com.felipe.elftemplate.architecture.DesignPatternsArchitectureTest" time="0.702"/>
+  <testcase name="controllersAndEnginesShouldBePublic" classname="com.felipe.elftemplate.architecture.DesignPatternsArchitectureTest" time="0.844"/>
+  <testcase name="activitiesShouldInheritFromActivityOrAppCompatActivity" classname="com.felipe.elftemplate.architecture.DesignPatternsArchitectureTest" time="0.59"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

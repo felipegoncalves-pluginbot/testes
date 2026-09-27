@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.felipe.elftemplate.tracking.PreviewViewportTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-09-11T19:20:18" hostname="fedora" time="0.005">
+  <properties/>
+  <testcase name="tallerSourceCropsTopAndBottom" classname="com.felipe.elftemplate.tracking.PreviewViewportTest" time="0.0"/>
+  <testcase name="posePreviewFitsUnderCap" classname="com.felipe.elftemplate.tracking.PreviewViewportTest" time="0.004"/>
+  <testcase name="letterboxFourByThreeIntoSixteenByNineHasSideBars" classname="com.felipe.elftemplate.tracking.PreviewViewportTest" time="0.0"/>
+  <testcase name="widerSourceCropsLeftAndRight" classname="com.felipe.elftemplate.tracking.PreviewViewportTest" time="0.0"/>
+  <testcase name="hdPreviewDownsamplesTo640x360" classname="com.felipe.elftemplate.tracking.PreviewViewportTest" time="0.001"/>
+  <testcase name="mapXKeepsOpticalLeftOnTheLeft" classname="com.felipe.elftemplate.tracking.PreviewViewportTest" time="0.0"/>
+  <testcase name="yawPanShiftsOverlayTowardRgbCenter" classname="com.felipe.elftemplate.tracking.PreviewViewportTest" time="0.0"/>
+  <testcase name="matchingAspectFillsTheView" classname="com.felipe.elftemplate.tracking.PreviewViewportTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

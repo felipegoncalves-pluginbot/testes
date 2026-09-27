@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.felipe.elftemplate.logic.HandCursorEngineTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-09-11T19:20:13" hostname="fedora" time="2.438">
+  <properties/>
+  <testcase name="hidesCursorWhenNoHandRaised" classname="com.felipe.elftemplate.logic.HandCursorEngineTest" time="0.001"/>
+  <testcase name="mapsHandIntoLetterboxedScreen" classname="com.felipe.elftemplate.logic.HandCursorEngineTest" time="0.001"/>
+  <testcase name="pushUsesSpineWhenShoulderZMissing" classname="com.felipe.elftemplate.logic.HandCursorEngineTest" time="0.0"/>
+  <testcase name="pushForwardTriggersSingleClickPulse" classname="com.felipe.elftemplate.logic.HandCursorEngineTest" time="0.0"/>
+  <testcase name="dwellDoesNotRepeatWhileHandStaysStill" classname="com.felipe.elftemplate.logic.HandCursorEngineTest" time="1.805"/>
+  <testcase name="dwellClickWhenHandStable" classname="com.felipe.elftemplate.logic.HandCursorEngineTest" time="0.631"/>
+  <testcase name="picksRaisedHandForCursor" classname="com.felipe.elftemplate.logic.HandCursorEngineTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

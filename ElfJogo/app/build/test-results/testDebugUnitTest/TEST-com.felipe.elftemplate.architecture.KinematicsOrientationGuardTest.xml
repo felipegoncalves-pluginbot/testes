@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.felipe.elftemplate.architecture.KinematicsOrientationGuardTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-09-11T19:20:08" hostname="fedora" time="0.006">
+  <properties/>
+  <testcase name="testArmsLoweredNeverRaiseWings" classname="com.felipe.elftemplate.architecture.KinematicsOrientationGuardTest" time="0.0"/>
+  <testcase name="testPoseDepthFusionAlignsWithScreenPerspective" classname="com.felipe.elftemplate.architecture.KinematicsOrientationGuardTest" time="0.005"/>
+  <testcase name="testHeadTrackingDirectionConsistency" classname="com.felipe.elftemplate.architecture.KinematicsOrientationGuardTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

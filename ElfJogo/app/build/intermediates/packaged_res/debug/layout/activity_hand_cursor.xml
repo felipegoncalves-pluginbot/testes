@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FF0D1B2A">
+
+    <LinearLayout
+        android:id="@+id/hand_cursor_panel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:id="@+id/hand_cursor_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:text="@string/hand_cursor_status_idle"
+            android:textColor="#B0BEC5"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/btn_cursor_a"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:text="@string/hand_cursor_btn_a" />
+
+        <Button
+            android:id="@+id/btn_cursor_b"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:text="@string/hand_cursor_btn_b" />
+
+        <Button
+            android:id="@+id/btn_cursor_back"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            android:text="@string/hand_cursor_btn_back" />
+    </LinearLayout>
+
+    <com.felipe.elftemplate.logic.HandCursorOverlayView
+        android:id="@+id/hand_cursor_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="false"
+        android:focusable="false" />
+
+</FrameLayout>

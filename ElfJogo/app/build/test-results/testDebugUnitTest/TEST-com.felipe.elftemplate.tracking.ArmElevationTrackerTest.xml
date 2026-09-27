@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.felipe.elftemplate.tracking.ArmElevationTrackerTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-09-11T19:20:17" hostname="fedora" time="0.001">
+  <properties/>
+  <testcase name="handRaisedThenPartialDropKeepsRaisedUntilExitBand" classname="com.felipe.elftemplate.tracking.ArmElevationTrackerTest" time="0.001"/>
+  <testcase name="missingHandDecaysElevation" classname="com.felipe.elftemplate.tracking.ArmElevationTrackerTest" time="0.0"/>
+  <testcase name="forwardReachWithoutSeparationCapsElevation" classname="com.felipe.elftemplate.tracking.ArmElevationTrackerTest" time="0.0"/>
+  <system-out><![CDATA[D/NavController: NAV -> Dist: 1,06m | ErrAng: 20 deg | Pose: (0,00, 0,00) | Target: (1,00, 0,36) | CMD: turn_left
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

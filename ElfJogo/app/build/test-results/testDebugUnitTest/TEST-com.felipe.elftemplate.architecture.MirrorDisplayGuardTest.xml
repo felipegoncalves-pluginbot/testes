@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.felipe.elftemplate.architecture.MirrorDisplayGuardTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-09-11T19:20:11" hostname="fedora" time="0.002">
+  <properties/>
+  <testcase name="previewMirrorsOnCanvasNotViewProperty" classname="com.felipe.elftemplate.architecture.MirrorDisplayGuardTest" time="0.0"/>
+  <testcase name="overlayPanUsesHeadYawGain" classname="com.felipe.elftemplate.architecture.MirrorDisplayGuardTest" time="0.001"/>
+  <testcase name="mirrorLayoutMustNotUseViewScaleX" classname="com.felipe.elftemplate.architecture.MirrorDisplayGuardTest" time="0.0"/>
+  <testcase name="mirrorActivityEnablesCanvasMirrorOnRgbOnly" classname="com.felipe.elftemplate.architecture.MirrorDisplayGuardTest" time="0.001"/>
+  <testcase name="fusionMustNotInventHandsWhenWristIsLost" classname="com.felipe.elftemplate.architecture.MirrorDisplayGuardTest" time="0.0"/>
+  <testcase name="overlayDoesNotInvertNormalizedX" classname="com.felipe.elftemplate.architecture.MirrorDisplayGuardTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

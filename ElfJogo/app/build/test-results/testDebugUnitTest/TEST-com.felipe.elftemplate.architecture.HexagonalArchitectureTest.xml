@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.felipe.elftemplate.architecture.HexagonalArchitectureTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-09-11T19:20:06" hostname="fedora" time="1.277">
+  <properties/>
+  <testcase name="logicDomainShouldNotDependOnExternalAdaptersOrServer" classname="com.felipe.elftemplate.architecture.HexagonalArchitectureTest" time="0.652"/>
+  <testcase name="productionCodeShouldNotContainMockOrDummyClasses" classname="com.felipe.elftemplate.architecture.HexagonalArchitectureTest" time="0.625"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

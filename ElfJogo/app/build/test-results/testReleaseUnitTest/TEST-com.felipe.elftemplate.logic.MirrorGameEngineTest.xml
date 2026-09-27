@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.felipe.elftemplate.logic.MirrorGameEngineTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2026-08-27T19:00:29" hostname="fedora" time="0.007">
+  <properties/>
+  <testcase name="testHead2DAngleMappingSanbotHardware" classname="com.felipe.elftemplate.logic.MirrorGameEngineTest" time="0.002"/>
+  <testcase name="testPlayerAtCenterProducesZeroOffsetWhenStandingStill" classname="com.felipe.elftemplate.logic.MirrorGameEngineTest" time="0.0"/>
+  <testcase name="testDeadzoneSuppressesJitterWhenStandingStill" classname="com.felipe.elftemplate.logic.MirrorGameEngineTest" time="0.0"/>
+  <testcase name="testSeatedHeadTurnUsesRelativeYaw" classname="com.felipe.elftemplate.logic.MirrorGameEngineTest" time="0.0"/>
+  <testcase name="testMirroringRightHandRaisesLeftWing" classname="com.felipe.elftemplate.logic.MirrorGameEngineTest" time="0.002"/>
+  <testcase name="testMirroringLeftHandRaisesRightWing" classname="com.felipe.elftemplate.logic.MirrorGameEngineTest" time="0.0"/>
+  <testcase name="testMirroringBothHandsRaisesBothWings" classname="com.felipe.elftemplate.logic.MirrorGameEngineTest" time="0.0"/>
+  <testcase name="testSeatedBodyShiftWithoutHeadTurnStaysNearCenter" classname="com.felipe.elftemplate.logic.MirrorGameEngineTest" time="0.0"/>
+  <testcase name="testBaseRotationIsAlwaysDisabled" classname="com.felipe.elftemplate.logic.MirrorGameEngineTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

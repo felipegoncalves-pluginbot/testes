@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.felipe.elftemplate.server.RobotWebServerTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-09-11T19:20:17" hostname="fedora" time="0.164">
+  <properties/>
+  <testcase name="testGracefulHandlingOnPrematureClientClose" classname="com.felipe.elftemplate.server.RobotWebServerTest" time="0.146"/>
+  <testcase name="testGzipDisabledForMapData" classname="com.felipe.elftemplate.server.RobotWebServerTest" time="0.018"/>
+  <system-out><![CDATA[W/NavController: NAV -> CAMINHO BLOQUEADO! Parando robô.
+D/NavController: NAV -> Dist: 1,06m | ErrAng: 20 deg | Pose: (0,00, 0,00) | Target: (1,00, 0,36) | CMD: turn_left
+D/NavController: NAV -> Dist: 1,41m | ErrAng: 45 deg | Pose: (0,00, 0,00) | Target: (1,00, 1,00) | CMD: left
+W/NavController: NAV -> CAMINHO BLOQUEADO! Parando robô.
+]]></system-out>
+  <system-err><![CDATA[set. 11, 2026 4:20:17 PM fi.iki.elonen.NanoHTTPD$Response send
+GRAVE: Could not send response to the client
+java.net.SocketException: Pipe quebrado
+	at java.base/sun.nio.ch.SocketDispatcher.write0(Native Method)
+	at java.base/sun.nio.ch.SocketDispatcher.write(Unknown Source)
+	at java.base/sun.nio.ch.NioSocketImpl.tryWrite(Unknown Source)
+	at java.base/sun.nio.ch.NioSocketImpl.implWrite(Unknown Source)
+	at java.base/sun.nio.ch.NioSocketImpl.write(Unknown Source)
+	at java.base/sun.nio.ch.NioSocketImpl$2.write(Unknown Source)
+	at java.base/java.net.Socket$SocketOutputStream.write(Unknown Source)
+	at fi.iki.elonen.NanoHTTPD$Response.sendBody(NanoHTTPD.java:1694)
+	at fi.iki.elonen.NanoHTTPD$Response.sendBodyWithCorrectEncoding(NanoHTTPD.java:1667)
+	at fi.iki.elonen.NanoHTTPD$Response.sendBodyWithCorrectTransferAndEncoding(NanoHTTPD.java:1657)
+	at fi.iki.elonen.NanoHTTPD$Response.send(NanoHTTPD.java:1624)
+	at fi.iki.elonen.NanoHTTPD$HTTPSession.execute(NanoHTTPD.java:957)
+	at fi.iki.elonen.NanoHTTPD$ClientHandler.run(NanoHTTPD.java:192)
+	at java.base/java.lang.Thread.run(Unknown Source)
+
+]]></system-err>
+</testsuite>

@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.felipe.elftemplate.app-mergeDebugResources-24:/values-zh/values-zh.xml",
+            "map": [
+                {
+                    "source": "/home/pluginbot/.gradle/caches/transforms-3/490401e6087c44827f1753128e83c403/transformed/jetified-SanbotOpenSDK_2.0.1.10/res/values-zh/values-zh.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,107,159,209,277,345,423,490,553,609,665,721,767,816,873,922,968",
+                        "endColumns": "51,51,49,67,67,77,66,62,55,55,55,45,48,56,48,45,45",
+                        "endOffsets": "102,154,204,272,340,418,485,548,604,660,716,762,811,868,917,963,1009"
+                    }
+                }
+            ]
+        }
+    ]
+}

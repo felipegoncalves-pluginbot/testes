@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.felipe.elftemplate.tracking3d.MetricPipelineAccuracyTest" tests="11" skipped="0" failures="0" errors="0" timestamp="2026-09-11T19:20:21" hostname="fedora" time="1.153">
+  <properties/>
+  <testcase name="personIsDetectedBeyondTheOldTwoMeterCeiling" classname="com.felipe.elftemplate.tracking3d.MetricPipelineAccuracyTest" time="0.087"/>
+  <testcase name="closePersonIsDetectedWithoutProximityHack" classname="com.felipe.elftemplate.tracking3d.MetricPipelineAccuracyTest" time="0.092"/>
+  <testcase name="tposeWristsLandNearTheRenderedWrists" classname="com.felipe.elftemplate.tracking3d.MetricPipelineAccuracyTest" time="0.071"/>
+  <testcase name="handsUpPutsBothWristsAboveTheShoulders" classname="com.felipe.elftemplate.tracking3d.MetricPipelineAccuracyTest" time="0.079"/>
+  <testcase name="tposeArmSpanMatchesAnthropometry" classname="com.felipe.elftemplate.tracking3d.MetricPipelineAccuracyTest" time="0.071"/>
+  <testcase name="oneArmUpIsNotConfusedWithTheHead" classname="com.felipe.elftemplate.tracking3d.MetricPipelineAccuracyTest" time="0.081"/>
+  <testcase name="armsDownKeepsBothWristsBelowTheShoulders" classname="com.felipe.elftemplate.tracking3d.MetricPipelineAccuracyTest" time="0.059"/>
+  <testcase name="statureIsRecoveredInMeters" classname="com.felipe.elftemplate.tracking3d.MetricPipelineAccuracyTest" time="0.067"/>
+  <testcase name="groundPlaneRecoversCameraMounting" classname="com.felipe.elftemplate.tracking3d.MetricPipelineAccuracyTest" time="0.061"/>
+  <testcase name="headIsFoundNearTheTopOfTheBody" classname="com.felipe.elftemplate.tracking3d.MetricPipelineAccuracyTest" time="0.063"/>
+  <testcase name="repeatedFramesKeepTheSkeletonStable" classname="com.felipe.elftemplate.tracking3d.MetricPipelineAccuracyTest" time="0.419"/>
+  <system-out><![CDATA[W/NavController: NAV -> CAMINHO BLOQUEADO! Parando robô.
+D/NavController: NAV -> Dist: 1,06m | ErrAng: 20 deg | Pose: (0,00, 0,00) | Target: (1,00, 0,36) | CMD: turn_left
+D/NavController: NAV -> Dist: 1,41m | ErrAng: 45 deg | Pose: (0,00, 0,00) | Target: (1,00, 1,00) | CMD: left
+W/NavController: NAV -> CAMINHO BLOQUEADO! Parando robô.
+D/NavController: NAV -> Dist: 1,06m | ErrAng: 20 deg | Pose: (0,00, 0,00) | Target: (1,00, 0,36) | CMD: turn_left
+D/NavController: NAV -> Dist: 1,41m | ErrAng: 45 deg | Pose: (0,00, 0,00) | Target: (1,00, 1,00) | CMD: left
+W/NavController: NAV -> CAMINHO BLOQUEADO! Parando robô.
+D/NavController: NAV -> Dist: 1,06m | ErrAng: 20 deg | Pose: (0,00, 0,00) | Target: (1,00, 0,36) | CMD: turn_left
+D/NavController: NAV -> Dist: 1,41m | ErrAng: 45 deg | Pose: (0,00, 0,00) | Target: (1,00, 1,00) | CMD: left
+W/NavController: NAV -> CAMINHO BLOQUEADO! Parando robô.
+D/NavController: NAV -> Dist: 1,06m | ErrAng: 20 deg | Pose: (0,00, 0,00) | Target: (1,00, 0,36) | CMD: turn_left
+D/NavController: NAV -> Dist: 1,41m | ErrAng: 45 deg | Pose: (0,00, 0,00) | Target: (1,00, 1,00) | CMD: left
+W/NavController: NAV -> CAMINHO BLOQUEADO! Parando robô.
+D/NavController: NAV -> Dist: 1,06m | ErrAng: 20 deg | Pose: (0,00, 0,00) | Target: (1,00, 0,36) | CMD: turn_left
+D/NavController: NAV -> Dist: 1,41m | ErrAng: 45 deg | Pose: (0,00, 0,00) | Target: (1,00, 1,00) | CMD: left
+W/NavController: NAV -> CAMINHO BLOQUEADO! Parando robô.
+D/NavController: NAV -> Dist: 1,06m | ErrAng: 20 deg | Pose: (0,00, 0,00) | Target: (1,00, 0,36) | CMD: turn_left
+D/NavController: NAV -> Dist: 1,41m | ErrAng: 45 deg | Pose: (0,00, 0,00) | Target: (1,00, 1,00) | CMD: left
+W/NavController: NAV -> CAMINHO BLOQUEADO! Parando robô.
+D/NavController: NAV -> Dist: 1,06m | ErrAng: 20 deg | Pose: (0,00, 0,00) | Target: (1,00, 0,36) | CMD: turn_left
+D/NavController: NAV -> Dist: 1,41m | ErrAng: 45 deg | Pose: (0,00, 0,00) | Target: (1,00, 1,00) | CMD: left
+W/NavController: NAV -> CAMINHO BLOQUEADO! Parando robô.
+D/NavController: NAV -> Dist: 1,06m | ErrAng: 20 deg | Pose: (0,00, 0,00) | Target: (1,00, 0,36) | CMD: turn_left
+D/NavController: NAV -> Dist: 1,41m | ErrAng: 45 deg | Pose: (0,00, 0,00) | Target: (1,00, 1,00) | CMD: left
+W/NavController: NAV -> CAMINHO BLOQUEADO! Parando robô.
+D/NavController: NAV -> Dist: 1,06m | ErrAng: 20 deg | Pose: (0,00, 0,00) | Target: (1,00, 0,36) | CMD: turn_left
+D/NavController: NAV -> Dist: 1,41m | ErrAng: 45 deg | Pose: (0,00, 0,00) | Target: (1,00, 1,00) | CMD: left
+W/NavController: NAV -> CAMINHO BLOQUEADO! Parando robô.
+D/NavController: NAV -> Dist: 1,06m | ErrAng: 20 deg | Pose: (0,00, 0,00) | Target: (1,00, 0,36) | CMD: turn_left
+D/NavController: NAV -> Dist: 1,41m | ErrAng: 45 deg | Pose: (0,00, 0,00) | Target: (1,00, 1,00) | CMD: left
+W/NavController: NAV -> CAMINHO BLOQUEADO! Parando robô.
+D/NavController: NAV -> Dist: 1,06m | ErrAng: 20 deg | Pose: (0,00, 0,00) | Target: (1,00, 0,36) | CMD: turn_left
+D/NavController: NAV -> Dist: 1,41m | ErrAng: 45 deg | Pose: (0,00, 0,00) | Target: (1,00, 1,00) | CMD: left
+W/NavController: NAV -> CAMINHO BLOQUEADO! Parando robô.
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

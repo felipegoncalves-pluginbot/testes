@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.felipe.elftemplate.architecture.AiGuardArchitectureTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-09-11T19:19:57" hostname="fedora" time="7.068">
+  <properties/>
+  <testcase name="productionCodeShouldNotContainMockOrDummyClasses" classname="com.felipe.elftemplate.architecture.AiGuardArchitectureTest" time="3.441"/>
+  <testcase name="logicLayerShouldNotDependOnSanbotSdk" classname="com.felipe.elftemplate.architecture.AiGuardArchitectureTest" time="0.983"/>
+  <testcase name="activitiesShouldExtendAndroidActivity" classname="com.felipe.elftemplate.architecture.AiGuardArchitectureTest" time="0.978"/>
+  <testcase name="productionCodeShouldNotUseDeprecatedAsyncTask" classname="com.felipe.elftemplate.architecture.AiGuardArchitectureTest" time="0.906"/>
+  <testcase name="logicLayerShouldNotDependOnServerLayer" classname="com.felipe.elftemplate.architecture.AiGuardArchitectureTest" time="0.757"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[SLF4J(W): No SLF4J providers were found.
+SLF4J(W): Defaulting to no-operation (NOP) logger implementation
+SLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.
+]]></system-err>
+</testsuite>

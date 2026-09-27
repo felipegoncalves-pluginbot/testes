@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Cabeça do robô -->
+    <path
+        android:fillColor="#F5F7FA"
+        android:pathData="M54,24 C44,24 36,30 34,40 L32,46 C31,48 31,50 32,52 L34,58 C36,68 44,74 54,74 C64,74 72,68 74,58 L76,52 C77,50 77,48 76,46 L74,40 C72,30 64,24 54,24 Z" />
+
+    <!-- Orelhas -->
+    <path
+        android:fillColor="#E8EDF2"
+        android:pathData="M30,46 C26,46 24,50 24,54 C24,58 26,62 30,62 L32,58 C32,54 32,50 32,46 Z" />
+    <path
+        android:fillColor="#E8EDF2"
+        android:pathData="M78,46 C82,46 84,50 84,54 C84,58 82,62 78,62 L76,58 C76,54 76,50 76,46 Z" />
+
+    <!-- Antena -->
+    <path
+        android:fillColor="#F5F7FA"
+        android:pathData="M52,18 L56,18 L56,26 L52,26 Z" />
+    <path
+        android:fillColor="#39FF14"
+        android:pathData="M54,15 m-2,0 a2,2 0 1,1 4,0 a2,2 0 1,1 -4,0" />
+
+    <!-- Tela facial -->
+    <path
+        android:fillColor="#0A1628"
+        android:pathData="M40,42 L68,42 C70,42 72,44 72,46 L72,56 C72,58 70,60 68,60 L40,60 C38,60 36,58 36,56 L36,46 C36,44 38,42 40,42 Z" />
+
+    <!-- Olhos terminal [ ] -->
+    <path
+        android:fillColor="#39FF14"
+        android:pathData="M43,48 L43,54 L45,54 L45,52 L47,52 L47,50 L45,50 L45,48 Z" />
+    <path
+        android:fillColor="#39FF14"
+        android:pathData="M65,48 L65,50 L63,50 L63,52 L65,52 L65,54 L61,54 L61,48 Z" />
+
+    <!-- Prompt >_ -->
+    <path
+        android:fillColor="#39FF14"
+        android:pathData="M46,78 L50,81 L46,84 L46,82 L44,82 L44,80 L46,80 Z" />
+    <path
+        android:fillColor="#39FF14"
+        android:pathData="M52,80 L58,80 L58,82 L52,82 Z" />
+</vector>

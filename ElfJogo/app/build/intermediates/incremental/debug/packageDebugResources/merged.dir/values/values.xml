@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorAccent">#D81B60</color>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="cpr_bg">#140808</color>
+    <color name="cpr_red">#C62828</color>
+    <color name="cpr_red_bright">#E53935</color>
+    <color name="hub_card_bg">#B3004D56</color>
+    <color name="hub_card_featured_bg">#CC005A63</color>
+    <color name="hub_teal_dark">#003840</color>
+    <color name="hub_terminal_green">#39FF14</color>
+    <color name="hub_terminal_green_dim">#8039FF14</color>
+    <color name="hub_text_primary">#FFFFFF</color>
+    <color name="hub_text_secondary">#B8FFE0</color>
+    <string name="app_name">Elf Jogo</string>
+    <string name="cpr_btn_back">⬅ Voltar</string>
+    <string name="cpr_btn_music_pause">⏸ Pausar</string>
+    <string name="cpr_btn_music_pick">📂 Escolher música</string>
+    <string name="cpr_btn_music_play">▶ Tocar</string>
+    <string name="cpr_btn_music_restart">↺ Reiniciar</string>
+    <string name="cpr_btn_next">Próximo ▶</string>
+    <string name="cpr_btn_prev">◀ Anterior</string>
+    <string name="cpr_hub_subtitle">Treino de reanimação cardiopulmonar</string>
+    <string name="cpr_hub_title">RCP / Primeiros Socorros</string>
+    <string name="cpr_music_load_error">Erro ao abrir o arquivo selecionado</string>
+    <string name="cpr_music_loading">Carregando música…</string>
+    <string name="cpr_music_pick_prompt">Toque em Escolher música para abrir o armazenamento</string>
+    <string name="cpr_picker_title">Escolher arquivo de áudio</string>
+    <string name="hand_cursor_btn_a">Botão A</string>
+    <string name="hand_cursor_btn_b">Botão B</string>
+    <string name="hand_cursor_btn_back">Voltar</string>
+    <string name="hand_cursor_status_a">Botão A acionado</string>
+    <string name="hand_cursor_status_b">Botão B acionado</string>
+    <string name="hand_cursor_status_click">Clique!</string>
+    <string name="hand_cursor_status_idle">Levante a mão direita na frente do robô</string>
+    <string name="hand_cursor_status_miss">Empurre mais para a câmera para clicar</string>
+    <string name="hand_cursor_status_track">Mova a mão — empurre ou segure ~0,5 s para clicar</string>
+    <string name="hand_cursor_subtitle">Mão direita = cursor nativo</string>
+    <string name="hand_cursor_title">Mouse Kinect</string>
+    <string name="hub_background_desc">PUC Poços de Caldas — robôs e Ciência da Computação</string>
+    <string name="hub_prompt">>_ escolha um jogo</string>
+    <string name="hub_rail_left">Jogos Kinect — coluna esquerda</string>
+    <string name="hub_rail_right">Arcade corporal — coluna direita</string>
+    <string name="tracking3d_back">Voltar</string>
+    <string name="tracking3d_gesture_idle">sem jogador</string>
+    <string name="tracking3d_overlay_description">Máscara de segmentação e esqueleto do jogador</string>
+    <string name="tracking3d_speech_off">Narrar gestos: ON</string>
+    <string name="tracking3d_speech_on">Narrar gestos: OFF</string>
+    <string name="tracking3d_subtitle">Novo motor: esqueleto geodésico em metros</string>
+    <string name="tracking3d_title">Tracking 3D métrico</string>
+    <string name="tracking3d_waiting_body">Aguardando pessoa no volume de jogo</string>
+    <string name="tracking3d_waiting_sensor">Abrindo o Orbbec Astra…</string>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+</resources>

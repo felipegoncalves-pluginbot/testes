@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.felipe.elftemplate.tracking.DepthBlobHandDetectionTest" tests="11" skipped="0" failures="0" errors="0" timestamp="2026-09-11T19:20:17" hostname="fedora" time="0.086">
+  <properties/>
+  <testcase name="handsUp_at640x480_withNoise_handsStillAboveShoulders" classname="com.felipe.elftemplate.tracking.DepthBlobHandDetectionTest" time="0.039"/>
+  <testcase name="standing_handsMustNotSnapToFeet" classname="com.felipe.elftemplate.tracking.DepthBlobHandDetectionTest" time="0.003"/>
+  <testcase name="tPose_handsLateral_notCollapsedToTorso" classname="com.felipe.elftemplate.tracking.DepthBlobHandDetectionTest" time="0.001"/>
+  <testcase name="standing_armsDown_handsNotRaised" classname="com.felipe.elftemplate.tracking.DepthBlobHandDetectionTest" time="0.001"/>
+  <testcase name="standing_withTableSideBlob_armsDown_notRaised" classname="com.felipe.elftemplate.tracking.DepthBlobHandDetectionTest" time="0.008"/>
+  <testcase name="extremeLateralNoise_isClampedWithinAnthropometricEnvelope" classname="com.felipe.elftemplate.tracking.DepthBlobHandDetectionTest" time="0.007"/>
+  <testcase name="handsUp_handsAboveShoulders_notAtTorsoFallback" classname="com.felipe.elftemplate.tracking.DepthBlobHandDetectionTest" time="0.009"/>
+  <testcase name="standing_at640x480_armsAlongBody_mayUseLowPixelCount" classname="com.felipe.elftemplate.tracking.DepthBlobHandDetectionTest" time="0.005"/>
+  <testcase name="closerFurnitureBlob_doesNotStealPlayer" classname="com.felipe.elftemplate.tracking.DepthBlobHandDetectionTest" time="0.001"/>
+  <testcase name="handsUp_handY_mustBeAboveShoulder_notCentroidHip" classname="com.felipe.elftemplate.tracking.DepthBlobHandDetectionTest" time="0.003"/>
+  <testcase name="seatedPerson_isDetected_handsNotAtBottom" classname="com.felipe.elftemplate.tracking.DepthBlobHandDetectionTest" time="0.003"/>
+  <system-out><![CDATA[W/NavController: NAV -> CAMINHO BLOQUEADO! Parando robô.
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

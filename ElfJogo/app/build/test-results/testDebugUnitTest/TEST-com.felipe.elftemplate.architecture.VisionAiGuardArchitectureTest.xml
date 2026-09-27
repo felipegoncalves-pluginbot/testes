@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.felipe.elftemplate.architecture.VisionAiGuardArchitectureTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-09-11T19:20:11" hostname="fedora" time="2.569">
+  <properties/>
+  <testcase name="serverShouldNotDirectlyAccessKinectTrackingEngine" classname="com.felipe.elftemplate.architecture.VisionAiGuardArchitectureTest" time="0.639"/>
+  <testcase name="trackingShouldNotDependOnLogicLayer" classname="com.felipe.elftemplate.architecture.VisionAiGuardArchitectureTest" time="0.648"/>
+  <testcase name="logicShouldNotDependOnOpenNiOrOrbbecNative" classname="com.felipe.elftemplate.architecture.VisionAiGuardArchitectureTest" time="0.616"/>
+  <testcase name="trackingShouldNotDependOnMovementLayer" classname="com.felipe.elftemplate.architecture.VisionAiGuardArchitectureTest" time="0.665"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

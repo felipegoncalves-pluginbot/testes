@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.felipe.elftemplate.tracking.HybridKinectRegressionTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-09-11T19:20:17" hostname="fedora" time="0.005">
+  <properties/>
+  <testcase name="remoteBadHeadNeverReplacesLocalHead" classname="com.felipe.elftemplate.tracking.HybridKinectRegressionTest" time="0.003"/>
+  <testcase name="mirrorPoseStreamSkipsHdCrop" classname="com.felipe.elftemplate.tracking.HybridKinectRegressionTest" time="0.0"/>
+  <testcase name="withoutPhoneIsIdenticalToLocalPipeline" classname="com.felipe.elftemplate.tracking.HybridKinectRegressionTest" time="0.0"/>
+  <testcase name="disconnectedRelayNeverFlagsRemoteAux" classname="com.felipe.elftemplate.tracking.HybridKinectRegressionTest" time="0.0"/>
+  <system-out><![CDATA[W/NavController: NAV -> CAMINHO BLOQUEADO! Parando robô.
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

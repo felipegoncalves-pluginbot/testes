@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.felipe.elftemplate.movement.NavigationControllerTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-08-27T19:00:30" hostname="fedora" time="0.608">
+  <properties/>
+  <testcase name="testArrivedCondition" classname="com.felipe.elftemplate.movement.NavigationControllerTest" time="0.005"/>
+  <testcase name="testTurnCommands" classname="com.felipe.elftemplate.movement.NavigationControllerTest" time="0.15"/>
+  <testcase name="testObstacleAvoidance" classname="com.felipe.elftemplate.movement.NavigationControllerTest" time="0.15"/>
+  <testcase name="testTargetAngleCalculation" classname="com.felipe.elftemplate.movement.NavigationControllerTest" time="0.0"/>
+  <testcase name="testPrecisionModeToggle" classname="com.felipe.elftemplate.movement.NavigationControllerTest" time="0.301"/>
+  <system-out><![CDATA[D/SensorFusion: SensorFusionEngine inicializada com RTAB-Map e RobotEKF
+D/NavController: Iniciando navegação autônoma para: 0.05, 0.05
+I/NavController: Chegou ao destino!
+D/SensorFusion: SensorFusionEngine inicializada com RTAB-Map e RobotEKF
+D/NavController: Iniciando navegação autônoma para: 1.0, 0.36397023426620234
+D/NavController: NAV -> Dist: 1,06m | ErrAng: 20 deg | Pose: (0,00, 0,00) | Target: (1,00, 0,36) | CMD: turn_left
+D/NavController: NAV -> Dist: 1,06m | ErrAng: 20 deg | Pose: (0,00, 0,00) | Target: (1,00, 0,36) | CMD: turn_left
+D/SensorFusion: SensorFusionEngine inicializada com RTAB-Map e RobotEKF
+D/NavController: Iniciando navegação autônoma para: 1.0, 0.0
+W/NavController: NAV -> CAMINHO BLOQUEADO! Parando robô.
+D/NavController: NAV -> Dist: 1,06m | ErrAng: 20 deg | Pose: (0,00, 0,00) | Target: (1,00, 0,36) | CMD: turn_left
+W/NavController: NAV -> CAMINHO BLOQUEADO! Parando robô.
+D/NavController: NAV -> Dist: 1,06m | ErrAng: 20 deg | Pose: (0,00, 0,00) | Target: (1,00, 0,36) | CMD: turn_left
+D/SensorFusion: SensorFusionEngine inicializada com RTAB-Map e RobotEKF
+D/NavController: Iniciando navegação autônoma para: 1.0, 1.0
+D/SensorFusion: SensorFusionEngine inicializada com RTAB-Map e RobotEKF
+D/NavController: NAV -> Dist: 1,41m | ErrAng: 45 deg | Pose: (0,00, 0,00) | Target: (1,00, 1,00) | CMD: left
+D/NavController: Iniciando navegação autônoma para: 5.0, 5.0
+D/NavController: NAV -> Dist: 7,07m | ErrAng: 45 deg | Pose: (0,00, 0,00) | Target: (5,00, 5,00) | CMD: left
+W/NavController: NAV -> CAMINHO BLOQUEADO! Parando robô.
+D/NavController: NAV -> Dist: 1,06m | ErrAng: 20 deg | Pose: (0,00, 0,00) | Target: (1,00, 0,36) | CMD: turn_left
+D/NavController: NAV -> Dist: 1,41m | ErrAng: 45 deg | Pose: (0,00, 0,00) | Target: (1,00, 1,00) | CMD: left
+D/NavController: NAV -> Dist: 7,07m | ErrAng: 45 deg | Pose: (0,00, 0,00) | Target: (5,00, 5,00) | CMD: left
+W/NavController: NAV -> CAMINHO BLOQUEADO! Parando robô.
+D/NavController: Iniciando navegação autônoma para: 0.2, 0.2
+D/NavController: NAV -> Dist: 0,28m | ErrAng: 45 deg | Pose: (0,00, 0,00) | Target: (0,20, 0,20) | CMD: left
+D/NavController: NAV -> Dist: 1,06m | ErrAng: 20 deg | Pose: (0,00, 0,00) | Target: (1,00, 0,36) | CMD: turn_left
+D/NavController: NAV -> Dist: 1,41m | ErrAng: 45 deg | Pose: (0,00, 0,00) | Target: (1,00, 1,00) | CMD: left
+W/NavController: NAV -> CAMINHO BLOQUEADO! Parando robô.
+D/NavController: NAV -> Dist: 0,28m | ErrAng: 45 deg | Pose: (0,00, 0,00) | Target: (0,20, 0,20) | CMD: left
+D/NavController: NAV -> Dist: 1,06m | ErrAng: 20 deg | Pose: (0,00, 0,00) | Target: (1,00, 0,36) | CMD: turn_left
+D/NavController: NAV -> Dist: 1,41m | ErrAng: 45 deg | Pose: (0,00, 0,00) | Target: (1,00, 1,00) | CMD: left
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

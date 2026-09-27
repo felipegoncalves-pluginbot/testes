@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tesla Vision - Robot Dashboard</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+    <script src="three.min.js"></script>
+    <link rel="stylesheet" href="dashboard.css" />
+  </head>
+  <body>
+    <div id="minimap-container"></div>
+
+    <div class="overlay">
+      <!-- Top HUD -->
+      <div class="top-bar">
+        <div class="glass-panel hud-stats">
+          <div>X: <span id="stat-x">0.00</span> m</div>
+          <div>Y: <span id="stat-y">0.00</span> m</div>
+          <div>Yaw: <span id="stat-yaw">0</span>°</div>
+          <div style="margin-left: 10px; padding: 2px 8px; border-radius: 5px; background: rgba(0,0,0,0.3); font-size: 0.9rem">
+            Status: <span id="stat-status" style="color: var(--success)">Estacionário</span>
+          </div>
+        </div>
+        <div class="top-controls">
+          <button class="btn glass-panel" id="btn-record" onclick="sendAction('record_toggle')" style="border-color: var(--danger)">
+            🔴 REC
+          </button>
+          <button class="btn glass-panel" id="btn-play" onclick="sendAction('play_toggle')" style="border-color: var(--success)">
+            ▶️ PLAY
+          </button>
+          <button class="btn glass-panel" id="btn-dev" onclick="toggleDevMode()">
+            🛠️ Modo Dev
+          </button>
+          <button class="btn glass-panel" id="btn-reset" onclick="resetPose()" style="border-color: var(--primary)">
+            📍 Reset Pose
+          </button>
+          <button
+            class="btn glass-panel"
+            id="btn-camera"
+            onclick="toggleCamera()"
+          >
+            🔄 Visão SLAM
+          </button>
+          <a href="/map_debug" target="_blank" class="btn glass-panel" style="text-decoration:none; border-color: #0f0; color: #0f0;">
+            🗺️ Abrir Mapa Full
+          </a>
+          <button class="btn glass-panel" id="btn-force-astra" onclick="sendAction('force_astra')" style="border-color: #f59e0b; color: #f59e0b;">
+            🔌 Force Astra
+          </button>
+        </div>
+      </div>
+
+      <!-- Camera Preview Panel (v20) -> SLAM Preview (v26) -->
+      <div class="glass-panel camera-panel" id="camera-panel" style="width: 400px; height: 300px; padding: 0; overflow: hidden;">
+        <h4 style="margin: 5px; position: absolute; z-index: 10; color: white; text-shadow: 1px 1px 2px black;">Visão SLAM</h4>
+        <div id="slam-preview-container" style="width: 100%; height: 100%;"></div>
+        <img id="camera-stream" src="" alt="Astra Activity" style="display:none">
+      </div>
+
+      <!-- Dev Panel -->
+      <div class="glass-panel dev-panel" id="dev-panel">
+        <h3 style="margin-top: 0">Diagnóstico de Sensores</h3>
+        <div class="parking-visual" id="parking-visual">
+          <div class="robot-icon" id="robot-compass-icon"></div>
+        </div>
+        <div>Giroscópio (Raw): <span id="stat-gyro">0</span></div>
+        <div>Bússola / Acel. (X,Y,Z): <span id="stat-accel" style="font-family: monospace; color: var(--primary)">0, 0, 0</span></div>
+        <div class="ir-grid" id="ir-grid"></div>
+      </div>
+
+      <!-- Bottom Controls -->
+      <div class="bottom-bar">
+        <div class="glass-panel">
+          <div class="wasd-grid">
+            <div style="grid-column: 2">
+              <div class="key" id="btn-w">W</div>
+            </div>
+            <div class="key" id="btn-a">A</div>
+            <div class="key" id="btn-s">S</div>
+            <div class="key" id="btn-d">D</div>
+          </div>
+          <button
+            class="btn"
+            style="
+              width: 100%;
+              border-color: var(--danger);
+              color: var(--danger);
+            "
+            onclick="sendAction('home')"
+          >
+            Parada de Emergência
+          </button>
+        </div>
+
+        <div class="glass-panel waypoint-panel">
+          <h3 style="margin: 0 0 10px 0; font-weight: 400">Navegação</h3>
+          <div class="input-group">
+            <input type="text" id="wp-name" placeholder="Ex: Base, Cozinha" />
+            <button class="btn btn-primary" onclick="addWaypoint()">
+              Salvar
+            </button>
+          </div>
+          <div class="waypoint-list" id="waypoint-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="three_engine.js"></script>
+    <script src="dashboard.js"></script>
+  </body>
+</html>

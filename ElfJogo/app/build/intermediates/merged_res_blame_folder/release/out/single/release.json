@@ -1,0 +1,126 @@
+[
+    {
+        "merged": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-merged_res-26:/drawable_target_frame.xml.flat",
+        "source": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-main-27:/drawable/target_frame.xml"
+    },
+    {
+        "merged": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-merged_res-26:/mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-main-27:/mipmap-xhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-merged_res-26:/layout_activity_fruit_slicer.xml.flat",
+        "source": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-main-27:/layout/activity_fruit_slicer.xml"
+    },
+    {
+        "merged": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-merged_res-26:/drawable_ic_follow.png.flat",
+        "source": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-main-27:/drawable/ic_follow.png"
+    },
+    {
+        "merged": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-merged_res-26:/layout_activity_pose_match.xml.flat",
+        "source": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-main-27:/layout/activity_pose_match.xml"
+    },
+    {
+        "merged": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-merged_res-26:/mipmap-hdpi_ic_launcher_round.png.flat",
+        "source": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-main-27:/mipmap-hdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-merged_res-26:/mipmap-xxhdpi_ic_launcher_round.png.flat",
+        "source": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-main-27:/mipmap-xxhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-merged_res-26:/drawable_ic_tennis.png.flat",
+        "source": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-main-27:/drawable/ic_tennis.png"
+    },
+    {
+        "merged": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-merged_res-26:/xml_device_filter.xml.flat",
+        "source": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-main-27:/xml/device_filter.xml"
+    },
+    {
+        "merged": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-merged_res-26:/mipmap-hdpi_ic_launcher.png.flat",
+        "source": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-main-27:/mipmap-hdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.felipe.elftemplate.app-merged_res-26:/layout_activity_mirror.xml.flat",
+        "source": "com.felipe.elftemplate.app-main-27:/layout/activity_mirror.xml"
+    },
+    {
+        "merged": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-merged_res-26:/layout_activity_follow.xml.flat",
+        "source": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-main-27:/layout/activity_follow.xml"
+    },
+    {
+        "merged": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-merged_res-26:/mipmap-xhdpi_ic_launcher_round.png.flat",
+        "source": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-main-27:/mipmap-xhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-merged_res-26:/xml_backup_descriptor.xml.flat",
+        "source": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-main-27:/xml/backup_descriptor.xml"
+    },
+    {
+        "merged": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-merged_res-26:/drawable_ic_launcher_background.xml.flat",
+        "source": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-main-27:/drawable/ic_launcher_background.xml"
+    },
+    {
+        "merged": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-merged_res-26:/layout_activity_mirror.xml.flat",
+        "source": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-main-27:/layout/activity_mirror.xml"
+    },
+    {
+        "merged": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-merged_res-26:/layout_activity_main.xml.flat",
+        "source": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-main-27:/layout/activity_main.xml"
+    },
+    {
+        "merged": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-merged_res-26:/layout_activity_dodger.xml.flat",
+        "source": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-main-27:/layout/activity_dodger.xml"
+    },
+    {
+        "merged": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-merged_res-26:/drawable-anydpi-v24_ic_launcher_foreground.xml.flat",
+        "source": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-pngs-22:/drawable-anydpi-v24/ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-merged_res-26:/layout_activity_kinect_web_game.xml.flat",
+        "source": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-main-27:/layout/activity_kinect_web_game.xml"
+    },
+    {
+        "merged": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-merged_res-26:/mipmap-mdpi_ic_launcher.png.flat",
+        "source": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-main-27:/mipmap-mdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-merged_res-26:/layout_activity_map.xml.flat",
+        "source": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-main-27:/layout/activity_map.xml"
+    },
+    {
+        "merged": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-merged_res-26:/mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-main-27:/mipmap-xxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-merged_res-26:/mipmap-xxxhdpi_ic_launcher_round.png.flat",
+        "source": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-main-27:/mipmap-xxxhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-merged_res-26:/drawable_circle_yellow.xml.flat",
+        "source": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-main-27:/drawable/circle_yellow.xml"
+    },
+    {
+        "merged": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-merged_res-26:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-main-27:/mipmap-anydpi-v26/ic_launcher_round.xml"
+    },
+    {
+        "merged": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-merged_res-26:/drawable_tennis_court_background.png.flat",
+        "source": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-main-27:/drawable/tennis_court_background.png"
+    },
+    {
+        "merged": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-merged_res-26:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-main-27:/mipmap-anydpi-v26/ic_launcher.xml"
+    },
+    {
+        "merged": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-merged_res-26:/mipmap-mdpi_ic_launcher_round.png.flat",
+        "source": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-main-27:/mipmap-mdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-merged_res-26:/layout_activity_tennis.xml.flat",
+        "source": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-main-27:/layout/activity_tennis.xml"
+    },
+    {
+        "merged": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-merged_res-26:/mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "/home/pluginbot/.gradle/daemon/8.5/com.felipe.elftemplate.app-main-27:/mipmap-xxxhdpi/ic_launcher.png"
+    }
+]

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.felipe.elftemplate.architecture.AllocationHotPathGuardTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-09-11T19:20:04" hostname="fedora" time="0.068">
+  <properties/>
+  <testcase name="trackingHotPathMustNotAllocateJointsOrFrames" classname="com.felipe.elftemplate.architecture.AllocationHotPathGuardTest" time="0.068"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

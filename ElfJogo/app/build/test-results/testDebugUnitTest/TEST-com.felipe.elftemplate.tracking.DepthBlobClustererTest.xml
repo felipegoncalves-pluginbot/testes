@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.felipe.elftemplate.tracking.DepthBlobClustererTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-09-11T19:20:17" hostname="fedora" time="0.003">
+  <properties/>
+  <testcase name="clusterSurvivesUndersizedBufferWithoutCrash" classname="com.felipe.elftemplate.tracking.DepthBlobClustererTest" time="0.001"/>
+  <testcase name="clusterFindsBlobOnSyntheticTorso" classname="com.felipe.elftemplate.tracking.DepthBlobClustererTest" time="0.002"/>
+  <system-out><![CDATA[D/NavController: NAV -> Dist: 1,41m | ErrAng: 45 deg | Pose: (0,00, 0,00) | Target: (1,00, 1,00) | CMD: left
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

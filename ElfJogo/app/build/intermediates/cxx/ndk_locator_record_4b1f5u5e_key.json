@@ -1,0 +1,8 @@
+{
+  "ndkVersionFromDsl": "25.1.8937393",
+  "sdkFolder": "/home/pluginbot/Android/Sdk",
+  "sideBySideNdkFolderNames": [
+    "27.0.12077973",
+    "25.1.8937393"
+  ]
+}

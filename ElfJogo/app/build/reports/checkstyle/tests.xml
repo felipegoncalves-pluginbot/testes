@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="10.12.5">
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/movement/ConsoleLogger.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/movement/FakeMovement.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/movement/JoystickMovementControllerTest.java">
+<error line="3" column="31" severity="error" message="A forma de importação &apos;.*&apos; deveria ser evitada - org.junit.Assert.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/movement/NavigationControllerTest.java">
+<error line="3" column="31" severity="error" message="A forma de importação &apos;.*&apos; deveria ser evitada - org.junit.Assert.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/movement/RobotHardwareAngleTest.java">
+<error line="3" column="31" severity="error" message="A forma de importação &apos;.*&apos; deveria ser evitada - org.junit.Assert.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/movement/WheelOdometryProcessorTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/movement/RobotGameFeedbackLifecycleTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking/HeadGestureDetectorTest.java">
+<error line="3" column="31" severity="error" message="A forma de importação &apos;.*&apos; deveria ser evitada - org.junit.Assert.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="65" severity="error" message="TEST-GUARD: só assertNotNull não valida comportamento; adicione assertEquals/True com valor esperado" source="com.puppycrawl.tools.checkstyle.checks.regexp.RegexpSinglelineJavaCheck"/>
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking/KinectTrackingEngineTest.java">
+<error line="1" severity="error" message="O arquivo tem 258 linhas (o máximo permitido é 220)." source="com.puppycrawl.tools.checkstyle.checks.sizes.FileLengthCheck"/>
+<error line="3" column="31" severity="error" message="A forma de importação &apos;.*&apos; deveria ser evitada - org.junit.Assert.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="38" severity="error" message="TEST-GUARD: só assertNotNull não valida comportamento; adicione assertEquals/True com valor esperado" source="com.puppycrawl.tools.checkstyle.checks.regexp.RegexpSinglelineJavaCheck"/>
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking/KinectWebBridgeTest.java">
+<error line="3" column="31" severity="error" message="A forma de importação &apos;.*&apos; deveria ser evitada - org.junit.Assert.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="72" severity="error" message="TEST-GUARD: só assertNotNull não valida comportamento; adicione assertEquals/True com valor esperado" source="com.puppycrawl.tools.checkstyle.checks.regexp.RegexpSinglelineJavaCheck"/>
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking/PoseDepthFusionTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking/DepthHistogramSegmenterTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking/KinectGestureClassifierTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking/PersonTargetSelectorTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking/SyntheticDepthFixtures.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking/GoldenDatasetTrackingTest.java">
+<error line="3" column="31" severity="error" message="A forma de importação &apos;.*&apos; deveria ser evitada - org.junit.Assert.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="33" severity="error" message="TEST-GUARD: só assertNotNull não valida comportamento; adicione assertEquals/True com valor esperado" source="com.puppycrawl.tools.checkstyle.checks.regexp.RegexpSinglelineJavaCheck"/>
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking/ArmElevationTrackerTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking/ArmElevationMapperTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking/DepthBlobHandDetectionTest.java">
+<error line="1" severity="error" message="O arquivo tem 255 linhas (o máximo permitido é 220)." source="com.puppycrawl.tools.checkstyle.checks.sizes.FileLengthCheck"/>
+<error line="3" column="31" severity="error" message="A forma de importação &apos;.*&apos; deveria ser evitada - org.junit.Assert.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking/PoseDepthFusionExtrapolationTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking/KinectTrackingEngineSmoothingTest.java">
+<error line="3" column="31" severity="error" message="A forma de importação &apos;.*&apos; deveria ser evitada - org.junit.Assert.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking/SkeletonPipelineHarnessTest.java">
+<error line="3" column="31" severity="error" message="A forma de importação &apos;.*&apos; deveria ser evitada - org.junit.Assert.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking/KinectHoltHandFilterTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking/PoseDepthFusionTFLiteTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking/TFLitePoseProcessorTest.java">
+<error line="74" severity="error" message="TEST-GUARD: só assertNotNull não valida comportamento; adicione assertEquals/True com valor esperado" source="com.puppycrawl.tools.checkstyle.checks.regexp.RegexpSinglelineJavaCheck"/>
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking/OpenCVDepthFilterTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking/JointReuseHotPathTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking/FusionModeLatchTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking/DepthBlobHandPickerTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking/Yuv420pConverterTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking/PreviewViewportTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking/H264NalUtilTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking/LatestEncodedSlotTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking/RgbPreviewBridgeTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking/ArmElevationBridgeTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking/TrackingResultCodecTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking/HybridTrackingProviderTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking/DepthBlobClustererTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking/Nv21LumaEnhancerTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking/PoseFrameHoldTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking/HybridRemoteMergeTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking/MirrorRgbDepthAlignTest.java">
+<error line="37" severity="error" message="TEST-GUARD: só assertNotNull não valida comportamento; adicione assertEquals/True com valor esperado" source="com.puppycrawl.tools.checkstyle.checks.regexp.RegexpSinglelineJavaCheck"/>
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking/HybridRemoteArmsTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking/HybridKinectRegressionTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/server/RobotWebServerTest.java">
+<error line="3" column="31" severity="error" message="A forma de importação &apos;.*&apos; deveria ser evitada - org.junit.Assert.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/server/MirrorTrackingRelayWsTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/logic/DodgerGameEngineTest.java">
+<error line="3" column="31" severity="error" message="A forma de importação &apos;.*&apos; deveria ser evitada - org.junit.Assert.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="23" severity="error" message="TEST-GUARD: só assertNotNull não valida comportamento; adicione assertEquals/True com valor esperado" source="com.puppycrawl.tools.checkstyle.checks.regexp.RegexpSinglelineJavaCheck"/>
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/logic/FruitSlicerGameEngineTest.java">
+<error line="3" column="31" severity="error" message="A forma de importação &apos;.*&apos; deveria ser evitada - org.junit.Assert.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/logic/MirrorGameEngineTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/logic/PoseMatchGameEngineTest.java">
+<error line="3" column="31" severity="error" message="A forma de importação &apos;.*&apos; deveria ser evitada - org.junit.Assert.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/logic/RobotEKFTest.java">
+<error line="3" column="31" severity="error" message="A forma de importação &apos;.*&apos; deveria ser evitada - org.junit.Assert.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/logic/CprTrainingEngineTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/logic/CprMusicFinderTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/logic/HandCursorEngineTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/architecture/DesignPatternsArchitectureTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/architecture/LayeredArchitectureTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/architecture/HexagonalArchitectureTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/architecture/AiGuardArchitectureTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/architecture/VisionAiGuardArchitectureTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/architecture/MeaningfulUnitTestQualityTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/architecture/TemporalSignalGuardTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/architecture/MemoryBackpressureGuardTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/architecture/HeadKinematicsGuardTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/architecture/MirrorMotorGuardTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/architecture/KinematicsOrientationGuardTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/architecture/AllocationHotPathGuardTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/architecture/CoordinateContractTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/architecture/MirrorDisplayGuardTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/debug/SanbotDebugBridgeTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/mirror/MirrorSessionControllerTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking3d/SyntheticHumanScene.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking3d/MetricPipelineFixture.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking3d/MetricPipelineAccuracyTest.java">
+<error line="1" severity="error" message="O arquivo tem 221 linhas (o máximo permitido é 220)." source="com.puppycrawl.tools.checkstyle.checks.sizes.FileLengthCheck"/>
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking3d/MetricToLegacyContractTest.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking3d/PosedHumanSkeleton.java">
+<error line="1" severity="error" message="O arquivo tem 256 linhas (o máximo permitido é 220)." source="com.puppycrawl.tools.checkstyle.checks.sizes.FileLengthCheck"/>
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking3d/LabeledHumanScene.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking3d/BodyPartTrainingSet.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking3d/RandomPoseSampler.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking3d/BodyPartForestTrainer.java">
+<error line="1" severity="error" message="O arquivo tem 294 linhas (o máximo permitido é 220)." source="com.puppycrawl.tools.checkstyle.checks.sizes.FileLengthCheck"/>
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking3d/SyntheticDepthRenderer.java">
+</file>
+<file name="/home/pluginbot/Documentos/AndroidStudio/Elf/ElfJogo/app/src/test/java/com/felipe/elftemplate/tracking3d/RayCapsuleTracer.java">
+</file>
+</checkstyle>

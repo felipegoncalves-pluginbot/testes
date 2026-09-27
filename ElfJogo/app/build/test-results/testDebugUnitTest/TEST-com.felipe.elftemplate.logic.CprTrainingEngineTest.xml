@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.felipe.elftemplate.logic.CprTrainingEngineTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-09-11T19:20:13" hostname="fedora" time="0.001">
+  <properties/>
+  <testcase name="testAutoCountsCompressionsOnBeatCycle" classname="com.felipe.elftemplate.logic.CprTrainingEngineTest" time="0.001"/>
+  <testcase name="testPulseAdvancesAtTargetBpm" classname="com.felipe.elftemplate.logic.CprTrainingEngineTest" time="0.0"/>
+  <testcase name="testAdvanceAndRetreatSteps" classname="com.felipe.elftemplate.logic.CprTrainingEngineTest" time="0.0"/>
+  <testcase name="testStartsAtSafetyStep" classname="com.felipe.elftemplate.logic.CprTrainingEngineTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

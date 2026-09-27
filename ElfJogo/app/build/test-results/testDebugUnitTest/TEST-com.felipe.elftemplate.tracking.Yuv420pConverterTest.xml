@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.felipe.elftemplate.tracking.Yuv420pConverterTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-09-11T19:20:18" hostname="fedora" time="0.0">
+  <properties/>
+  <testcase name="toNv21_interleavesUAndVPlanes" classname="com.felipe.elftemplate.tracking.Yuv420pConverterTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
