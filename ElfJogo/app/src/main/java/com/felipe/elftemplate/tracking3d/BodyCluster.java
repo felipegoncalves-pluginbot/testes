@@ -66,6 +66,15 @@ public final class BodyCluster {
   public boolean headOutOfFrame;
 
   /**
+   * Arestas da borda com vizinho válido fora do aglomerado; quantas dão para algo mais perto;
+   * quantas continuam a mesma superfície além do alcance (ver {@link ClusterBoundary}).
+   */
+  public int boundaryEdges;
+
+  public int occludedEdges;
+  public int beyondRangeEdges;
+
+  /**
    * Menor largura horizontal encontrada nas faixas de altura da metade superior do corpo, em metros.
    *
    * <p>É o discriminador que separa gente de mobília: uma pessoa sempre tem um pescoço, ou seja
@@ -148,6 +157,9 @@ public final class BodyCluster {
     touchesFrameRight = false;
     seated = false;
     headOutOfFrame = false;
+    boundaryEdges = 0;
+    occludedEdges = 0;
+    beyondRangeEdges = 0;
   }
 
   /** Acumula um ponto nos perfis horizontal (faixas) e vertical (colunas). */

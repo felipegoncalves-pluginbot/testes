@@ -23,7 +23,7 @@ profiler (`tools/logcat_cv_profiler.py`) no device.
 | Workspace TFLite | vários MB | mmap do `.tflite` + interpreter |
 | Overlay debug ARGB | extra | não clonar por frame |
 | Debug hub 2× 160×120 ARGB + `int[19200]` | ~230 KB | Astra PNG + HD JPEG ≤2 Hz; sem cópia NV21 640×480 |
-| Floresta de partes do corpo | ~332 KB | asset `bodypart_forest.bin`, 3 árvores / 6273 nós; folhas em byte |
+| Floresta de partes do corpo | ~386 KB | asset `bodypart_forest.bin`, 3 árvores / 7278 nós; folhas em byte |
 | Rótulos por célula (`BodyPartLabeler`) | ~61 KB | `byte[]` + `float[]` em grade 128×96, realocados só se a grade mudar |
 | OpenCV native | extra | só se o profiler mostrar Java > 25 ms/frame |
 
@@ -31,9 +31,14 @@ profiler (`tools/logcat_cv_profiler.py`) no device.
 
 O modelo passa dos 100 KB, então registro o que foi e o que **não** foi medido.
 
-Medido no host: 3 árvores, profundidade 13, 6273 nós, 6276 folhas, 332 KB em disco e em RAM
+Medido no host: 3 árvores, profundidade 13, 7278 nós, 7281 folhas, 386 KB em disco e em RAM
 (arrays primitivos, sem objeto por nó). As folhas guardam probabilidade quantizada em 1 byte por
 parte, o que já economiza 4× sobre `float`.
+
+O retreino com o Astra na cabeça (0,62–0,92 m, pitch de −12° a 20°) usa 600 quadros em vez de 420
+e somou 68 KB ao modelo anterior (317 KB, 5988 nós), abaixo do limite de 100 KB por PR. A
+profundidade 14 ganhava 0,7 ponto de acerto por pixel e custaria mais 63 KB e um nível de leitura
+por célula, então ficou 13. A conta de CPU abaixo não muda: mesmas 3 árvores e 13 níveis.
 
 Custo de CPU por frame, por conta algorítmica: ~78 leituras de profundidade por célula (3 árvores ×
 ~13 níveis × 2 amostras) sobre as células do corpo segmentado, tipicamente 1.100 a 3.000. Dá 85k a
@@ -46,11 +51,11 @@ FPS reais. Se o profiler mostrar folga apertada, a primeira alavanca é reduzir 
 Para regenerar o modelo:
 
 ```bash
-./gradlew :app:testDebugUnitTest --tests '*BodyPartForestGenerator*' \
-    -Pbodypart.train=true -Pbodypart.frames=420
+./gradlew :app:testDebugUnitTest --tests '*BodyPartForestGenerator*' -Pbodypart.train=true
 ```
 
-Semente e hiperparâmetros ficam registrados em `app/src/main/assets/bodypart_forest.md`.
+Os padrões do gerador reproduzem o asset embarcado byte a byte. Semente, montagem do sensor e todos
+os hiperparâmetros ficam registrados em `app/src/main/assets/bodypart_forest.md`.
 
 ## Regras
 

@@ -254,6 +254,7 @@ public final class MetricBodySegmenter {
       expandBounds(cluster, wx, wy, wz);
       cluster.addBandSample(wy, wx);
       markFrameContact(cluster, i % gridW, i / gridW, gridW, gridH);
+      ClusterBoundary.countEdges(cloud, labels, worldZ, MAX_TRACK_DEPTH_M, i, cluster);
       accumulator[slot * 4] += wx;
       accumulator[(slot * 4) + 1] += wy;
       accumulator[(slot * 4) + 2] += wz;

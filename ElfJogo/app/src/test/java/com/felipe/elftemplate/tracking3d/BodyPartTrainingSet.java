@@ -28,7 +28,7 @@ final class BodyPartTrainingSet implements DepthPartFeature.DepthSampler {
   private final SyntheticDepthRenderer renderer = new SyntheticDepthRenderer();
   private final LabeledHumanScene scene = new LabeledHumanScene(renderer);
   private final PosedHumanSkeleton body = new PosedHumanSkeleton();
-  private final RandomPoseSampler poseSampler = new RandomPoseSampler();
+  private final RandomPoseSampler poseSampler;
   private final DepthPointCloud cloud = new DepthPointCloud();
 
   private float[][] frameDepth = new float[0][];
@@ -46,6 +46,19 @@ final class BodyPartTrainingSet implements DepthPartFeature.DepthSampler {
   private int gridHeight;
   private float focalPx;
   private float[] activeDepth;
+
+  /** Conjunto na montagem real do robô (Astra na cabeça). */
+  BodyPartTrainingSet() {
+    this(RandomPoseSampler.ROBOT_HEAD);
+  }
+
+  BodyPartTrainingSet(RandomPoseSampler.Mount mount) {
+    this.poseSampler = new RandomPoseSampler(mount);
+  }
+
+  RandomPoseSampler.Mount getMount() {
+    return poseSampler.getMount();
+  }
 
   /** Gera {@code frames} cenas aleatórias e sorteia pixels de cada uma. */
   void generate(int frames, long seed) {

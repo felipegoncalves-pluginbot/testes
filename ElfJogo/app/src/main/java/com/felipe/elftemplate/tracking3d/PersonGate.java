@@ -35,6 +35,27 @@ public final class PersonGate {
    */
   public static final float MAX_TORSO_BAND_HEAD_CUT_M = 0.70f;
 
+  /**
+   * Fração máxima da borda encostada em superfície mais próxima.
+   *
+   * <p>Acima disso o aglomerado é fundo visto por uma fresta (ver {@link ClusterBoundary}). Medido
+   * no sintético com o Astra na cabeça: pessoa livre 0%; pessoa atrás de mesa, caixa ou balcão
+   * 4–14%; pessoa com outra na frente 17–18%; parede entre as pernas 78–100%; parede presa entre o
+   * jogador e a borda da imagem 52–60%.
+   */
+  public static final float MAX_OCCLUDED_BOUNDARY = 0.4f;
+
+  /**
+   * Fração máxima da borda que continua a mesma superfície além do alcance.
+   *
+   * <p>Acima disso o aglomerado é pedaço de uma superfície maior cortada pelo alcance de 4,2 m.
+   * Pessoa até 9%, parede fatiada no limite 97–100%.
+   */
+  public static final float MAX_BEYOND_RANGE_BOUNDARY = 0.5f;
+
+  /** Borda mínima para a fração de oclusão significar algo. */
+  private static final int MIN_BOUNDARY_EDGES = 8;
+
   /** Piso absoluto de pontos, para o caso de grades muito decimadas. */
   private static final int ABSOLUTE_MIN_POINTS = 40;
 
@@ -72,6 +93,8 @@ public final class PersonGate {
   public static final int REJECT_TOO_THICK = 3;
   public static final int REJECT_NO_NECK = 4;
   public static final int REJECT_STATURE = 5;
+  public static final int REJECT_SEEN_THROUGH_GAP = 6;
+  public static final int REJECT_CUT_BY_RANGE = 7;
 
   /**
    * Aplica todos os critérios métricos ao aglomerado.
@@ -81,11 +104,12 @@ public final class PersonGate {
    * @return {@link #ACCEPTED} ou o código do critério que reprovou.
    */
   public static int evaluate(BodyCluster cluster, DepthPointCloud cloud, boolean floorMeasured) {
-    if (cluster == null || cluster.pointCount <= 0) {
+    if (!hasEnoughPoints(cluster, cloud)) {
       return REJECT_TOO_FEW_POINTS;
     }
-    if (cluster.pointCount < minPointsAt(cluster.nearestDepthM, cloud)) {
-      return REJECT_TOO_FEW_POINTS;
+    int boundary = boundaryVerdict(cluster);
+    if (boundary != ACCEPTED) {
+      return boundary;
     }
     if (cluster.widthM > MAX_SPAN_M) {
       return REJECT_TOO_WIDE;
@@ -98,6 +122,25 @@ public final class PersonGate {
       return REJECT_NO_NECK;
     }
     return hasPlausibleStature(cluster, floorMeasured) ? ACCEPTED : REJECT_STATURE;
+  }
+
+  private static boolean hasEnoughPoints(BodyCluster cluster, DepthPointCloud cloud) {
+    return cluster != null
+        && cluster.pointCount > 0
+        && cluster.pointCount >= minPointsAt(cluster.nearestDepthM, cloud);
+  }
+
+  /** Borda que denuncia fundo em vez de corpo; {@link #ACCEPTED} quando a borda é de pessoa. */
+  private static int boundaryVerdict(BodyCluster cluster) {
+    if (cluster.boundaryEdges < MIN_BOUNDARY_EDGES) {
+      return ACCEPTED;
+    }
+    if (cluster.occludedEdges > cluster.boundaryEdges * MAX_OCCLUDED_BOUNDARY) {
+      return REJECT_SEEN_THROUGH_GAP;
+    }
+    return cluster.beyondRangeEdges > cluster.boundaryEdges * MAX_BEYOND_RANGE_BOUNDARY
+        ? REJECT_CUT_BY_RANGE
+        : ACCEPTED;
   }
 
   /** Texto curto para o HUD do robô. */
@@ -115,6 +158,10 @@ public final class PersonGate {
         return "sem pescoco";
       case REJECT_STATURE:
         return "estatura fora da faixa";
+      case REJECT_SEEN_THROUGH_GAP:
+        return "fundo visto por fresta";
+      case REJECT_CUT_BY_RANGE:
+        return "superficie cortada pelo alcance";
       default:
         return "desconhecido";
     }

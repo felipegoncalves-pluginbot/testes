@@ -46,18 +46,78 @@ public class RobotMountingTrackingTest {
         0.3f);
   }
 
+  /**
+   * Dois corpos de verdade: um adulto a 3,2 m, com a cabeça mais alta no quadro e portanto primeiro
+   * na varredura, e uma criança a 1,8 m. O principal é o mais próximo, não o primeiro rótulo.
+   */
   @Test
-  public void closestBodyIsPrimaryWhenTheWallComesFirstInScanOrder() {
+  public void closestBodyIsPrimaryEvenWhenAFartherBodyComesFirstInScanOrder() {
     MetricPipelineFixture fixture = new MetricPipelineFixture();
-    fixture.standardScene(STATURE, 3.0f, SyntheticHumanScene.Pose.ARMS_DOWN);
+    fixture.standardScene(1.25f, 1.8f, SyntheticHumanScene.Pose.ARMS_DOWN);
+    fixture.scene.addPerson(STATURE, 3.2f, -0.6f, SyntheticHumanScene.Pose.ARMS_DOWN);
     fixture.run(7L);
 
-    assertTrue("cena tem jogador e recortes de parede", fixture.clusterCount >= 2);
-    assertEquals("corpo principal é o jogador", 3.0f, fixture.primaryCluster().centroidZ, 0.3f);
-    for (int slot = 1; slot < fixture.clusterCount; slot++) {
-      assertTrue(
-          "slot 0 é o mais próximo",
-          fixture.segmenter.getCluster(slot).centroidZ >= fixture.primaryCluster().centroidZ);
+    assertEquals("criança e adulto aprovados", 2, fixture.clusterCount);
+    assertEquals(
+        "corpo principal é o mais próximo", 1.8f, fixture.primaryCluster().centroidZ, 0.3f);
+    assertEquals("o outro corpo é o adulto", 3.2f, fixture.segmenter.getCluster(1).centroidZ, 0.3f);
+  }
+
+  /** Parede vista pelo vão entre as pernas: cercada pelo jogador, não é um segundo corpo. */
+  @Test
+  public void wallSeenBetweenTheLegsIsNotASecondBody() {
+    MetricPipelineFixture fixture = new MetricPipelineFixture();
+    fixture.standardScene(STATURE, 2.5f, SyntheticHumanScene.Pose.ARMS_DOWN);
+    fixture.run(11L);
+
+    assertEquals("só o jogador", 1, fixture.clusterCount);
+  }
+
+  /** Parede no limite de 4,2 m de alcance, fatiada pelo ruído: pedaços dela não são corpos. */
+  @Test
+  public void wallCutByTheRangeLimitIsNotABody() {
+    MetricPipelineFixture fixture = new MetricPipelineFixture();
+    fixture.standardScene(STATURE, 3.0f, SyntheticHumanScene.Pose.T_POSE);
+    fixture.run(11L);
+
+    assertEquals("só o jogador", 1, fixture.clusterCount);
+    assertEquals("corpo é o jogador", 3.0f, fixture.primaryCluster().centroidZ, 0.3f);
+  }
+
+  /**
+   * Um balcão de 1 m na frente esconde metade do corpo, mas a borda do jogador ainda dá para o
+   * fundo.
+   */
+  @Test
+  public void personBehindACounterIsStillTracked() {
+    MetricPipelineFixture fixture = new MetricPipelineFixture();
+    fixture.standardScene(STATURE, 2.0f, SyntheticHumanScene.Pose.ARMS_DOWN);
+    for (float y = 0.10f; y <= 1.0f; y += 0.06f) {
+      fixture.renderer.addWorldCapsule(-0.7f, y, 1.6f, 0.7f, y, 1.6f, 0.045f);
     }
+    fixture.run(9L);
+
+    assertTrue("jogador aprovado", fixture.clusterCount >= 1);
+    assertEquals("corpo é o jogador", 2.0f, fixture.primaryCluster().centroidZ, 0.3f);
+  }
+
+  /**
+   * Cabeça inclinada 10° para cima: o chão perto do jogador sai do quadro. A busca de pitch achava
+   * um piso falso a ~30° para baixo, feito de uma fatia de parede e pessoa, e reprovava o jogador.
+   */
+  @Test
+  public void tiltedUpSensorDoesNotInventASteepFloor() {
+    MetricPipelineFixture fixture = new MetricPipelineFixture();
+    fixture.renderer.setCamera(0.80f, -10f);
+    fixture.renderer.setBackWallDepthM(3.8f);
+    fixture.renderer.getTracer().clear();
+    fixture.scene.addPerson(STATURE, 1.6f, 0f, SyntheticHumanScene.Pose.ARMS_DOWN);
+    fixture.run(5L);
+
+    if (fixture.plane.isMeasured()) {
+      assertEquals("pitch medido", -10f, fixture.plane.getPitchDeg(), 6f);
+    }
+    assertTrue("jogador aprovado", fixture.clusterCount >= 1);
+    assertEquals("corpo é o jogador", 1.6f, fixture.primaryCluster().centroidZ, 0.3f);
   }
 }

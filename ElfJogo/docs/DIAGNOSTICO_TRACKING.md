@@ -35,6 +35,39 @@ coisas dependiam disso:
 Testes: `HeadGazeServoTest` (inclui malha fechada), `MirrorSessionControllerTest` (pitch sempre 0),
 `MirrorDisplayGuardTest` (proíbe pan pelo yaw).
 
+## Classificador e gate na geometria da cabeça
+
+Os testes do pipeline renderizavam o sensor a 1,05 m com 5° para baixo. Com os fixtures
+(`MetricPipelineFixture`, `LearnedPipelineFixture`) movidos para o Astra na cabeça, a 0,80 m e
+nivelado, apareceram os problemas abaixo. A grade citada tem 576 cenas sintéticas: sensor a
+0,62/0,72/0,80/0,92 m, pitch −10°/0°/8°/15°, jogador a 1,2–3,6 m, três posições laterais, braços
+baixos e pose T.
+
+| # | Sintoma | Causa | Evidência | Correção |
+|---|---------|-------|-----------|----------|
+| 12 | Membros do esqueleto aprendido erram mais que o necessário | `bodypart_forest.bin` treinado com o sensor entre 0,92 e 1,18 m e pitch de 0° a 13°, acima da cabeça do Elf | Em 60 quadros de validação com semente fora do treino: 48,8% dos pixels de corpo certos na montagem do robô, 60,0% na de treino | Retreino com 0,62–0,92 m e pitch de −12° a 20°, 600 quadros, profundidade 13: 61,7%. Em 300 poses, juntas a menos de 15 cm: joelhos 84% → 93%, ombros 67% → 69%, cotovelos 51% → 52%, tornozelos igual (58%) |
+| 13 | Punho da pose T e do braço aberto cai para dentro do braço | O refinador trocava sempre a extremidade que a geometria mediu pela proposta do classificador | Em 1.000 poses, a troca derrubava o punho lateral de 63–69% para 51–52% a menos de 15 cm | Mão ou pé medido como extremidade só é trocado se a proposta estiver a até 15 cm dele. Punhos no geral: 29% → 33–34% |
+| 14 | Aparece um segundo "corpo"; o esqueleto troca de alvo | Recortes da parede do fundo passavam no gate: a parede vista pelo vão entre as pernas e a parede no limite de 4,2 m, fatiada pelo ruído | Grade: 350 cenas com corpo falso, 683 corpos falsos | `ClusterBoundary` mede a borda de cada aglomerado. Reprovado se mais de 40% da borda dá para algo mais perto (fundo visto por fresta) ou mais de 50% continua a mesma superfície além do alcance. Grade: 0 corpo falso. Pessoa atrás de mesa, caixa, balcão ou de outra pessoa continua aprovada (4–18% de borda ocluída) |
+| 15 | Com a cabeça inclinada para cima, jogador reprovado por "estatura fora da faixa" | Sem chão perto, a busca de pitch achava um piso a 22–30° para baixo, feito de uma fatia de parede e pessoa | Grade: jogador reprovado em 16 cenas, todas com pitch −10° (15 por estatura) | O piso tem de encostar nos 15% de baixo do quadro. Grade: jogador aprovado e corpo principal em 576 de 576 |
+
+O retreino é reproduzível: `./gradlew :app:testDebugUnitTest --tests '*BodyPartForestGenerator*'
+-Pbodypart.train=true` gera o mesmo `bodypart_forest.bin` byte a byte, e o relatório
+`bodypart_forest.md` registra semente, montagem e hiperparâmetros. O modelo cresceu de 317 para
+386 KB (`docs/specs/MEMORY_BUDGET.md`).
+
+Testes: `BodyPartRobotMountAccuracyTest` (modelo embarcado na montagem da cabeça),
+`RobotMountingTrackingTest` (parede entre as pernas, parede no limite de alcance, jogador atrás de
+um balcão, cabeça inclinada para cima, corpo mais próximo com dois corpos reais) e a pose T em 12
+sementes em `BodyPartPoseAccuracyTest`. Com o código de produção anterior, 8 dos 46 testes de
+`tracking3d` falham.
+
+**Limite físico, não corrigível no software:** com a cabeça 10° para cima e o sensor a 0,80 m, o
+chão só entra no quadro a partir de ~3,5 m. Na grade, 8 de 86 planos medidos continuam errados,
+todos com pitch −10°: sete com a altura 0,12–0,31 m fora e o pitch 2–5° fora, e um com piso falso a
+32,5° (jogador a 1,2 m). Em todos esses o jogador continua aprovado e é o corpo principal; o que
+fica errado são as alturas absolutas. O código nunca inclina a cabeça, então isso só acontece se a
+cabeça estiver parada inclinada para cima.
+
 ## O que conferir no robô
 
 1. **Cabeça nos jogos:** com o jogador parado no centro, a cabeça não deve se mexer. Ao andar
@@ -43,23 +76,27 @@ Testes: `HeadGazeServoTest` (inclui malha fechada), `MirrorSessionControllerTest
    entrega a imagem espelhada. O pipeline assume imagem **não** espelhada. Se vier `true`, esquerda
    e direita estão trocadas em todos os jogos.
 3. **Logcat `Astra3D` / HUD:** altura e pitch medidos do sensor. Um pitch acima de ~15° para baixo
-   significa que a cabeça de um adulto nunca aparece no quadro.
+   significa que a cabeça de um adulto nunca aparece no quadro. Pitch negativo (cabeça para cima)
+   deixa o chão quase fora do quadro e as alturas imprecisas: nivele a cabeça. A altura deve ficar
+   entre 0,62 e 0,92 m, a faixa em que o classificador de partes foi treinado.
 4. **Distância de jogo:** com o sensor abaixo de 0,9 m e sem inclinação, a cabeça de um adulto só
    entra no quadro a partir de ~2,3 m. O Kinect pedia de 1,8 a 2,4 m, com o sensor na altura dos
    olhos e motor de inclinação.
 5. `app/release/release/app-release.apk` é de outro app (`com.felipe.flipelf`) e não contém os jogos.
 
-## Pendente
-
-- O classificador de partes (`bodypart_forest.bin`) foi treinado com o sensor sintético entre 0,92 e
-  1,18 m (`RandomPoseSampler`), acima da cabeça do Elf. Vale retreinar com 0,65–0,90 m e pitch da
-  cabeça real.
-
 ## Limitações da validação
 
 Não há Android SDK neste ambiente, então o Gradle não roda. Compilei as fontes de produção alteradas
 com `javac` contra o `android-all` (API 23), o SDK Sanbot, o `OpenNI.jar`, o TFLite e o NanoHTTPD.
-Rodei 259 testes JUnit dos pacotes `tracking`, `tracking3d`, `logic`, `mirror`, `movement`,
-`server` e `debug`, mais os guards de alocação, memória, contrato de eixos, cinemática, espelho e
-qualidade de teste, e o Checkstyle com as configurações do projeto. As Activities não compilam fora
-do Gradle (dependem do `R`), e as mudanças nelas são pequenas.
+Rodei 265 testes JUnit (72 classes) dos pacotes `tracking`, `tracking3d`, `logic`, `mirror`,
+`movement`, `server` e `debug`, mais os guards de alocação, memória, contrato de eixos, cinemática,
+espelho e qualidade de teste, os testes ArchUnit de camadas e ciclos, o Checkstyle com as
+configurações do projeto e o google-java-format 1.17 nas linhas alteradas. As Activities dos jogos
+compilam contra o `android-all` da API 26 (o `findViewById` genérico do compileSdk) com um `R` de
+stub.
+
+O PMD 6.55.0, a versão fixada no `build.gradle`, não carrega os rulesets de `config/pmd`: seis
+propriedades (`allowedTypes` em `LooseCoupling` e cinco `checkAssert*` em
+`JUnitAssertionsShouldIncludeMessage`) não existem nessa versão. Isso já era assim antes destas
+mudanças. Rodei o PMD com uma cópia dos rulesets sem essas propriedades: nenhum achado novo nos
+testes nem em `tracking`/`logic`, e os achados novos de complexidade em `src/main` foram corrigidos.

@@ -76,9 +76,9 @@ final class LearnedPipelineFixture {
     return Files.exists(fromRoot) ? fromRoot : null;
   }
 
-  /** Configura a câmera na geometria real de operação do Sanbot. */
+  /** Configura a câmera na geometria real do Sanbot: Astra na cabeça, a 0,80 m, nivelado. */
   void standardCamera(float personDepthM) {
-    renderer.setCamera(1.05f, 5f);
+    renderer.setCamera(0.80f, 0f);
     renderer.setBackWallDepthM(Math.max(3.9f, personDepthM + 1.0f));
     renderer.setNoise(0.0030f, 0.02f);
     renderer.getTracer().clear();

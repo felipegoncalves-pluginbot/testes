@@ -57,7 +57,21 @@ public final class GroundPlaneEstimator {
   /** Suavização em direção à nova medida, para o referencial não pular entre frames. */
   private static final float BLEND_ALPHA = 0.25f;
 
+  /**
+   * Faixa de baixo do quadro que o piso tem de alcançar, em fração da altura da grade.
+   *
+   * <p>Para uma câmera acima do chão, o chão visível começa sempre na borda de baixo da imagem. Com
+   * o Astra na cabeça inclinado para cima, o chão perto do jogador sai do quadro e a busca de pitch
+   * achava um "piso" a 22–30° para baixo feito de uma fatia diagonal de parede e pessoa, sem nenhum
+   * ponto no chão verdadeiro e sem passar da linha 67 de 96. Um piso assim deslocava todas as
+   * alturas e o jogador era reprovado por estatura.
+   */
+  private static final float FLOOR_BOTTOM_BAND = 0.15f;
+
   private final int[] histogram = new int[BIN_COUNT];
+
+  /** Linha mais baixa da grade que caiu em cada bin, para o teste da borda de baixo. */
+  private final int[] lowestRowInBin = new int[BIN_COUNT];
 
   private boolean lastFitSucceeded;
   private int lastFloorSupport;
@@ -101,7 +115,7 @@ public final class GroundPlaneEstimator {
       float pitchRad = (float) Math.toRadians(deg);
       fillHistogram(cloud, pitchRad);
       int floorBin = findFloorModeBin(minSupport);
-      if (floorBin < 0) {
+      if (floorBin < 0 || !reachesFrameBottom(floorBin, cloud.getGridHeight())) {
         continue;
       }
       int score = binScore(floorBin);
@@ -136,8 +150,21 @@ public final class GroundPlaneEstimator {
     return sampled;
   }
 
+  /** O piso candidato encosta na faixa de baixo do quadro? */
+  private boolean reachesFrameBottom(int floorBin, int gridHeight) {
+    int lowest = lowestRowInBin[floorBin];
+    if (floorBin > 0) {
+      lowest = Math.max(lowest, lowestRowInBin[floorBin - 1]);
+    }
+    if (floorBin + 1 < BIN_COUNT) {
+      lowest = Math.max(lowest, lowestRowInBin[floorBin + 1]);
+    }
+    return lowest >= gridHeight * (1f - FLOOR_BOTTOM_BAND);
+  }
+
   private void fillHistogram(DepthPointCloud cloud, float pitchRad) {
     Arrays.fill(histogram, 0);
+    Arrays.fill(lowestRowInBin, -1);
     float cos = (float) Math.cos(pitchRad);
     float sin = (float) Math.sin(pitchRad);
     for (int gy = 0; gy < cloud.getGridHeight(); gy += SAMPLE_STRIDE) {
@@ -151,6 +178,7 @@ public final class GroundPlaneEstimator {
         int bin = (int) ((value - RANGE_MIN_M) / BIN_SIZE_M);
         if (bin >= 0 && bin < BIN_COUNT) {
           histogram[bin]++;
+          lowestRowInBin[bin] = gy; // a varredura desce: a última linha é a mais baixa
         }
       }
     }
